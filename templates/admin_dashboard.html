@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<div class="navbar">
+    <h1>Admin Panel - GyanaGhar</h1>
+    <a href="/logout">Logout</a>
+    <a href="/admin/notes"> Manage Notes</a>
+</div>
+
+<div class="container">
+    <h3>Admin Controls</h3>
+
+    <div class="card-container">
+        <div class="card">
+            <a href="/admin/add_note">➕ Add Note</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

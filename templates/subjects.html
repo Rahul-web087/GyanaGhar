@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Subjects - GyanaGhar</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<div class="navbar">
+    <h1>GyanaGhar 🎓</h1>
+    <div>
+        <a href="/dashboard">Home</a>
+        <a href="/logout">Logout</a>
+    </div>
+</div>
+
+<div class="container">
+    <h3>Class {{ class_num }} Subjects</h3>
+
+    <div class="card-container">
+        {% for subject in subjects %}
+            <div class="card">
+                <a href="/class/{{ class_num }}/{{ subject }}">
+                    📚 {{ subject }}
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+
+    <br>
+    <a href="/dashboard">⬅ Back</a>
+</div>
+
+</body>
+</html>
