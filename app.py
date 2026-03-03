@@ -478,7 +478,7 @@ def create_admin():
     admin = User(
         name="Admin",
         email="admin@gyanaghar.com",
-        password=generate_password_hash("Rahul@123"),
+        password=generate_password_hash("admin123"),
         role="admin",
         secret_question="Your first school name?",
         secret_answer="demo"
