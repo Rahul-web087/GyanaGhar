@@ -513,24 +513,46 @@ def admin_dashboard():
 
 
 # -------- CREATE ADMIN --------
+# @app.route('/create_admin')
+# def create_admin():
+#
+#     if User.query.filter_by(email="admin@gyanaghar.com").first():
+#         return "Admin already exists!"
+#
+#     admin = User(
+#         name="Admin",
+#         email="admin@gyanaghar.com",
+#         password=generate_password_hash("admin123"),
+#         role="admin",
+#         secret_question="Your first school name?",
+#         secret_answer="demo"
+#     )
+#
+#     db.session.add(admin)
+#     db.session.commit()
+#     return "Admin Created Successfully!"
+
 @app.route('/create_admin')
 def create_admin():
+    try:
+        if User.query.filter_by(email="admin@gyanaghar.com").first():
+            return "Admin already exists!"
 
-    if User.query.filter_by(email="admin@gyanaghar.com").first():
-        return "Admin already exists!"
+        admin = User(
+            name="Admin",
+            email="admin@gyanaghar.com",
+            password=generate_password_hash("admin123"),
+            role="admin",
+            secret_question="Your first school name?",
+            secret_answer="demo"
+        )
 
-    admin = User(
-        name="Admin",
-        email="admin@gyanaghar.com",
-        password=generate_password_hash("admin123"),
-        role="admin",
-        secret_question="Your first school name?",
-        secret_answer="demo"
-    )
+        db.session.add(admin)
+        db.session.commit()
+        return "Admin Created Successfully!"
 
-    db.session.add(admin)
-    db.session.commit()
-    return "Admin Created Successfully!"
+    except Exception as e:
+        return f"Error: {str(e)}"
 
 
 # -------- LOGOUT --------
