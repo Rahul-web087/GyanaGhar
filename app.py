@@ -406,9 +406,13 @@ def load_user(user_id):
 
 # ================= ROUTES =================
 
+# @app.route('/')
+# def home():
+#     return render_template('home.html')
+
 @app.route('/')
 def home():
-    return render_template('home.html')
+    return "HELLO RAHUL TEST"
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
