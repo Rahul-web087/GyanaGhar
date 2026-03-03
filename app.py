@@ -429,6 +429,14 @@ def register():
     return render_template('register.html')
 
 
+# db=-=-=
+
+@app.route('/init_db')
+def init_db():
+    db.create_all()
+    return "Database Initialized Successfully!"
+
+
 # -------- LOGIN --------
 @app.route('/login', methods=['GET', 'POST'])
 def login():
