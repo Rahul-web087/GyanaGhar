@@ -338,43 +338,46 @@
 
 
 
+
+
+
 import os
-from flask import Flask, render_template, redirect, url_for, request, send_from_directory
+from flask import Flask, render_template, redirect, url_for, request, send_from_directory, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = os.getenv("SECRET_KEY", "gyanaghar_secret")
 
-# ========================
-# SECRET KEY
-# ========================
-app.config['SECRET_KEY'] = os.getenv("SECRET_KEY", "supersecretkey")
+# ================= DATABASE CONFIG =================
 
-# ========================
-# DATABASE CONFIG (PostgreSQL)
-# ========================
 database_url = os.getenv("DATABASE_URL")
 
 if database_url:
     database_url = database_url.replace("postgres://", "postgresql://")
+else:
+    raise RuntimeError("DATABASE_URL is not set!")
 
 app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+UPLOAD_FOLDER = 'uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 db = SQLAlchemy(app)
 
-# ========================
-# LOGIN MANAGER
-# ========================
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
 
-# ========================
-# MODELS
-# ========================
+# ================= CREATE TABLES FOR PRODUCTION =================
+
+with app.app_context():
+    db.create_all()
+
+# ================= MODELS =================
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -382,6 +385,8 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(200))
     role = db.Column(db.String(20), default="student")
+    secret_question = db.Column(db.String(200))
+    secret_answer = db.Column(db.String(200))
 
 
 class Note(db.Model):
@@ -393,40 +398,38 @@ class Note(db.Model):
     video_link = db.Column(db.String(300))
     pdf_file = db.Column(db.String(200))
 
+# ================= USER LOADER =================
 
-# ========================
-# CREATE TABLES (IMPORTANT)
-# ========================
-with app.app_context():
-    db.create_all()
-
-
-# ========================
-# USER LOADER
-# ========================
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-
-# ========================
-# ROUTES
-# ========================
+# ================= ROUTES =================
 
 @app.route('/')
 def home():
     return render_template('home.html')
 
-
-# -------- REGISTER --------
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         name = request.form['name']
         email = request.form['email']
         password = generate_password_hash(request.form['password'])
+        question = request.form['secret_question']
+        answer = request.form['secret_answer'].lower()
 
-        new_user = User(name=name, email=email, password=password)
+        if User.query.filter_by(email=email).first():
+            return "Email already exists"
+
+        new_user = User(
+            name=name,
+            email=email,
+            password=password,
+            secret_question=question,
+            secret_answer=answer
+        )
+
         db.session.add(new_user)
         db.session.commit()
 
@@ -434,8 +437,6 @@ def register():
 
     return render_template('register.html')
 
-
-# -------- LOGIN --------
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -454,36 +455,33 @@ def login():
 
     return render_template('login.html')
 
-
-# -------- DASHBOARD --------
 @app.route('/dashboard')
 @login_required
 def dashboard():
     return render_template('dashboard.html', name=current_user.name)
 
-
-# -------- ADMIN DASHBOARD --------
 @app.route('/admin')
 @login_required
 def admin_dashboard():
     if current_user.role != "admin":
         return "Access Denied"
-    return render_template('admin_dashboard.html')
+    return render_template("admin_dashboard.html")
 
+# ================= CREATE ADMIN SAFELY =================
 
-# -------- CREATE ADMIN --------
 @app.route('/create_admin')
 def create_admin():
 
-    existing_admin = User.query.filter_by(email="admin@gyanaghar.com").first()
-    if existing_admin:
+    if User.query.filter_by(email="admin@gyanaghar.com").first():
         return "Admin already exists!"
 
     admin = User(
         name="Admin",
         email="admin@gyanaghar.com",
-        password=generate_password_hash("admin123"),
-        role="admin"
+        password=generate_password_hash("Rahul@123"),
+        role="admin",
+        secret_question="Your first school name?",
+        secret_answer="demo"
     )
 
     db.session.add(admin)
@@ -491,17 +489,13 @@ def create_admin():
 
     return "Admin Created Successfully!"
 
-
-# -------- LOGOUT --------
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('home'))
 
+# ================= LOCAL RUN ONLY =================
 
-# ========================
-# RUN (FOR LOCAL ONLY)
-# ========================
 if __name__ == "__main__":
     app.run()
