@@ -1005,17 +1005,17 @@ def class_page(class_id):
 
 
 # ------ Subject ---
-@app.route('/class/<int:class_num>/<subject>')
+@app.route('/class/<int:class_id>/<int:subject_id>')
 @login_required
-def subject_page(class_num, subject):
+def subject_page(class_id, subject_id):
 
-    chapters = ["Chapter 1", "Chapter 2", "Chapter 3"]
+    chapters = Chapter.query.filter_by(subject_id=subject_id).all()
 
     return render_template(
         "chapters.html",
-        class_num=class_num,
-        subject=subject,
-        chapters=chapters
+        chapters=chapters,
+        class_id=class_id,
+        subject_id=subject_id
     )
 
 # --- subject's chapter -----
