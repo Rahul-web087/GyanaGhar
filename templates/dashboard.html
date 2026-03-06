@@ -189,6 +189,304 @@
 <!--</body>-->
 <!--</html>-->
 
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+
+<!--<title>Dashboard - GyanaGhar</title>-->
+
+<!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+
+<!--<style>-->
+
+<!--body{-->
+<!--margin:0;-->
+<!--font-family:Arial, Helvetica, sans-serif;-->
+<!--background:linear-gradient(135deg,#1e3c72,#2a5298);-->
+<!--color:white;-->
+<!--}-->
+
+<!--/* NAVBAR */-->
+
+<!--.navbar{-->
+<!--display:flex;-->
+<!--justify-content:space-between;-->
+<!--align-items:center;-->
+<!--padding:15px 40px;-->
+<!--background:#1e3c72;-->
+<!--box-shadow:0 4px 10px rgba(0,0,0,0.2);-->
+<!--}-->
+
+<!--.logo-section{-->
+<!--display:flex;-->
+<!--align-items:center;-->
+<!--gap:10px;-->
+<!--}-->
+
+<!--.logo-section img{-->
+<!--height:40px;-->
+<!--}-->
+
+<!--.navbar a{-->
+<!--color:white;-->
+<!--text-decoration:none;-->
+<!--margin-left:20px;-->
+<!--font-weight:bold;-->
+<!--}-->
+
+<!--.navbar a:hover{-->
+<!--text-decoration:underline;-->
+<!--}-->
+
+
+<!--/* MAIN CONTAINER */-->
+
+<!--.container{-->
+<!--width:90%;-->
+<!--margin:auto;-->
+<!--margin-top:40px;-->
+<!--text-align:center;-->
+<!--}-->
+
+
+<!--/* WELCOME CARD */-->
+
+<!--.welcome-card{-->
+<!--background:white;-->
+<!--color:#333;-->
+<!--padding:30px;-->
+<!--border-radius:12px;-->
+<!--width:420px;-->
+<!--margin:auto;-->
+<!--box-shadow:0 5px 20px rgba(0,0,0,0.3);-->
+<!--}-->
+
+<!--.welcome-card h2{-->
+<!--margin:0;-->
+<!--}-->
+
+
+<!--/* CLASS SECTION */-->
+
+<!--.section-title{-->
+<!--margin-top:50px;-->
+<!--font-size:22px;-->
+<!--}-->
+
+<!--.class-grid{-->
+<!--margin-top:30px;-->
+<!--display:grid;-->
+<!--grid-template-columns:repeat(auto-fit,minmax(200px,1fr));-->
+<!--gap:25px;-->
+<!--}-->
+
+
+<!--/* CLASS CARD */-->
+
+<!--.class-card{-->
+<!--background:white;-->
+<!--color:#333;-->
+<!--padding:25px;-->
+<!--border-radius:12px;-->
+<!--box-shadow:0 4px 15px rgba(0,0,0,0.3);-->
+<!--transition:0.3s;-->
+<!--}-->
+
+<!--.class-card:hover{-->
+<!--transform:translateY(-5px);-->
+<!--box-shadow:0 10px 25px rgba(0,0,0,0.4);-->
+<!--}-->
+
+<!--.class-card h4{-->
+<!--margin:10px 0;-->
+<!--}-->
+
+<!--.class-card a{-->
+<!--display:inline-block;-->
+<!--margin-top:10px;-->
+<!--padding:10px 25px;-->
+<!--background:#2a5298;-->
+<!--color:white;-->
+<!--border-radius:6px;-->
+<!--text-decoration:none;-->
+<!--font-weight:bold;-->
+<!--}-->
+
+<!--.class-card a:hover{-->
+<!--background:#1e3c72;-->
+<!--}-->
+
+
+<!--/* ADMIN PANEL */-->
+
+<!--.admin-panel{-->
+<!--margin-top:60px;-->
+<!--background:white;-->
+<!--color:#333;-->
+<!--padding:25px;-->
+<!--border-radius:12px;-->
+<!--width:400px;-->
+<!--margin-left:auto;-->
+<!--margin-right:auto;-->
+<!--box-shadow:0 4px 20px rgba(0,0,0,0.3);-->
+<!--}-->
+
+<!--.admin-btn{-->
+<!--display:block;-->
+<!--margin:12px auto;-->
+<!--padding:10px 25px;-->
+<!--background:#ff9800;-->
+<!--color:white;-->
+<!--border-radius:6px;-->
+<!--text-decoration:none;-->
+<!--width:200px;-->
+<!--}-->
+
+<!--.admin-btn:hover{-->
+<!--background:#e68900;-->
+<!--}-->
+
+
+<!--/* FOOTER */-->
+
+<!--footer{-->
+<!--margin-top:70px;-->
+<!--padding:20px;-->
+<!--background:#1e3c72;-->
+<!--text-align:center;-->
+<!--}-->
+
+<!--</style>-->
+
+<!--</head>-->
+
+
+<!--<body>-->
+
+<!--&lt;!&ndash; NAVBAR &ndash;&gt;-->
+
+<!--<div class="navbar">-->
+
+<!--<div class="logo-section">-->
+
+<!--<img src="{{ url_for('static', filename='gyanagharlogo.png') }}">-->
+
+<!--<h1>GyanaGhar</h1>-->
+
+<!--</div>-->
+
+<!--<div>-->
+
+<!--<a href="/dashboard">Home</a>-->
+
+<!--<a href="/logout">Logout</a>-->
+
+<!--</div>-->
+
+<!--</div>-->
+
+
+
+<!--<div class="container">-->
+
+
+<!--&lt;!&ndash; WELCOME &ndash;&gt;-->
+
+<!--<div class="welcome-card">-->
+
+<!--<h2>Welcome, {{ name }} 👋</h2>-->
+
+<!--<p>Select your class to start learning.</p>-->
+
+<!--</div>-->
+
+
+
+<!--<h3 class="section-title">📚 Choose Your Class</h3>-->
+
+
+<!--&lt;!&ndash; CLASS GRID &ndash;&gt;-->
+
+<!--<div class="class-grid">-->
+
+<!--<div class="class-card">-->
+<!--<h4>Class 6</h4>-->
+<!--<a href="/class/6">Enter</a>-->
+<!--</div>-->
+
+<!--<div class="class-card">-->
+<!--<h4>Class 7</h4>-->
+<!--<a href="/class/7">Enter</a>-->
+<!--</div>-->
+
+<!--<div class="class-card">-->
+<!--<h4>Class 8</h4>-->
+<!--<a href="/class/8">Enter</a>-->
+<!--</div>-->
+
+<!--<div class="class-card">-->
+<!--<h4>Class 9</h4>-->
+<!--<a href="/class/9">Enter</a>-->
+<!--</div>-->
+
+<!--<div class="class-card">-->
+<!--<h4>Class 10</h4>-->
+<!--<a href="/class/10">Enter</a>-->
+<!--</div>-->
+
+<!--</div>-->
+
+
+
+<!--&lt;!&ndash; ADMIN PANEL &ndash;&gt;-->
+
+<!--{% if current_user.role == "admin" %}-->
+
+<!--<div class="admin-panel">-->
+
+<!--<h3>⚙ Admin Panel</h3>-->
+
+<!--<a class="admin-btn" href="/admin/add_class">➕ Add Class</a>-->
+
+<!--<a class="admin-btn" href="/admin/add_subject">📚 Add Subject</a>-->
+
+<!--<a class="admin-btn" href="/admin/add_chapter">📖 Add Chapter</a>-->
+
+<!--<a class="admin-btn" href="/admin/add_note">📝 Add Notes</a>-->
+
+<!--<a class="admin-btn" href="/admin/notes">⚙ Manage Courses</a>-->
+
+<!--</div>-->
+
+<!--{% endif %}-->
+
+
+<!--</div>-->
+
+
+
+<!--<footer>-->
+
+<!--© 2026 GyanaGhar | Built by Rahul Nayak-->
+
+<!--</footer>-->
+
+<!--</body>-->
+<!--</html>-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -261,17 +559,13 @@ margin:auto;
 box-shadow:0 5px 20px rgba(0,0,0,0.3);
 }
 
-.welcome-card h2{
-margin:0;
-}
-
-
-/* CLASS SECTION */
-
 .section-title{
 margin-top:50px;
 font-size:22px;
 }
+
+
+/* CLASS GRID */
 
 .class-grid{
 margin-top:30px;
@@ -390,8 +684,6 @@ text-align:center;
 <div class="container">
 
 
-<!-- WELCOME -->
-
 <div class="welcome-card">
 
 <h2>Welcome, {{ name }} 👋</h2>
@@ -405,40 +697,25 @@ text-align:center;
 <h3 class="section-title">📚 Choose Your Class</h3>
 
 
-<!-- CLASS GRID -->
+<!-- DYNAMIC CLASS GRID -->
 
 <div class="class-grid">
 
-<div class="class-card">
-<h4>Class 6</h4>
-<a href="/class/6">Enter</a>
-</div>
+{% for c in classes %}
 
 <div class="class-card">
-<h4>Class 7</h4>
-<a href="/class/7">Enter</a>
+
+<h4>{{ c.name }}</h4>
+
+<a href="/class/{{ c.id }}">Enter</a>
+
 </div>
 
-<div class="class-card">
-<h4>Class 8</h4>
-<a href="/class/8">Enter</a>
-</div>
-
-<div class="class-card">
-<h4>Class 9</h4>
-<a href="/class/9">Enter</a>
-</div>
-
-<div class="class-card">
-<h4>Class 10</h4>
-<a href="/class/10">Enter</a>
-</div>
+{% endfor %}
 
 </div>
 
 
-
-<!-- ADMIN PANEL -->
 
 {% if current_user.role == "admin" %}
 
@@ -460,15 +737,11 @@ text-align:center;
 
 {% endif %}
 
-
 </div>
 
 
-
 <footer>
-
 © 2026 GyanaGhar | Built by Rahul Nayak
-
 </footer>
 
 </body>

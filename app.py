@@ -709,9 +709,14 @@ def login():
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('dashboard.html', name=current_user.name)
 
+    classes = Class.query.all()
 
+    return render_template(
+        'dashboard.html',
+        name=current_user.name,
+        classes=classes
+    )
 
 # ------- admin add note ------
 @app.route('/admin/add_note', methods=['GET', 'POST'])
@@ -833,7 +838,7 @@ def create_admin():
         admin = User(
             name="Admin",
             email="admin@gyanaghar.com",
-            password=generate_password_hash("Rahul@0708"),
+            password=generate_password_hash("admin123"),
             role="admin",
             secret_question="Your first school name?",
             secret_answer="demo"
@@ -986,16 +991,16 @@ def delete_class(class_num):
 
 
 #-------- class -------
-@app.route('/class/<int:class_num>')
+@app.route('/class/<int:class_id>')
 @login_required
-def class_page(class_num):
+def class_page(class_id):
 
-    subjects = ["Mathematics", "Science", "English", "Odia", "Social Science"]
+    subjects = Subject.query.filter_by(class_id=class_id).all()
 
     return render_template(
         "subjects.html",
-        class_num=class_num,
-        subjects=subjects
+        subjects=subjects,
+        class_id=class_id
     )
 
 
@@ -1044,11 +1049,7 @@ def chapter_page(class_num, subject, chapter):
     )
 
 
-# remove it
-@app.route('/init_db')
-def init_db():
-    db.create_all()
-    return "Database Initialized Successfully!"
+
 
 # -------- LOGOUT --------
 @app.route('/logout')
