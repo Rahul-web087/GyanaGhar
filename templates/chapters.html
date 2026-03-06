@@ -30,6 +30,21 @@
     <br>
     <a href="/class/{{ class_num }}">⬅ Back</a>
 </div>
+<h2>{{ subject }} - Class {{ class_num }}</h2>
+
+<ul>
+{% for chapter in chapters %}
+
+<li>
+<a href="/class/{{ class_num }}/{{ subject }}/{{ chapter }}">
+{{ chapter }}
+</a>
+</li>
+
+{% endfor %}
+</ul>
+
+<a href="/class/{{ class_num }}">Back</a>
 
 </body>
 </html>
