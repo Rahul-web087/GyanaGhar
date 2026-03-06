@@ -24,14 +24,92 @@
 <!--</body>-->
 <!--</html>-->
 
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+<!--    <title>Dashboard - GyanaGhar</title>-->
+<!--    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">-->
+<!--</head>-->
+<!--<body>-->
+<!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--<div class="navbar">-->
+<!--    <h1>GyanaGhar 🎓</h1>-->
+<!--    <div>-->
+<!--        <a href="/dashboard">Home</a>-->
+<!--        <a href="/logout">Logout</a>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<div class="container">-->
+
+<!--    &lt;!&ndash; Welcome Section &ndash;&gt;-->
+<!--    <div style="background:white; padding:25px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">-->
+<!--        <h2>Welcome, {{ name }} 👋</h2>-->
+<!--        <p>Select your class to start learning.</p>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Class Cards &ndash;&gt;-->
+<!--    <h3 style="margin-top:30px;">📚 Choose Your Class</h3>-->
+
+<!--    <div class="card-container">-->
+<!--        <div class="card">-->
+<!--            <h4>Class 6</h4>-->
+<!--            <a href="/class/6">Enter</a>-->
+<!--        </div>-->
+
+<!--        <div class="card">-->
+<!--            <h4>Class 7</h4>-->
+<!--            <a href="/class/7">Enter</a>-->
+<!--        </div>-->
+
+<!--        <div class="card">-->
+<!--            <h4>Class 8</h4>-->
+<!--            <a href="/class/8">Enter</a>-->
+<!--        </div>-->
+
+<!--        <div class="card">-->
+<!--            <h4>Class 9</h4>-->
+<!--            <a href="/class/9">Enter</a>-->
+<!--        </div>-->
+<!-- {% if current_user.role == "admin" %}-->
+<!--<hr>-->
+
+<!--<h3>Admin Panel</h3>-->
+
+<!--<ul>-->
+<!--    <li>-->
+<!--        <a href="/admin/add_note">➕ Add Course / Notes</a>-->
+<!--    </li>-->
+
+<!--    <li>-->
+<!--        <a href="/admin/notes">📚 Manage Courses</a>-->
+<!--    </li>-->
+<!--</ul>-->
+
+<!--{% endif %}-->
+<!--        <div class="card">-->
+<!--            <h4>Class 10</h4>-->
+<!--            <a href="/class/10">Enter</a>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--</div>-->
+<!--<footer style="margin-top:60px; padding:20px; text-align:center; background:#1e3c72; color:white;">-->
+<!--    © 2026 GyanaGhar | Built by Rahul Nayak-->
+<!--</footer>-->
+<!--</body>-->
+<!--</html>-->
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>Dashboard - GyanaGhar</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
+
 <body>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <div class="navbar">
     <h1>GyanaGhar 🎓</h1>
     <div>
@@ -52,6 +130,7 @@
     <h3 style="margin-top:30px;">📚 Choose Your Class</h3>
 
     <div class="card-container">
+
         <div class="card">
             <h4>Class 6</h4>
             <a href="/class/6">Enter</a>
@@ -76,11 +155,38 @@
             <h4>Class 10</h4>
             <a href="/class/10">Enter</a>
         </div>
+
     </div>
 
+
+    <!-- Admin Panel -->
+    {% if current_user.role == "admin" %}
+
+    <hr style="margin-top:40px;">
+
+    <h3>⚙ Admin Panel</h3>
+
+    <div class="card-container">
+
+        <div class="card">
+            <h4>Add Course</h4>
+            <a href="/admin/add_note">Add</a>
+        </div>
+
+        <div class="card">
+            <h4>Manage Courses</h4>
+            <a href="/admin/notes">Manage</a>
+        </div>
+
+    </div>
+
+    {% endif %}
+
 </div>
+
 <footer style="margin-top:60px; padding:20px; text-align:center; background:#1e3c72; color:white;">
     © 2026 GyanaGhar | Built by Rahul Nayak
 </footer>
+
 </body>
 </html>
