@@ -998,19 +998,7 @@ def class_page(class_num):
         subjects=subjects
     )
 
-# ------ chapter -------
-@app.route('/class/<int:class_num>/<subject>')
-@login_required
-def subject_page(class_num, subject):
 
-    chapters = ["Chapter 1", "Chapter 2", "Chapter 3"]
-
-    return render_template(
-        "chapters.html",
-        class_num=class_num,
-        subject=subject,
-        chapters=chapters
-    )
 # ------ Subject ---
 @app.route('/class/<int:class_num>/<subject>')
 @login_required
