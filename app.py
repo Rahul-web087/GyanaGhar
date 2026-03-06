@@ -669,10 +669,10 @@ def register():
 
 
 # -------- DATABASE INIT --------
-@app.route('/init_db')
-def init_db():
-    db.create_all()
-    return "Database Initialized Successfully!"
+# @app.route('/init_db')
+# def init_db():
+#     db.create_all()
+#     return "Database Initialized Successfully!"
 
 
 # -------- LOGIN --------
@@ -697,6 +697,47 @@ def login():
 @login_required
 def dashboard():
     return render_template('dashboard.html', name=current_user.name)
+
+
+
+# ------- admin add note ------
+@app.route('/admin/add_note', methods=['GET', 'POST'])
+@login_required
+def admin_add_note():
+
+    if current_user.role != "admin":
+        return "Access Denied"
+
+    if request.method == "POST":
+
+        class_num = request.form['class_num']
+        subject = request.form['subject']
+        chapter = request.form['chapter']
+        content = request.form['content']
+        video_link = request.form['video_link']
+
+        pdf = request.files['pdf_file']
+        filename = None
+
+        if pdf and pdf.filename != "":
+            filename = secure_filename(pdf.filename)
+            pdf.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+        new_note = Note(
+            class_num=class_num,
+            subject=subject,
+            chapter=chapter,
+            content=content,
+            video_link=video_link,
+            pdf_file=filename
+        )
+
+        db.session.add(new_note)
+        db.session.commit()
+
+        return "Course Added Successfully!"
+
+    return render_template("admin_add_note.html")
 
 
 # -------- PROFILE --------
@@ -792,6 +833,76 @@ def create_admin():
 
     except Exception as e:
         return f"Error: {str(e)}"
+
+
+
+
+# ---------- admin/add notes --------
+
+
+@app.route('/admin/notes')
+@login_required
+def admin_notes():
+
+    if current_user.role != "admin":
+        return "Access Denied"
+
+    notes = Note.query.all()
+
+    return render_template("admin_notes.html", notes=notes)
+
+
+
+#----- delete chapter ------
+
+@app.route('/admin/delete_note/<int:note_id>')
+@login_required
+def delete_note(note_id):
+
+    if current_user.role != "admin":
+        return "Access Denied"
+
+    note = Note.query.get_or_404(note_id)
+
+    if note.pdf_file:
+        pdf_path = os.path.join(app.config['UPLOAD_FOLDER'], note.pdf_file)
+        if os.path.exists(pdf_path):
+            os.remove(pdf_path)
+
+    db.session.delete(note)
+    db.session.commit()
+
+    return redirect(url_for('admin_notes'))
+
+
+
+
+# -------- Delete entire subject -----
+@app.route('/admin/delete_subject/<subject>')
+@login_required
+def delete_subject(subject):
+
+    if current_user.role != "admin":
+        return "Access Denied"
+
+    Note.query.filter_by(subject=subject).delete()
+    db.session.commit()
+
+    return redirect(url_for('admin_notes'))
+
+
+# ----- delete entire class ----
+@app.route('/admin/delete_class/<int:class_num>')
+@login_required
+def delete_class(class_num):
+
+    if current_user.role != "admin":
+        return "Access Denied"
+
+    Note.query.filter_by(class_num=class_num).delete()
+    db.session.commit()
+
+    return redirect(url_for('admin_notes'))
 
 
 # -------- LOGOUT --------
