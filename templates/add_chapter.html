@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Add Chapter - GyanaGhar</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+
+<div class="navbar">
+<h1>GyanaGhar 🎓</h1>
+
+<div>
+<a href="/dashboard">Dashboard</a>
+<a href="/logout">Logout</a>
+</div>
+</div>
+
+<div class="container">
+
+<div class="form-card">
+
+<h2>📖 Add Chapter</h2>
+
+<form method="POST">
+
+<label>Select Subject</label>
+
+<select name="subject_id">
+
+{% for s in subjects %}
+
+<option value="{{ s.id }}">{{ s.name }}</option>
+
+{% endfor %}
+
+</select>
+
+<label>Chapter Name</label>
+
+<input type="text" name="name" placeholder="Example: Chapter 1" required>
+
+<button type="submit">Add Chapter</button>
+
+</form>
+
+</div>
+
+</div>
+
+<footer class="footer">
+© 2026 GyanaGhar | Built by Rahul Nayak
+</footer>
+
+</body>
+</html>

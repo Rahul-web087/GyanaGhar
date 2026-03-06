@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Add Class - GyanaGhar</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+
+<div class="navbar">
+<h1>GyanaGhar 🎓</h1>
+
+<div>
+<a href="/dashboard">Dashboard</a>
+<a href="/logout">Logout</a>
+</div>
+</div>
+
+<div class="container">
+
+<div class="form-card">
+
+<h2>➕ Add New Class</h2>
+
+<form method="POST">
+
+<label>Class Name</label>
+
+<input type="text" name="name" placeholder="Example: Class 6" required>
+
+<button type="submit">Add Class</button>
+
+</form>
+
+</div>
+
+</div>
+
+<footer class="footer">
+© 2026 GyanaGhar | Built by Rahul Nayak
+</footer>
+
+</body>
+</html>

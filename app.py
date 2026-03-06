@@ -630,6 +630,24 @@ class Note(db.Model):
     video_link = db.Column(db.String(300))
     pdf_file = db.Column(db.String(200))
 
+ # ---- Update Databse models -----
+
+class Class(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50))
+
+
+class Subject(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100))
+    class_id = db.Column(db.Integer, db.ForeignKey('class.id'))
+
+
+class Chapter(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100))
+    subject_id = db.Column(db.Integer, db.ForeignKey('subject.id'))
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -668,11 +686,6 @@ def register():
     return render_template('register.html')
 
 
-# -------- DATABASE INIT --------
-# @app.route('/init_db')
-# def init_db():
-#     db.create_all()
-#     return "Database Initialized Successfully!"
 
 
 # -------- LOGIN --------
@@ -820,7 +833,7 @@ def create_admin():
         admin = User(
             name="Admin",
             email="admin@gyanaghar.com",
-            password=generate_password_hash("admin123"),
+            password=generate_password_hash("Rahul@0708"),
             role="admin",
             secret_question="Your first school name?",
             secret_answer="demo"
@@ -851,6 +864,73 @@ def admin_notes():
 
     return render_template("admin_notes.html", notes=notes)
 
+# ----- admin add class ------
+
+@app.route('/admin/add_class', methods=['GET','POST'])
+@login_required
+def add_class():
+
+    if current_user.role != "admin":
+        return "Access Denied"
+
+    if request.method == "POST":
+
+        name = request.form['name']
+
+        new_class = Class(name=name)
+
+        db.session.add(new_class)
+        db.session.commit()
+
+        return redirect(url_for('admin_dashboard'))
+
+    return render_template("add_class.html")
+# ----- admin  add subject -----
+@app.route('/admin/add_subject', methods=['GET','POST'])
+@login_required
+def add_subject():
+
+    if current_user.role != "admin":
+        return "Access Denied"
+
+    classes = Class.query.all()
+
+    if request.method == "POST":
+
+        subject = Subject(
+            name=request.form['name'],
+            class_id=request.form['class_id']
+        )
+
+        db.session.add(subject)
+        db.session.commit()
+
+        return redirect(url_for('admin_dashboard'))
+
+    return render_template("add_subject.html", classes=classes)
+# ----- admin add chapter -----
+@app.route('/admin/add_chapter', methods=['GET','POST'])
+@login_required
+def add_chapter():
+
+    if current_user.role != "admin":
+        return "Access Denied"
+
+    subjects = Subject.query.all()
+
+    if request.method == "POST":
+
+        chapter = Chapter(
+            name=request.form['name'],
+            subject_id=request.form['subject_id']
+        )
+
+        db.session.add(chapter)
+        db.session.commit()
+
+        return redirect(url_for('admin_dashboard'))
+
+    return render_template("add_chapter.html", subjects=subjects)
 
 
 #----- delete chapter ------
@@ -931,6 +1011,56 @@ def subject_page(class_num, subject):
         subject=subject,
         chapters=chapters
     )
+# ------ Subject ---
+@app.route('/class/<int:class_num>/<subject>')
+@login_required
+def subject_page(class_num, subject):
+
+    chapters = ["Chapter 1", "Chapter 2", "Chapter 3"]
+
+    return render_template(
+        "chapters.html",
+        class_num=class_num,
+        subject=subject,
+        chapters=chapters
+    )
+
+# --- subject's chapter -----
+@app.route('/class/<int:class_num>/<subject>/<chapter>')
+@login_required
+def chapter_page(class_num, subject, chapter):
+
+    note = Note.query.filter_by(
+        class_num=class_num,
+        subject=subject,
+        chapter=chapter
+    ).first()
+
+    if note:
+        content = note.content
+        video = note.video_link
+        pdf = note.pdf_file
+    else:
+        content = "No notes available yet."
+        video = None
+        pdf = None
+
+    return render_template(
+        "notes.html",
+        class_num=class_num,
+        subject=subject,
+        chapter=chapter,
+        notes=content,
+        video_link=video,
+        pdf_file=pdf
+    )
+
+
+# remove it
+@app.route('/init_db')
+def init_db():
+    db.create_all()
+    return "Database Initialized Successfully!"
 
 # -------- LOGOUT --------
 @app.route('/logout')

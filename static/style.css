@@ -118,3 +118,49 @@ h2 {
         width: 90%;
     }
 }
+
+.form-card{
+background:white;
+padding:30px;
+border-radius:12px;
+box-shadow:0 4px 12px rgba(0,0,0,0.1);
+max-width:400px;
+margin:auto;
+margin-top:40px;
+}
+
+.form-card h2{
+text-align:center;
+margin-bottom:20px;
+}
+
+.form-card input,
+.form-card select{
+width:100%;
+padding:10px;
+margin:10px 0;
+border:1px solid #ccc;
+border-radius:6px;
+}
+
+.form-card button{
+width:100%;
+padding:12px;
+background:#1e3c72;
+color:white;
+border:none;
+border-radius:8px;
+cursor:pointer;
+}
+
+.form-card button:hover{
+background:#16325c;
+}
+
+.footer{
+margin-top:60px;
+padding:20px;
+text-align:center;
+background:#1e3c72;
+color:white;
+}

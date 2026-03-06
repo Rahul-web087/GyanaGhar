@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Add Subject - GyanaGhar</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+
+<div class="navbar">
+<h1>GyanaGhar 🎓</h1>
+
+<div>
+<a href="/dashboard">Dashboard</a>
+<a href="/logout">Logout</a>
+</div>
+</div>
+
+<div class="container">
+
+<div class="form-card">
+
+<h2>📚 Add Subject</h2>
+
+<form method="POST">
+
+<label>Select Class</label>
+
+<select name="class_id">
+
+{% for c in classes %}
+
+<option value="{{ c.id }}">{{ c.name }}</option>
+
+{% endfor %}
+
+</select>
+
+<label>Subject Name</label>
+
+<input type="text" name="name" placeholder="Example: Mathematics" required>
+
+<button type="submit">Add Subject</button>
+
+</form>
+
+</div>
+
+</div>
+
+<footer class="footer">
+© 2026 GyanaGhar | Built by Rahul Nayak
+</footer>
+
+</body>
+</html>
