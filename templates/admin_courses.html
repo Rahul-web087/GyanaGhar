@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Manage Courses</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f4f6fb;
+margin:0;
+}
+
+.container{
+width:90%;
+margin:auto;
+margin-top:40px;
+}
+
+table{
+width:100%;
+background:white;
+border-collapse:collapse;
+}
+
+th,td{
+padding:12px;
+border-bottom:1px solid #ddd;
+text-align:left;
+}
+
+th{
+background:#1e3c72;
+color:white;
+}
+
+.delete{
+background:#dc3545;
+color:white;
+padding:6px 12px;
+border-radius:4px;
+text-decoration:none;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>📚 Course Manager</h2>
+
+<table>
+
+<tr>
+<th>Class</th>
+<th>Subject</th>
+<th>Chapter</th>
+<th>Action</th>
+</tr>
+
+{% for item in courses %}
+
+<tr>
+
+<td>{{ item.class_name }}</td>
+
+<td>{{ item.subject_name }}</td>
+
+<td>{{ item.chapter_name }}</td>
+
+<td>
+
+<a class="delete" href="/admin/delete_course/{{ item.chapter_id }}">
+Delete
+
+</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+</body>
+</html>
