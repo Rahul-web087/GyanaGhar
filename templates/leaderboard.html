@@ -1,0 +1,24 @@
+<h2>Student Leaderboard</h2>
+
+<table>
+
+<tr>
+
+<th>Student</th>
+<th>Completed Chapters</th>
+
+</tr>
+
+{% for d in data %}
+
+<tr>
+
+<td>{{ d.name }}</td>
+
+<td>{{ d.completed }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>

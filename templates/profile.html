@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Profile - GyanaGhar</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+body{
+font-family:Arial;
+margin:0;
+background:linear-gradient(135deg,#1e3c72,#2a5298);
+color:white;
+}
+
+.container{
+width:400px;
+margin:auto;
+margin-top:80px;
+background:white;
+color:#333;
+padding:30px;
+border-radius:10px;
+box-shadow:0 5px 20px rgba(0,0,0,0.3);
+}
+
+input{
+width:100%;
+padding:10px;
+margin-top:10px;
+margin-bottom:20px;
+border-radius:5px;
+border:1px solid #ccc;
+}
+
+button{
+background:#2a5298;
+color:white;
+padding:10px 20px;
+border:none;
+border-radius:5px;
+cursor:pointer;
+}
+
+button:hover{
+background:#1e3c72;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>My Profile</h2>
+
+<form method="POST" action="/update_profile">
+
+<label>Name</label>
+
+<input type="text" name="name" value="{{ user.name }}">
+
+<label>Email</label>
+
+<input type="email" name="email" value="{{ user.email }}">
+
+<button type="submit">Update Profile</button>
+
+</form>
+
+<br>
+
+<a href="/dashboard">← Back to Dashboard</a>
+
+</div>
+
+</body>
+</html>

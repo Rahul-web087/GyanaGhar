@@ -669,11 +669,20 @@ text-align:center;
 
 </div>
 
-<div>
+<<div>
 
 <a href="/dashboard">Home</a>
 
-<a href="/logout">Logout</a>
+<a href="/profile">Profile</a>
+
+<form method="POST" action="/delete_account" style="display:inline;">
+<button style="background:red;color:white;border:none;padding:6px 10px;border-radius:5px;"
+onclick="return confirm('Are you sure you want to delete your account?');">
+
+Delete Account
+
+</button>
+</form>
 
 </div>
 
@@ -716,7 +725,6 @@ text-align:center;
 </div>
 
 
-
 {% if current_user.role == "admin" %}
 
 <div class="admin-panel">
@@ -731,18 +739,20 @@ text-align:center;
 
 <a class="admin-btn" href="/admin/add_note">📝 Add Notes</a>
 
-<a class="admin-btn" href="/admin/notes">⚙ Manage Courses</a>
+<a class="admin-btn" href="/admin/courses">⚙ Manage Courses</a>
+
+<a class="admin-btn" href="/admin/analytics">📊 Analytics</a>
 
 </div>
 
 {% endif %}
-
-</div>
 
 
 <footer>
 © 2026 GyanaGhar | Built by Rahul Nayak
 </footer>
 
+</div>
 </body>
+
 </html>
