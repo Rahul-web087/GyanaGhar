@@ -1532,52 +1532,68 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
 
+
 # ================= MODELS =================
 
 class User(UserMixin, db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
+
     name = db.Column(db.String(100))
+
     email = db.Column(db.String(100), unique=True)
+
     password = db.Column(db.String(200))
+
     role = db.Column(db.String(20), default="student")
 
 
 class Class(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
+
     name = db.Column(db.String(50))
-    thumbnail = db.Column(db.String(200))
 
 
 class Subject(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
+
     name = db.Column(db.String(100))
+
     class_id = db.Column(db.Integer, db.ForeignKey('class.id'))
 
 
 class Chapter(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
+
     name = db.Column(db.String(100))
+
     subject_id = db.Column(db.Integer, db.ForeignKey('subject.id'))
 
 
 class Note(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
-    chapter_id = db.Column(db.Integer)
+
+    chapter_id = db.Column(db.Integer, db.ForeignKey('chapter.id'))
+
     content = db.Column(db.Text)
+
     video_link = db.Column(db.String(300))
+
     pdf_file = db.Column(db.String(200))
 
 
 class Progress(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
+
     user_id = db.Column(db.Integer)
+
     chapter_id = db.Column(db.Integer)
+
     completed = db.Column(db.Boolean, default=False)
 
 
@@ -1585,17 +1601,12 @@ class Progress(db.Model):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+
 # ================= HOME =================
 
 @app.route('/')
 def home():
-
-    if current_user.is_authenticated:
-        return redirect("/dashboard")
-
-    return render_template("home.html")
-
-
+    return redirect("/login")
 # ================= REGISTER =================
 
 @app.route('/register', methods=['GET','POST'])
@@ -1640,26 +1651,60 @@ def init_db():
     db.drop_all()
     db.create_all()
     return "Database recreated successfully!"
-# ======= admin =====
-@app.route("/create_admin")
+
+
+
+# # ======= admin =====
+# @app.route("/create_admin")
+# def create_admin():
+#
+#     existing = User.query.filter_by(email="admin@gyanaghar.com").first()
+#
+#     if existing:
+#         return "Admin already exists"
+#
+#     admin = User(
+#         name="Admin",
+#         email="admin@gyanaghar.com",
+#         password=generate_password_hash("admin123"),
+#         role="admin"
+#     )
+#
+#     db.session.add(admin)
+#     db.session.commit()
+#
+#     return "Admin created successfully"
+
+
+# -------- CREATE ADMIN --------
+@app.route('/create_admin')
 def create_admin():
 
-    existing = User.query.filter_by(email="admin@gyanaghar.com").first()
+    try:
 
-    if existing:
-        return "Admin already exists"
+        if User.query.filter_by(email="admin@gyanaghar.com").first():
+            return "Admin already exists!"
 
-    admin = User(
-        name="Admin",
-        email="admin@gyanaghar.com",
-        password=generate_password_hash("admin123"),
-        role="admin"
-    )
+        admin = User(
+            name="Admin",
+            email="admin@gyanaghar.com",
+            password=generate_password_hash("admin123"),
+            role="admin",
+            secret_question="Your first school name?",
+            secret_answer="demo"
+        )
 
-    db.session.add(admin)
-    db.session.commit()
+        db.session.add(admin)
+        db.session.commit()
 
-    return "Admin created successfully"
+        return "Admin Created Successfully!"
+
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+
+
+
 
 
 # ================= DASHBOARD =================
@@ -1672,29 +1717,9 @@ def dashboard():
 
     return render_template(
         "dashboard.html",
-        classes=classes,
-        name=current_user.name
+        name=current_user.name,
+        classes=classes
     )
-
-
-
-# ================= UPDATE PROFILE =================
-
-@app.route('/update_profile', methods=['POST'])
-@login_required
-def update_profile():
-
-    user = User.query.get(current_user.id)
-
-    user.name = request.form['name']
-    user.email = request.form['email']
-
-    db.session.commit()
-
-    return redirect("/profile")
-
-
-
 
 
 # ================= CLASS PAGE =================
