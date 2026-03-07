@@ -1633,6 +1633,15 @@ def login():
     return render_template("login.html")
 
 
+# delet it --=-=-
+
+@app.route("/init_db")
+def init_db():
+    db.drop_all()
+    db.create_all()
+    return "Database recreated successfully!"
+
+
 # ================= DASHBOARD =================
 
 @app.route('/dashboard')
