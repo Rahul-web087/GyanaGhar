@@ -1633,13 +1633,33 @@ def login():
     return render_template("login.html")
 
 
-# delet it --=-=-
+# ================delete =========== it --=-=-
 
 @app.route("/init_db")
 def init_db():
     db.drop_all()
     db.create_all()
     return "Database recreated successfully!"
+# ======= admin =====
+@app.route("/create_admin")
+def create_admin():
+
+    existing = User.query.filter_by(email="admin@gyanaghar.com").first()
+
+    if existing:
+        return "Admin already exists"
+
+    admin = User(
+        name="Admin",
+        email="admin@gyanaghar.com",
+        password=generate_password_hash("admin123"),
+        role="admin"
+    )
+
+    db.session.add(admin)
+    db.session.commit()
+
+    return "Admin created successfully"
 
 
 # ================= DASHBOARD =================
