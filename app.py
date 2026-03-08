@@ -1547,6 +1547,10 @@ class User(UserMixin, db.Model):
 
     role = db.Column(db.String(20), default="student")
 
+    secret_question = db.Column(db.String(200))
+
+    secret_answer = db.Column(db.String(200))
+
 
 class Class(db.Model):
 
@@ -1606,7 +1610,7 @@ def load_user(user_id):
 
 @app.route('/')
 def home():
-    return redirect("/login")
+    return render_template("home.html")
 # ================= REGISTER =================
 
 @app.route('/register', methods=['GET','POST'])
@@ -1617,7 +1621,9 @@ def register():
         user = User(
             name=request.form['name'],
             email=request.form['email'],
-            password=generate_password_hash(request.form['password'])
+            password=generate_password_hash(request.form['password']),
+            secret_question=request.form['secret_question'],
+            secret_answer=request.form['secret_answer'].lower()
         )
 
         db.session.add(user)
@@ -1701,6 +1707,42 @@ def create_admin():
 
     except Exception as e:
         return f"Error: {str(e)}"
+
+
+
+# -------- FORGOT PASSWORD --------
+@app.route('/forgot_password', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == 'POST':
+        user = User.query.filter_by(email=request.form['email']).first()
+        if user:
+            session['reset_user'] = user.id
+            return render_template('secret_question.html', question=user.secret_question)
+        return "Email not found"
+    return render_template('forgot_password.html')
+
+
+# -------- VERIFY SECRET --------
+@app.route('/verify_secret', methods=['POST'])
+def verify_secret():
+    user = User.query.get(session.get('reset_user'))
+    if user and request.form['answer'].lower() == user.secret_answer:
+        return render_template('reset_password.html')
+    return "Wrong Answer"
+
+
+# -------- RESET PASSWORD --------
+@app.route('/reset_password', methods=['POST'])
+def reset_password():
+    user = User.query.get(session.get('reset_user'))
+    if user:
+        user.password = generate_password_hash(request.form['password'])
+        db.session.commit()
+        session.pop('reset_user', None)
+        return redirect(url_for('login'))
+    return "Session expired"
+
+
 
 
 
