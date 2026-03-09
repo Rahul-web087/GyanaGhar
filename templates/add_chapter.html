@@ -21,25 +21,23 @@
 
 <div class="form-card">
 
-<h2>📖 Add Chapter</h2>
+<h2>Add Chapter</h2>
 
 <form method="POST">
 
-<label>Select Subject</label>
+<input type="text" name="name" placeholder="Chapter Name" required>
 
-<select name="subject_id">
+<br><br>
+
+<select name="subject_id" required>
 
 {% for s in subjects %}
-
 <option value="{{ s.id }}">{{ s.name }}</option>
-
 {% endfor %}
 
 </select>
 
-<label>Chapter Name</label>
-
-<input type="text" name="name" placeholder="Example: Chapter 1" required>
+<br><br>
 
 <button type="submit">Add Chapter</button>
 

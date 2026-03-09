@@ -50,10 +50,9 @@ text-decoration:none;
 <body>
 
 <div class="container">
+<h2>Manage Courses</h2>
 
-<h2>📚 Course Manager</h2>
-
-<table>
+<table border="1">
 
 <tr>
 <th>Class</th>
@@ -62,23 +61,16 @@ text-decoration:none;
 <th>Action</th>
 </tr>
 
-{% for item in courses %}
+{% for c in courses %}
 
 <tr>
 
-<td>{{ item.class_name }}</td>
-
-<td>{{ item.subject_name }}</td>
-
-<td>{{ item.chapter_name }}</td>
+<td>{{ c.class_name }}</td>
+<td>{{ c.subject_name }}</td>
+<td>{{ c.chapter_name }}</td>
 
 <td>
-
-<a class="delete" href="/admin/delete_course/{{ item.chapter_id }}">
-Delete
-
-</a>
-
+<a href="/admin/delete_course/{{ c.id }}">Delete</a>
 </td>
 
 </tr>

@@ -1974,12 +1974,15 @@ def add_chapter():
 
     if request.method == "POST":
 
-        chapter = Chapter(
-            name=request.form['name'],
-            subject_id=request.form['subject_id']
+        chapter_name = request.form.get("name")
+        subject_id = request.form.get("subject_id")
+
+        new_chapter = Chapter(
+            name=chapter_name,
+            subject_id=subject_id
         )
 
-        db.session.add(chapter)
+        db.session.add(new_chapter)
         db.session.commit()
 
         return redirect("/dashboard")
@@ -2049,20 +2052,17 @@ def admin_courses():
     if current_user.role != "admin":
         return "Access Denied"
 
-    data = db.session.execute("""
-
-    SELECT chapter.id as chapter_id,
-           chapter.name as chapter_name,
-           subject.name as subject_name,
-           class.name as class_name
-
-    FROM chapter
-    JOIN subject ON chapter.subject_id = subject.id
-    JOIN class ON subject.class_id = class.id
-
+    courses = db.session.execute("""
+        SELECT chapter.id,
+               chapter.name as chapter_name,
+               subject.name as subject_name,
+               class.name as class_name
+        FROM chapter
+        JOIN subject ON chapter.subject_id = subject.id
+        JOIN class ON subject.class_id = class.id
     """).fetchall()
 
-    return render_template("admin_courses.html", courses=data)
+    return render_template("admin_courses.html", courses=courses)
 
 
 # ================= DELETE COURSE =================
@@ -2074,7 +2074,7 @@ def delete_course(chapter_id):
     if current_user.role != "admin":
         return "Access Denied"
 
-    chapter = Chapter.query.get(chapter_id)
+    chapter = Chapter.query.get_or_404(chapter_id)
 
     db.session.delete(chapter)
     db.session.commit()
