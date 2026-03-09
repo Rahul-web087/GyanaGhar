@@ -1507,7 +1507,7 @@
 
 
 import os
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for, request, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -1557,6 +1557,8 @@ class Class(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
     name = db.Column(db.String(50))
+
+
 
 
 class Subject(db.Model):
@@ -1650,13 +1652,34 @@ def login():
     return render_template("login.html")
 
 
-# ================delete =========== it --=-=-
+# =============== Profile =============
 
-@app.route("/init_db")
-def init_db():
-    db.drop_all()
-    db.create_all()
-    return "Database recreated successfully!"
+@app.route('/profile', methods=['GET','POST'])
+@login_required
+def profile():
+
+    if request.method == "POST":
+
+        current_user.name = request.form.get("name")
+        current_user.email = request.form.get("email")
+
+        db.session.commit()
+
+        return redirect("/dashboard")
+
+    return render_template("profile.html", user=current_user)
+
+
+
+
+
+# ================delete =========== it --=-=-
+#
+# @app.route("/init_db")
+# def init_db():
+#     db.drop_all()
+#     db.create_all()
+#     return "Database recreated successfully!"
 
 
 
@@ -1901,8 +1924,7 @@ def add_class():
     if request.method == "POST":
 
         new_class = Class(
-            name=request.form['name'],
-            thumbnail=request.form['thumbnail']
+            name=request.form.get('name')
         )
 
         db.session.add(new_class)
