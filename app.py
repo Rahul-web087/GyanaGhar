@@ -2004,10 +2004,10 @@ def add_note():
     if request.method == "POST":
 
         note = Note(
-            chapter_id=request.form['chapter_id'],
-            content=request.form['content'],
-            video_link=request.form['video_link'],
-            pdf_file=request.form['pdf_file']
+            chapter_id=request.form.get("chapter_id"),
+            content=request.form.get("content"),
+            video_link=request.form.get("video_link"),
+            pdf_file=request.form.get("pdf_file")
         )
 
         db.session.add(note)

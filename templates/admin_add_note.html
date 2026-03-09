@@ -1,36 +1,65 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Add Note</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
+<title>Add Note</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+
 <div class="navbar">
-    <h1>Add Note - Admin</h1>
-    <a href="/logout">Logout</a>
+<h1>Add Note - Admin</h1>
+<a href="/dashboard">Dashboard</a>
+<a href="/logout">Logout</a>
 </div>
 
 <div class="container">
-    <h3>Add New Note</h3>
 
- <form method="POST" enctype="multipart/form-data">
+<h3>Add New Note</h3>
 
-    <input type="number" name="class_num" placeholder="Class Number" required><br><br>
+<form method="POST">
 
-    <input type="text" name="subject" placeholder="Subject" required><br><br>
+<label>Select Chapter</label>
+<br>
 
-    <input type="text" name="chapter" placeholder="Chapter Name" required><br><br>
+<select name="chapter_id" required>
 
-    <input type="text" name="video_link" placeholder="YouTube Embed Link"><br><br>
+{% for chapter in chapters %}
 
-    <input type="file" name="pdf_file" accept="application/pdf"><br><br>
+<option value="{{ chapter.id }}">{{ chapter.name }}</option>
 
-    <textarea name="content" placeholder="HTML Note Content" rows="6" style="width:90%;" required></textarea><br><br>
+{% endfor %}
 
-    <button type="submit">Add Note</button>
+</select>
+
+<br><br>
+
+<label>YouTube Video Link</label>
+<br>
+
+<input type="text" name="video_link" placeholder="YouTube Embed Link">
+
+<br><br>
+
+<label>PDF File Link</label>
+<br>
+
+<input type="text" name="pdf_file" placeholder="PDF URL">
+
+<br><br>
+
+<label>Note Content</label>
+<br>
+
+<textarea name="content" rows="6" style="width:90%;" placeholder="HTML Note Content"></textarea>
+
+<br><br>
+
+<button type="submit">Add Note</button>
 
 </form>
+
 </div>
 
 </body>
