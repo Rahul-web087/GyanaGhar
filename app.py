@@ -1675,11 +1675,11 @@ def profile():
 
 # ================delete =========== it --=-=-
 #
-# @app.route("/init_db")
-# def init_db():
-#     db.drop_all()
-#     db.create_all()
-#     return "Database recreated successfully!"
+@app.route("/init_db")
+def init_db():
+    db.drop_all()
+    db.create_all()
+    return "Database recreated successfully!"
 
 
 
@@ -1717,7 +1717,7 @@ def create_admin():
         admin = User(
             name="Admin",
             email="admin@gyanaghar.com",
-            password=generate_password_hash("admin123"),
+            password=generate_password_hash("Rahul@001"),
             role="admin",
             secret_question="Your first school name?",
             secret_answer="demo"
@@ -1827,8 +1827,7 @@ def chapter_page(chapter_id):
 
     return render_template(
         "notes.html",
-        note=note,
-        chapter_id=chapter_id
+        note=note
     )
 
 
@@ -1995,8 +1994,10 @@ def add_note():
 
     if request.method == "POST":
 
+        chapter_id = request.form.get("chapter_id")
+
         note = Note(
-            chapter_id=request.form.get("chapter_id"),
+            chapter_id=chapter_id,
             content=request.form.get("content"),
             video_link=request.form.get("video_link"),
             pdf_file=request.form.get("pdf_file")
@@ -2045,13 +2046,15 @@ def admin_courses():
         return "Access Denied"
 
     courses = db.session.execute("""
-        SELECT chapter.id,
-               chapter.name as chapter_name,
-               subject.name as subject_name,
-               class.name as class_name
+        SELECT 
+            chapter.id AS chapter_id,
+            chapter.name AS chapter_name,
+            subject.name AS subject_name,
+            class.name AS class_name
         FROM chapter
         JOIN subject ON chapter.subject_id = subject.id
         JOIN class ON subject.class_id = class.id
+        ORDER BY class.name, subject.name, chapter.name
     """).fetchall()
 
     return render_template("admin_courses.html", courses=courses)
@@ -2072,6 +2075,27 @@ def delete_course(chapter_id):
     db.session.commit()
 
     return redirect("/admin/courses")
+
+
+# ======= Edit Chapter  ==========
+@app.route('/admin/edit_chapter/<int:chapter_id>', methods=['GET','POST'])
+@login_required
+def edit_chapter(chapter_id):
+
+    if current_user.role != "admin":
+        return "Access Denied"
+
+    chapter = Chapter.query.get_or_404(chapter_id)
+
+    if request.method == "POST":
+
+        chapter.name = request.form.get("name")
+
+        db.session.commit()
+
+        return redirect("/admin/courses")
+
+    return render_template("edit_chapter.html", chapter=chapter)
 
 
 

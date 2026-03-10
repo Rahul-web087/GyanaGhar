@@ -1,76 +1,145 @@
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+
+<!--<title>Manage Courses</title>-->
+
+<!--<style>-->
+
+<!--body{-->
+<!--font-family:Arial;-->
+<!--background:#f4f6fb;-->
+<!--margin:0;-->
+<!--}-->
+
+<!--.container{-->
+<!--width:90%;-->
+<!--margin:auto;-->
+<!--margin-top:40px;-->
+<!--}-->
+
+<!--table{-->
+<!--width:100%;-->
+<!--background:white;-->
+<!--border-collapse:collapse;-->
+<!--}-->
+
+<!--th,td{-->
+<!--padding:12px;-->
+<!--border-bottom:1px solid #ddd;-->
+<!--text-align:left;-->
+<!--}-->
+
+<!--th{-->
+<!--background:#1e3c72;-->
+<!--color:white;-->
+<!--}-->
+
+<!--.delete{-->
+<!--background:#dc3545;-->
+<!--color:white;-->
+<!--padding:6px 12px;-->
+<!--border-radius:4px;-->
+<!--text-decoration:none;-->
+<!--}-->
+
+<!--</style>-->
+
+<!--</head>-->
+
+<!--<body>-->
+
+<!--<div class="container">-->
+<!--<h2>Manage Courses</h2>-->
+
+<!--<table border="1">-->
+
+<!--<tr>-->
+<!--<th>Class</th>-->
+<!--<th>Subject</th>-->
+<!--<th>Chapter</th>-->
+<!--<th>Action</th>-->
+<!--</tr>-->
+
+<!--{% for c in courses %}-->
+
+<!--<tr>-->
+
+<!--<td>{{ c.class_name }}</td>-->
+<!--<td>{{ c.subject_name }}</td>-->
+<!--<td>{{ c.chapter_name }}</td>-->
+
+<!--<td>-->
+<!--<a href="/admin/delete_course/{{ c.id }}">Delete</a>-->
+<!--</td>-->
+
+<!--</tr>-->
+
+<!--{% endfor %}-->
+
+<!--</table>-->
+
+<!--</div>-->
+
+<!--</body>-->
+<!--</html>-->
+
+
+
 <!DOCTYPE html>
 <html>
 <head>
 
 <title>Manage Courses</title>
 
-<style>
-
-body{
-font-family:Arial;
-background:#f4f6fb;
-margin:0;
-}
-
-.container{
-width:90%;
-margin:auto;
-margin-top:40px;
-}
-
-table{
-width:100%;
-background:white;
-border-collapse:collapse;
-}
-
-th,td{
-padding:12px;
-border-bottom:1px solid #ddd;
-text-align:left;
-}
-
-th{
-background:#1e3c72;
-color:white;
-}
-
-.delete{
-background:#dc3545;
-color:white;
-padding:6px 12px;
-border-radius:4px;
-text-decoration:none;
-}
-
-</style>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
 </head>
 
 <body>
 
-<div class="container">
-<h2>Manage Courses</h2>
+<div class="navbar">
 
-<table border="1">
+<h1>Manage Courses</h1>
+
+<a href="/dashboard">Dashboard</a>
+<a href="/logout">Logout</a>
+
+</div>
+
+<div class="container">
+
+<h3>Course List</h3>
+
+<table border="1" width="100%" style="background:white">
 
 <tr>
+
 <th>Class</th>
 <th>Subject</th>
 <th>Chapter</th>
 <th>Action</th>
+
 </tr>
 
-{% for c in courses %}
+{% for course in courses %}
 
 <tr>
 
-<td>{{ c.class_name }}</td>
-<td>{{ c.subject_name }}</td>
-<td>{{ c.chapter_name }}</td>
+<td>{{ course.class_name }}</td>
+
+<td>{{ course.subject_name }}</td>
+
+<td>{{ course.chapter_name }}</td>
 
 <td>
-<a href="/admin/delete_course/{{ c.id }}">Delete</a>
+
+<a href="/admin/edit_chapter/{{ course.chapter_id }}">Edit</a>
+
+|
+
+<a href="/admin/delete_course/{{ course.chapter_id }}">Delete</a>
+
 </td>
 
 </tr>

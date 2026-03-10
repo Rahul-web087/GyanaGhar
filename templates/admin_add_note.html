@@ -1,9 +1,80 @@
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+<!--<title>Add Note</title>-->
+<!--<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">-->
+<!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--</head>-->
+
+<!--<body>-->
+
+<!--<div class="navbar">-->
+<!--<h1>Add Note - Admin</h1>-->
+<!--<a href="/dashboard">Dashboard</a>-->
+<!--<a href="/logout">Logout</a>-->
+<!--</div>-->
+
+<!--<div class="container">-->
+
+<!--<h3>Add New Note</h3>-->
+
+<!--<form method="POST">-->
+
+<!--<label>Select Chapter</label>-->
+<!--<br>-->
+
+<!--<select name="chapter_id" required>-->
+
+<!--{% for chapter in chapters %}-->
+
+<!--<option value="{{ chapter.id }}">{{ chapter.name }}</option>-->
+
+<!--{% endfor %}-->
+
+<!--</select>-->
+
+<!--<br><br>-->
+
+<!--<label>YouTube Video Link</label>-->
+<!--<br>-->
+
+<!--<input type="text" name="video_link" placeholder="YouTube Embed Link">-->
+
+<!--<br><br>-->
+
+<!--<label>PDF File Link</label>-->
+<!--<br>-->
+
+<!--<input type="text" name="pdf_file" placeholder="PDF URL">-->
+
+<!--<br><br>-->
+
+<!--<label>Note Content</label>-->
+<!--<br>-->
+
+<!--<textarea name="content" rows="6" style="width:90%;" placeholder="HTML Note Content"></textarea>-->
+
+<!--<br><br>-->
+
+<!--<button type="submit">Add Note</button>-->
+
+<!--</form>-->
+
+<!--</div>-->
+
+<!--</body>-->
+<!--</html>-->
+
+
+
+
+
+
 <!DOCTYPE html>
 <html>
 <head>
 <title>Add Note</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
@@ -21,13 +92,14 @@
 <form method="POST">
 
 <label>Select Chapter</label>
-<br>
 
 <select name="chapter_id" required>
 
 {% for chapter in chapters %}
 
-<option value="{{ chapter.id }}">{{ chapter.name }}</option>
+<option value="{{ chapter.id }}">
+{{ chapter.name }}
+</option>
 
 {% endfor %}
 
@@ -35,24 +107,15 @@
 
 <br><br>
 
-<label>YouTube Video Link</label>
-<br>
-
 <input type="text" name="video_link" placeholder="YouTube Embed Link">
 
 <br><br>
 
-<label>PDF File Link</label>
-<br>
-
-<input type="text" name="pdf_file" placeholder="PDF URL">
+<input type="text" name="pdf_file" placeholder="PDF Link">
 
 <br><br>
 
-<label>Note Content</label>
-<br>
-
-<textarea name="content" rows="6" style="width:90%;" placeholder="HTML Note Content"></textarea>
+<textarea name="content" placeholder="Note Content" rows="6" style="width:90%;"></textarea>
 
 <br><br>
 
