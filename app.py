@@ -1825,18 +1825,10 @@ def chapter_page(chapter_id):
 
     note = Note.query.filter_by(chapter_id=chapter_id).first()
 
-    progress = Progress.query.filter_by(
-        user_id=current_user.id,
-        chapter_id=chapter_id
-    ).first()
-
-    completed = progress.completed if progress else False
-
     return render_template(
         "notes.html",
         note=note,
-        chapter_id=chapter_id,
-        completed=completed
+        chapter_id=chapter_id
     )
 
 

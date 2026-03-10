@@ -53,147 +53,258 @@
 
 
 
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+
+<!--<title>Study Notes - GyanaGhar</title>-->
+
+<!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+
+<!--<style>-->
+
+<!--body{-->
+<!--font-family:Arial;-->
+<!--margin:0;-->
+<!--background:#f4f6fb;-->
+<!--}-->
+
+<!--.navbar{-->
+<!--background:#1e3c72;-->
+<!--color:white;-->
+<!--padding:15px 30px;-->
+<!--display:flex;-->
+<!--justify-content:space-between;-->
+<!--}-->
+
+<!--.container{-->
+<!--width:90%;-->
+<!--margin:auto;-->
+<!--margin-top:30px;-->
+<!--}-->
+
+<!--.video{-->
+<!--margin-top:20px;-->
+<!--}-->
+
+<!--.video iframe{-->
+<!--width:100%;-->
+<!--height:420px;-->
+<!--border-radius:10px;-->
+<!--}-->
+
+<!--.pdf{-->
+<!--margin-top:30px;-->
+<!--}-->
+
+<!--.pdf iframe{-->
+<!--width:100%;-->
+<!--height:500px;-->
+<!--border-radius:10px;-->
+<!--}-->
+
+<!--.note-content{-->
+<!--background:white;-->
+<!--padding:20px;-->
+<!--margin-top:30px;-->
+<!--border-radius:10px;-->
+<!--}-->
+
+<!--.complete-btn{-->
+<!--display:inline-block;-->
+<!--margin-top:20px;-->
+<!--background:#28a745;-->
+<!--color:white;-->
+<!--padding:12px 25px;-->
+<!--border-radius:6px;-->
+<!--text-decoration:none;-->
+<!--}-->
+
+<!--.complete-btn:hover{-->
+<!--background:#218838;-->
+<!--}-->
+
+<!--</style>-->
+
+<!--</head>-->
+
+<!--<body>-->
+
+<!--<div class="navbar">-->
+
+<!--<h2>GyanaGhar</h2>-->
+
+<!--<a href="/dashboard" style="color:white;">Dashboard</a>-->
+
+<!--</div>-->
+
+
+<!--<div class="container">-->
+
+<!--<h2>Chapter Study Material</h2>-->
+
+
+<!--{% if note.video_link %}-->
+
+<!--<div class="video">-->
+
+<!--<h3>📺 Video Lecture</h3>-->
+
+<!--<iframe src="{{ note.video_link }}" allowfullscreen></iframe>-->
+
+<!--</div>-->
+
+<!--{% endif %}-->
+
+
+<!--{% if note.pdf_file %}-->
+
+<!--<div class="pdf">-->
+
+<!--<h3>📄 PDF Notes</h3>-->
+
+<!--<iframe src="{{ url_for('static', filename='pdf/'+note.pdf_file) }}"></iframe>-->
+
+<!--</div>-->
+
+<!--{% endif %}-->
+
+
+<!--<div class="note-content">-->
+
+<!--<h3>📝 Notes</h3>-->
+
+<!--<p>{{ note.content | safe }}</p>-->
+
+<!--</div>-->
+
+
+<!--{% if not completed %}-->
+
+<!--<a href="/complete/{{ chapter_id }}" class="complete-btn">-->
+
+<!--✅ Mark as Completed-->
+
+<!--</a>-->
+
+<!--{% else %}-->
+
+<!--<p style="color:green;font-weight:bold;">✔ Chapter Completed</p>-->
+
+<!--{% endif %}-->
+
+<!--</div>-->
+
+<!--</body>-->
+<!--</html>-->
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html>
 <head>
 
-<title>Study Notes - GyanaGhar</title>
+<title>Notes - GyanaGhar</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-
-body{
-font-family:Arial;
-margin:0;
-background:#f4f6fb;
-}
-
-.navbar{
-background:#1e3c72;
-color:white;
-padding:15px 30px;
-display:flex;
-justify-content:space-between;
-}
-
-.container{
-width:90%;
-margin:auto;
-margin-top:30px;
-}
-
-.video{
-margin-top:20px;
-}
-
-.video iframe{
-width:100%;
-height:420px;
-border-radius:10px;
-}
-
-.pdf{
-margin-top:30px;
-}
-
-.pdf iframe{
-width:100%;
-height:500px;
-border-radius:10px;
-}
-
-.note-content{
-background:white;
-padding:20px;
-margin-top:30px;
-border-radius:10px;
-}
-
-.complete-btn{
-display:inline-block;
-margin-top:20px;
-background:#28a745;
-color:white;
-padding:12px 25px;
-border-radius:6px;
-text-decoration:none;
-}
-
-.complete-btn:hover{
-background:#218838;
-}
-
-</style>
-
 </head>
+
 
 <body>
 
 <div class="navbar">
 
-<h2>GyanaGhar</h2>
+<h1>GyanaGhar 🎓</h1>
 
-<a href="/dashboard" style="color:white;">Dashboard</a>
+<div>
+
+<a href="/dashboard">Home</a>
+
+<a href="/logout">Logout</a>
 
 </div>
+
+</div>
+
 
 
 <div class="container">
 
-<h2>Chapter Study Material</h2>
+<h3>📚 Chapter Notes</h3>
 
+
+{% if note %}
+
+
+<!-- NOTE CONTENT -->
+
+<div style="text-align:left; background:white; padding:20px; border-radius:10px;">
+
+{{ note.content | safe }}
+
+</div>
+
+
+<br>
+
+
+<!-- VIDEO -->
 
 {% if note.video_link %}
 
-<div class="video">
+<h3>🎥 Video Lecture</h3>
 
-<h3>📺 Video Lecture</h3>
+<iframe width="100%" height="400"
 
-<iframe src="{{ note.video_link }}" allowfullscreen></iframe>
+src="{{ note.video_link }}"
 
-</div>
+frameborder="0"
+
+allowfullscreen>
+
+</iframe>
+
+<br><br>
 
 {% endif %}
 
+
+<!-- PDF -->
 
 {% if note.pdf_file %}
 
-<div class="pdf">
-
 <h3>📄 PDF Notes</h3>
 
-<iframe src="{{ url_for('static', filename='pdf/'+note.pdf_file) }}"></iframe>
+<a href="{{ note.pdf_file }}" target="_blank">
 
-</div>
-
-{% endif %}
-
-
-<div class="note-content">
-
-<h3>📝 Notes</h3>
-
-<p>{{ note.content | safe }}</p>
-
-</div>
-
-
-{% if not completed %}
-
-<a href="/complete/{{ chapter_id }}" class="complete-btn">
-
-✅ Mark as Completed
+Download PDF
 
 </a>
 
+{% endif %}
+
+
+
 {% else %}
 
-<p style="color:green;font-weight:bold;">✔ Chapter Completed</p>
+<p>No notes available yet.</p>
 
 {% endif %}
 
+
+<br>
+
+<a href="javascript:history.back()">⬅ Back</a>
+
 </div>
+
 
 </body>
 </html>
