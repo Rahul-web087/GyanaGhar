@@ -1845,7 +1845,8 @@ def chapter_page(chapter_id):
 
     return render_template(
         "notes.html",
-        note=note
+        note=note,
+        chapter_id=chapter_id
     )
 
 

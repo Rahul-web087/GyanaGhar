@@ -53,65 +53,95 @@
 
 
 
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+
+<!--<title>Chapters - GyanaGhar</title>-->
+
+<!--<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">-->
+
+<!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+
+<!--</head>-->
+
+
+<!--<body>-->
+
+<!--<div class="navbar">-->
+
+<!--<h1>GyanaGhar 🎓</h1>-->
+
+<!--<div>-->
+
+<!--<a href="/dashboard">Home</a>-->
+
+<!--<a href="/logout">Logout</a>-->
+
+<!--</div>-->
+
+<!--</div>-->
+
+
+
+<!--<div class="container">-->
+
+<!--<h3>📖 Chapters</h3>-->
+
+
+<!--<div class="card-container">-->
+
+<!--{% for chapter in chapters %}-->
+
+<!--<div class="card">-->
+
+<!--<h4>{{ chapter.name }}</h4>-->
+
+<!--<a href="/chapter/{{ chapter.id }}">Open</a>-->
+
+<!--</div>-->
+
+<!--{% endfor %}-->
+
+<!--</div>-->
+
+
+<!--<br>-->
+
+<!--<a href="/dashboard">⬅ Back</a>-->
+
+<!--</div>-->
+
+
+<!--</body>-->
+<!--</html>-->
+
+
+
+
 <!DOCTYPE html>
 <html>
 <head>
-
-<title>Chapters - GyanaGhar</title>
-
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<title>Chapters</title>
 </head>
-
 
 <body>
 
-<div class="navbar">
-
-<h1>GyanaGhar 🎓</h1>
-
-<div>
-
-<a href="/dashboard">Home</a>
-
-<a href="/logout">Logout</a>
-
-</div>
-
-</div>
-
-
-
-<div class="container">
-
-<h3>📖 Chapters</h3>
-
-
-<div class="card-container">
+<h2>Chapters</h2>
 
 {% for chapter in chapters %}
 
-<div class="card">
+<div>
 
-<h4>{{ chapter.name }}</h4>
+<a href="/chapter/{{ chapter.id }}">
 
-<a href="/chapter/{{ chapter.id }}">Open</a>
+📖 {{ chapter.name }}
+
+</a>
 
 </div>
 
 {% endfor %}
-
-</div>
-
-
-<br>
-
-<a href="/dashboard">⬅ Back</a>
-
-</div>
-
 
 </body>
 </html>
