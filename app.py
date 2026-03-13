@@ -1665,9 +1665,27 @@ def profile():
 
         db.session.commit()
 
-        return redirect("/dashboard")
+        return redirect("/profile")
 
-    return render_template("profile.html", user=current_user)
+    total_chapters = Chapter.query.count()
+
+    completed_chapters = Progress.query.filter_by(
+        user_id=current_user.id,
+        completed=True
+    ).count()
+
+    progress = 0
+
+    if total_chapters > 0:
+        progress = int((completed_chapters / total_chapters) * 100)
+
+    return render_template(
+        "profile.html",
+        user=current_user,
+        total_chapters=total_chapters,
+        completed_chapters=completed_chapters,
+        progress=progress
+    )
 
 
 
@@ -1675,11 +1693,11 @@ def profile():
 
 # ================delete =========== it --=-=-
 #
-@app.route("/init_db")
-def init_db():
-    db.drop_all()
-    db.create_all()
-    return "Database recreated successfully!"
+# @app.route("/init_db")
+# def init_db():
+#     db.drop_all()
+#     db.create_all()
+#     return "Database recreated successfully!"
 
 
 
