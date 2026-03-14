@@ -1690,14 +1690,14 @@ def profile():
 
 
 
-
-# ================delete =========== it --=-=-
 #
-# @app.route("/init_db")
-# def init_db():
-#     db.drop_all()
-#     db.create_all()
-#     return "Database recreated successfully!"
+# ================delete =========== it --=-=-
+
+@app.route("/init_db")
+def init_db():
+    db.drop_all()
+    db.create_all()
+    return "Database recreated successfully!"
 
 
 
