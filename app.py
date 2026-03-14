@@ -1511,6 +1511,7 @@ from flask import Flask, render_template, redirect, url_for, request, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy import text
 
 app = Flask(__name__)
 
@@ -1693,11 +1694,11 @@ def profile():
 #
 # ================delete =========== it --=-=-
 
-@app.route("/init_db")
-def init_db():
-    db.drop_all()
-    db.create_all()
-    return "Database recreated successfully!"
+# @app.route("/init_db")
+# def init_db():
+#     db.drop_all()
+#     db.create_all()
+#     return "Database recreated successfully!"
 
 
 
@@ -2064,7 +2065,7 @@ def admin_courses():
     if current_user.role != "admin":
         return "Access Denied"
 
-    courses = db.session.execute("""
+    courses = db.session.execute(text("""
         SELECT 
             chapter.id AS chapter_id,
             chapter.name AS chapter_name,
@@ -2074,7 +2075,7 @@ def admin_courses():
         JOIN subject ON chapter.subject_id = subject.id
         JOIN class ON subject.class_id = class.id
         ORDER BY class.name, subject.name, chapter.name
-    """).fetchall()
+    """)).fetchall()
 
     return render_template("admin_courses.html", courses=courses)
 
