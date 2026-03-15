@@ -1848,8 +1848,10 @@ def chapter_page(chapter_id):
     # total notes
     total_notes = len(notes)
 
-    # completed notes by student
-    completed_notes = db.session.query(Progress).join(Note).filter(
+    # completed notes by this user
+    completed_notes = db.session.query(Progress).join(
+        Note, Progress.note_id == Note.id
+    ).filter(
         Progress.user_id == current_user.id,
         Note.chapter_id == chapter_id
     ).count()
@@ -1866,7 +1868,6 @@ def chapter_page(chapter_id):
         chapter_id=chapter_id,
         progress_percent=progress_percent
     )
-
 
 # ================= COMPLETE CHAPTER =================
 
