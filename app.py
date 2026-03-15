@@ -2107,15 +2107,30 @@ def edit_chapter(chapter_id):
 
     chapter = Chapter.query.get_or_404(chapter_id)
 
+    subjects = Subject.query.all()
+    classes = Class.query.all()
+
+    # find current class
+    current_subject = Subject.query.get(chapter.subject_id)
+    current_class_id = current_subject.class_id
+
     if request.method == "POST":
 
-        chapter.name = request.form.get("name")
+        chapter.name = request.form['name']
+        chapter.subject_id = request.form['subject_id']
 
         db.session.commit()
 
         return redirect("/admin/courses")
 
-    return render_template("edit_chapter.html", chapter=chapter)
+    return render_template(
+        "edit_chapter.html",
+        chapter=chapter,
+        subjects=subjects,
+        classes=classes,
+        current_class_id=current_class_id
+    )
+
 
 
 
