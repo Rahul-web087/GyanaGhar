@@ -284,7 +284,6 @@
 <!--</html>-->
 
 
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -293,27 +292,48 @@
 
 <body>
 
+<h3>Your Learning Progress</h3>
+
+<div style="width:100%; background:#ddd; border-radius:10px;">
+<div style="
+width:{{ progress_percent }}%;
+background:green;
+padding:8px;
+color:white;
+border-radius:10px;">
+{{ progress_percent }}% Completed
+</div>
+</div>
+
+<hr>
+
 <h2>Chapter Notes</h2>
 
-{% if note %}
+{% if notes %}
+
+{% for note in notes %}
+
+<div style="margin-bottom:30px; border-bottom:1px solid #ccc; padding-bottom:15px;">
+
+<h3>{{ note.title }}</h3>
 
 <div>
-
 {{ note.content | safe }}
-
 </div>
 
 <br>
 
 {% if note.video_link %}
+
 <iframe width="560" height="315"
 src="{{ note.video_link }}"
 frameborder="0"
 allowfullscreen>
 </iframe>
-{% endif %}
 
-<br>
+<br><br>
+
+{% endif %}
 
 {% if note.pdf_file %}
 
@@ -323,7 +343,15 @@ allowfullscreen>
 
 </a>
 
+<br><br>
+
 {% endif %}
+
+<a href="/note/{{ note.id }}">Mark as Read</a>
+
+</div>
+
+{% endfor %}
 
 {% else %}
 

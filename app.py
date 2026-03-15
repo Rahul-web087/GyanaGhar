@@ -1842,12 +1842,29 @@ def subject_page(subject_id):
 @login_required
 def chapter_page(chapter_id):
 
-    note = Note.query.filter_by(chapter_id=chapter_id).first()
+    # get all notes in this chapter
+    notes = Note.query.filter_by(chapter_id=chapter_id).all()
+
+    # total notes
+    total_notes = len(notes)
+
+    # completed notes by student
+    completed_notes = db.session.query(Progress).join(Note).filter(
+        Progress.user_id == current_user.id,
+        Note.chapter_id == chapter_id
+    ).count()
+
+    # calculate progress
+    progress_percent = 0
+
+    if total_notes > 0:
+        progress_percent = int((completed_notes / total_notes) * 100)
 
     return render_template(
         "notes.html",
-        note=note,
-        chapter_id=chapter_id
+        notes=notes,
+        chapter_id=chapter_id,
+        progress_percent=progress_percent
     )
 
 
@@ -1897,6 +1914,33 @@ def search():
         results=results,
         query=query
     )
+
+# ============ View Notes ===========
+
+@app.route("/note/<int:note_id>")
+@login_required
+def view_note(note_id):
+
+    note = Note.query.get_or_404(note_id)
+
+    progress = Progress.query.filter_by(
+        user_id=current_user.id,
+        note_id=note_id
+    ).first()
+
+    if not progress:
+
+        progress = Progress(
+            user_id=current_user.id,
+            note_id=note_id
+        )
+
+        db.session.add(progress)
+        db.session.commit()
+
+    return render_template("view_note.html", note=note)
+
+
 
 
 # ================= LEADERBOARD =================
