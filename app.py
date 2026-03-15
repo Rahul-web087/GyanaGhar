@@ -2082,7 +2082,7 @@ def admin_courses():
 
 # ================= DELETE COURSE =================
 
-@app.route('/admin/delete_course/<int:chapter_id>')
+@app.route("/admin/delete_course/<int:chapter_id>")
 @login_required
 def delete_course(chapter_id):
 
@@ -2091,10 +2091,13 @@ def delete_course(chapter_id):
 
     chapter = Chapter.query.get_or_404(chapter_id)
 
+    # delete notes inside this chapter first
+    Note.query.filter_by(chapter_id=chapter_id).delete()
+
     db.session.delete(chapter)
     db.session.commit()
 
-    return redirect("/admin/courses")
+    return redirect(url_for("admin_courses"))
 
 
 # ======= Edit Chapter  ==========
