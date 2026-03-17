@@ -1597,11 +1597,11 @@ class Progress(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    user_id = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-    chapter_id = db.Column(db.Integer)
+    note_id = db.Column(db.Integer, db.ForeignKey('note.id'))
 
-    completed = db.Column(db.Boolean, default=False)
+    completed = db.Column(db.Boolean, default=True)
 
 
 @login_manager.user_loader
@@ -1694,11 +1694,11 @@ def profile():
 #
 # ================delete =========== it --=-=-
 
-# @app.route("/init_db")
-# def init_db():
-#     db.drop_all()
-#     db.create_all()
-#     return "Database recreated successfully!"
+@app.route("/init_db")
+def init_db():
+    db.drop_all()
+    db.create_all()
+    return "Database recreated successfully!"
 
 
 
