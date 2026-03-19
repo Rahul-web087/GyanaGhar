@@ -1729,6 +1729,8 @@ def init_db():
 
 
 # -------- CREATE ADMIN --------
+
+
 @app.route('/create_admin')
 def create_admin():
 
@@ -2053,22 +2055,20 @@ def edit_note(note_id):
 
 # ================= ADMIN ADD CHAPTER =================
 
-@app.route('/admin/add_chapter', methods=['GET','POST'])
+@app.route("/admin/add_chapter", methods=["GET", "POST"])
 @login_required
 def add_chapter():
 
-    if current_user.role != "admin":
-        return "Access Denied"
-
+    classes = Class.query.all()
     subjects = Subject.query.all()
 
     if request.method == "POST":
 
-        chapter_name = request.form.get("name")
-        subject_id = request.form.get("subject_id")
+        name = request.form["name"]
+        subject_id = request.form["subject_id"]
 
         new_chapter = Chapter(
-            name=chapter_name,
+            name=name,
             subject_id=subject_id
         )
 
@@ -2077,7 +2077,11 @@ def add_chapter():
 
         return redirect("/dashboard")
 
-    return render_template("add_chapter.html", subjects=subjects)
+    return render_template(
+        "add_chapter.html",
+        classes=classes,
+        subjects=subjects
+    )
 
 
 # ================= ADMIN ADD NOTE =================
@@ -2121,7 +2125,7 @@ def add_note():
         return redirect("/dashboard")
 
     return render_template(
-        "add_note.html",
+        "admin_add_note.html",
         classes=classes,
         subjects=subjects,
         chapters=chapters
