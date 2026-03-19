@@ -2023,42 +2023,6 @@ def add_subject():
 
 
 
-# =========== Admin  Add Pdf ===============
-from werkzeug.utils import secure_filename
-
-@app.route("/admin/add_note", methods=["GET", "POST"])
-@login_required
-def add_note():
-
-    if request.method == "POST":
-
-        title = request.form["title"]
-        content = request.form["content"]
-        chapter_id = request.form["chapter_id"]
-
-        pdf = request.files["pdf_file"]
-
-        filename = None
-
-        if pdf and pdf.filename != "":
-            filename = secure_filename(pdf.filename)
-            pdf.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
-
-        new_note = Note(
-            title=title,
-            content=content,
-            chapter_id=chapter_id,
-            pdf_file=filename
-        )
-
-        db.session.add(new_note)
-        db.session.commit()
-
-        return redirect("/dashboard")
-
-    return render_template("add_note.html")
-
-
 # ======= Admin Edit Note ==========
 @app.route("/admin/edit_note/<int:note_id>", methods=["GET", "POST"])
 @login_required
@@ -2117,7 +2081,6 @@ def add_chapter():
 
 
 # ================= ADMIN ADD NOTE =================
-
 @app.route("/admin/add_note", methods=["GET", "POST"])
 @login_required
 def add_note():
