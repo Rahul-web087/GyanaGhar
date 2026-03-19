@@ -359,5 +359,10 @@ allowfullscreen>
 
 {% endif %}
 
+{% if note.pdf_file %}
+<a href="{{ url_for('static', filename='uploads/' + note.pdf_file) }}" target="_blank">
+📄 Download PDF
+</a>
+{% endif %}
 </body>
 </html>

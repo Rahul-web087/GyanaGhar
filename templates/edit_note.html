@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Edit Note</title>
+</head>
+
+<body>
+
+<h2>Edit Note</h2>
+
+<form method="POST" enctype="multipart/form-data">
+
+<input type="text" name="title" value="{{ note.title }}" required>
+
+<br><br>
+
+<textarea name="content" rows="5" cols="40">
+{{ note.content }}
+</textarea>
+
+<br><br>
+
+<p>Current PDF: {{ note.pdf_file }}</p>
+
+<input type="file" name="pdf_file">
+
+<br><br>
+
+<button type="submit">Update Note</button>
+
+</form>
+
+</body>
+</html>

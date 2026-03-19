@@ -1,9 +1,184 @@
+<!--&lt;!&ndash;&lt;!&ndash;<!DOCTYPE html>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<html>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<head>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<title>Add Note</title>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<meta name="viewport" content="width=device-width, initial-scale=1.0">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;</head>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;<body>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;<div class="navbar">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<h1>Add Note - Admin</h1>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<a href="/dashboard">Dashboard</a>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<a href="/logout">Logout</a>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;</div>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;<div class="container">&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;<h3>Add New Note</h3>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;<form method="POST">&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;<label>Select Chapter</label>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<br>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;<select name="chapter_id" required>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;{% for chapter in chapters %}&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;<option value="{{ chapter.id }}">{{ chapter.name }}</option>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;{% endfor %}&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;</select>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;<br><br>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;<label>YouTube Video Link</label>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<br>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;<input type="text" name="video_link" placeholder="YouTube Embed Link">&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;<br><br>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;<label>PDF File Link</label>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<br>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;<input type="text" name="pdf_file" placeholder="PDF URL">&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;<br><br>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;<label>Note Content</label>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<br>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;<textarea name="content" rows="6" style="width:90%;" placeholder="HTML Note Content"></textarea>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;<br><br>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;<button type="submit">Add Note</button>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;</form>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;</div>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;</body>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;</html>&ndash;&gt;&ndash;&gt;-->
+
+
+
+
+
+
+<!--&lt;!&ndash;<!DOCTYPE html>&ndash;&gt;-->
+<!--&lt;!&ndash;<html>&ndash;&gt;-->
+<!--&lt;!&ndash;<head>&ndash;&gt;-->
+<!--&lt;!&ndash;<title>Add Note</title>&ndash;&gt;-->
+<!--&lt;!&ndash;<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">&ndash;&gt;-->
+<!--&lt;!&ndash;</head>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<body>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<div class="navbar">&ndash;&gt;-->
+<!--&lt;!&ndash;<h1>Add Note - Admin</h1>&ndash;&gt;-->
+<!--&lt;!&ndash;<a href="/dashboard">Dashboard</a>&ndash;&gt;-->
+<!--&lt;!&ndash;<a href="/logout">Logout</a>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<div class="container">&ndash;&gt;-->
+
+<!--&lt;!&ndash;<h3>Add New Note</h3>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<form method="POST">&ndash;&gt;-->
+
+<!--&lt;!&ndash;<label>Select Chapter</label>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<select name="chapter_id" required>&ndash;&gt;-->
+
+<!--&lt;!&ndash;{% for chapter in chapters %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;<option value="{{ chapter.id }}">&ndash;&gt;-->
+<!--&lt;!&ndash;{{ chapter.name }}&ndash;&gt;-->
+<!--&lt;!&ndash;</option>&ndash;&gt;-->
+
+<!--&lt;!&ndash;{% endfor %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;</select>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<br><br>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<input type="text" name="video_link" placeholder="YouTube Embed Link">&ndash;&gt;-->
+
+<!--&lt;!&ndash;<br><br>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<input type="text" name="pdf_file" placeholder="PDF Link">&ndash;&gt;-->
+
+<!--&lt;!&ndash;<br><br>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<textarea name="content" placeholder="Note Content" rows="6" style="width:90%;"></textarea>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<br><br>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<button type="submit">Add Note</button>&ndash;&gt;-->
+
+<!--&lt;!&ndash;</form>&ndash;&gt;-->
+
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;</body>&ndash;&gt;-->
+<!--&lt;!&ndash;</html>&ndash;&gt;-->
+
+
+
+
+
+
+
+
 <!--<!DOCTYPE html>-->
 <!--<html>-->
 <!--<head>-->
 <!--<title>Add Note</title>-->
+
 <!--<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">-->
-<!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+
+<!--<style>-->
+<!--.form-box{-->
+<!--background:white;-->
+<!--padding:25px;-->
+<!--border-radius:10px;-->
+<!--width:400px;-->
+<!--margin:auto;-->
+<!--box-shadow:0 4px 10px rgba(0,0,0,0.1);-->
+<!--}-->
+
+<!--.form-box input,-->
+<!--.form-box select,-->
+<!--.form-box textarea{-->
+<!--width:100%;-->
+<!--padding:10px;-->
+<!--margin-top:10px;-->
+<!--border:1px solid #ccc;-->
+<!--border-radius:5px;-->
+<!--}-->
+
+<!--.form-box button{-->
+<!--margin-top:15px;-->
+<!--padding:10px;-->
+<!--width:100%;-->
+<!--background:#007bff;-->
+<!--color:white;-->
+<!--border:none;-->
+<!--border-radius:5px;-->
+<!--font-size:16px;-->
+<!--cursor:pointer;-->
+<!--}-->
+
+<!--.form-box button:hover{-->
+<!--background:#0056b3;-->
+<!--}-->
+<!--</style>-->
+
 <!--</head>-->
 
 <!--<body>-->
@@ -16,49 +191,40 @@
 
 <!--<div class="container">-->
 
-<!--<h3>Add New Note</h3>-->
+<!--<h3 style="text-align:center;">Add New Note</h3>-->
 
-<!--<form method="POST">-->
+<!--<div class="form-box">-->
+
+<!--<form method="POST" enctype="multipart/form-data">-->
 
 <!--<label>Select Chapter</label>-->
-<!--<br>-->
-
 <!--<select name="chapter_id" required>-->
 
 <!--{% for chapter in chapters %}-->
-
-<!--<option value="{{ chapter.id }}">{{ chapter.name }}</option>-->
-
+<!--<option value="{{ chapter.id }}">-->
+<!--{{ chapter.name }}-->
+<!--</option>-->
 <!--{% endfor %}-->
 
 <!--</select>-->
 
-<!--<br><br>-->
+<!--<label>Note Title</label>-->
+<!--<input type="text" name="title" placeholder="Enter Note Title" required>-->
 
 <!--<label>YouTube Video Link</label>-->
-<!--<br>-->
+<!--<input type="text" name="video_link" placeholder="Paste embed link (optional)">-->
 
-<!--<input type="text" name="video_link" placeholder="YouTube Embed Link">-->
-
-<!--<br><br>-->
-
-<!--<label>PDF File Link</label>-->
-<!--<br>-->
-
-<!--<input type="text" name="pdf_file" placeholder="PDF URL">-->
-
-<!--<br><br>-->
+<!--<label>Upload PDF</label>-->
+<!--<input type="file" name="pdf_file">-->
 
 <!--<label>Note Content</label>-->
-<!--<br>-->
-
-<!--<textarea name="content" rows="6" style="width:90%;" placeholder="HTML Note Content"></textarea>-->
-
-<!--<br><br>-->
+<!--<textarea name="content" placeholder="Write note here..." rows="6"></textarea>-->
 
 <!--<button type="submit">Add Note</button>-->
 
 <!--</form>-->
+
+<!--</div>-->
 
 <!--</div>-->
 
@@ -67,14 +233,50 @@
 
 
 
-
-
-
 <!DOCTYPE html>
 <html>
 <head>
 <title>Add Note</title>
+
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<style>
+.form-box{
+background:white;
+padding:25px;
+border-radius:10px;
+width:400px;
+margin:auto;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+
+.form-box input,
+.form-box select,
+.form-box textarea{
+width:100%;
+padding:10px;
+margin-top:10px;
+border:1px solid #ccc;
+border-radius:5px;
+}
+
+.form-box button{
+margin-top:15px;
+padding:10px;
+width:100%;
+background:#007bff;
+color:white;
+border:none;
+border-radius:5px;
+font-size:16px;
+cursor:pointer;
+}
+
+.form-box button:hover{
+background:#0056b3;
+}
+</style>
+
 </head>
 
 <body>
@@ -87,43 +289,98 @@
 
 <div class="container">
 
-<h3>Add New Note</h3>
+<h3 style="text-align:center;">Add New Note</h3>
 
-<form method="POST">
+<div class="form-box">
 
-<label>Select Chapter</label>
+<form method="POST" enctype="multipart/form-data">
 
-<select name="chapter_id" required>
-
-{% for chapter in chapters %}
-
-<option value="{{ chapter.id }}">
-{{ chapter.name }}
-</option>
-
+<!-- ✅ Class -->
+<label>Select Class</label>
+<select id="classSelect">
+<option value="">Select Class</option>
+{% for c in classes %}
+<option value="{{ c.id }}">{{ c.name }}</option>
 {% endfor %}
-
 </select>
 
-<br><br>
+<!-- ✅ Subject -->
+<label>Select Subject</label>
+<select id="subjectSelect">
+<option value="">Select Subject</option>
+{% for s in subjects %}
+<option value="{{ s.id }}" data-class="{{ s.class_id }}">
+{{ s.name }}
+</option>
+{% endfor %}
+</select>
 
-<input type="text" name="video_link" placeholder="YouTube Embed Link">
+<!-- ✅ Chapter -->
+<label>Select Chapter</label>
+<select name="chapter_id" id="chapterSelect" required>
+<option value="">Select Chapter</option>
+{% for ch in chapters %}
+<option value="{{ ch.id }}" data-subject="{{ ch.subject_id }}">
+{{ ch.name }}
+</option>
+{% endfor %}
+</select>
 
-<br><br>
+<label>Note Title</label>
+<input type="text" name="title" placeholder="Enter Note Title" required>
 
-<input type="text" name="pdf_file" placeholder="PDF Link">
+<label>YouTube Video Link</label>
+<input type="text" name="video_link" placeholder="Paste embed link (optional)">
 
-<br><br>
+<label>Upload PDF</label>
+<input type="file" name="pdf_file">
 
-<textarea name="content" placeholder="Note Content" rows="6" style="width:90%;"></textarea>
-
-<br><br>
+<label>Note Content</label>
+<textarea name="content" placeholder="Write note here..." rows="6"></textarea>
 
 <button type="submit">Add Note</button>
 
 </form>
 
 </div>
+
+</div>
+
+<!-- ✅ JavaScript for dynamic filtering -->
+<script>
+const classSelect = document.getElementById("classSelect");
+const subjectSelect = document.getElementById("subjectSelect");
+const chapterSelect = document.getElementById("chapterSelect");
+
+classSelect.addEventListener("change", function () {
+    let classId = this.value;
+
+    for (let option of subjectSelect.options) {
+        if (option.dataset.class == classId || option.value == "") {
+            option.style.display = "block";
+        } else {
+            option.style.display = "none";
+        }
+    }
+
+    subjectSelect.value = "";
+    chapterSelect.value = "";
+});
+
+subjectSelect.addEventListener("change", function () {
+    let subjectId = this.value;
+
+    for (let option of chapterSelect.options) {
+        if (option.dataset.subject == subjectId || option.value == "") {
+            option.style.display = "block";
+        } else {
+            option.style.display = "none";
+        }
+    }
+
+    chapterSelect.value = "";
+});
+</script>
 
 </body>
 </html>

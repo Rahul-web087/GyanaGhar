@@ -1517,6 +1517,10 @@ app = Flask(__name__)
 
 # ================= CONFIG =================
 
+
+
+UPLOAD_FOLDER = "static/uploads"
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.config['SECRET_KEY'] = os.getenv("SECRET_KEY", "gyanaghar_secret")
 
 database_url = os.getenv("DATABASE_URL")
@@ -1725,30 +1729,30 @@ def init_db():
 
 
 # -------- CREATE ADMIN --------
-@app.route('/create_admin')
-def create_admin():
-
-    try:
-
-        if User.query.filter_by(email="admin@gyanaghar.com").first():
-            return "Admin already exists!"
-
-        admin = User(
-            name="Admin",
-            email="admin@gyanaghar.com",
-            password=generate_password_hash("Rahul@001"),
-            role="admin",
-            secret_question="Your first school name?",
-            secret_answer="demo"
-        )
-
-        db.session.add(admin)
-        db.session.commit()
-
-        return "Admin Created Successfully!"
-
-    except Exception as e:
-        return f"Error: {str(e)}"
+# @app.route('/create_admin')
+# def create_admin():
+#
+#     try:
+#
+#         if User.query.filter_by(email="admin@gyanaghar.com").first():
+#             return "Admin already exists!"
+#
+#         admin = User(
+#             name="Admin",
+#             email="admin@gyanaghar.com",
+#             password=generate_password_hash("Rahul@001"),
+#             role="admin",
+#             secret_question="Your first school name?",
+#             secret_answer="demo"
+#         )
+#
+#         db.session.add(admin)
+#         db.session.commit()
+#
+#         return "Admin Created Successfully!"
+#
+#     except Exception as e:
+#         return f"Error: {str(e)}"
 
 
 
@@ -1924,23 +1928,24 @@ def view_note(note_id):
 
     note = Note.query.get_or_404(note_id)
 
-    progress = Progress.query.filter_by(
-        user_id=current_user.id,
-        note_id=note_id
-    ).first()
-
-    if not progress:
-
-        progress = Progress(
+    try:
+        progress = Progress.query.filter_by(
             user_id=current_user.id,
             note_id=note_id
-        )
+        ).first()
 
-        db.session.add(progress)
-        db.session.commit()
+        if not progress:
+            progress = Progress(
+                user_id=current_user.id,
+                note_id=note_id
+            )
+            db.session.add(progress)
+            db.session.commit()
+
+    except Exception as e:
+        print("Progress Error:", e)
 
     return render_template("view_note.html", note=note)
-
 
 
 
@@ -2017,6 +2022,71 @@ def add_subject():
     return render_template("add_subject.html", classes=classes)
 
 
+
+# =========== Admin  Add Pdf ===============
+from werkzeug.utils import secure_filename
+
+@app.route("/admin/add_note", methods=["GET", "POST"])
+@login_required
+def add_note():
+
+    if request.method == "POST":
+
+        title = request.form["title"]
+        content = request.form["content"]
+        chapter_id = request.form["chapter_id"]
+
+        pdf = request.files["pdf_file"]
+
+        filename = None
+
+        if pdf and pdf.filename != "":
+            filename = secure_filename(pdf.filename)
+            pdf.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+
+        new_note = Note(
+            title=title,
+            content=content,
+            chapter_id=chapter_id,
+            pdf_file=filename
+        )
+
+        db.session.add(new_note)
+        db.session.commit()
+
+        return redirect("/dashboard")
+
+    return render_template("add_note.html")
+
+
+# ======= Admin Edit Note ==========
+@app.route("/admin/edit_note/<int:note_id>", methods=["GET", "POST"])
+@login_required
+def edit_note(note_id):
+
+    note = Note.query.get_or_404(note_id)
+
+    if request.method == "POST":
+
+        note.title = request.form["title"]
+        note.content = request.form["content"]
+
+        pdf = request.files["pdf_file"]
+
+        if pdf and pdf.filename != "":
+            filename = secure_filename(pdf.filename)
+            pdf.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+            note.pdf_file = filename   # replace old pdf
+
+        db.session.commit()
+
+        return redirect("/admin/courses")
+
+    return render_template("edit_note.html", note=note)
+
+
+
+
 # ================= ADMIN ADD CHAPTER =================
 
 @app.route('/admin/add_chapter', methods=['GET','POST'])
@@ -2048,33 +2118,51 @@ def add_chapter():
 
 # ================= ADMIN ADD NOTE =================
 
-@app.route('/admin/add_note', methods=['GET','POST'])
+@app.route("/admin/add_note", methods=["GET", "POST"])
 @login_required
 def add_note():
 
-    if current_user.role != "admin":
-        return "Access Denied"
-
+    classes = Class.query.all()
+    subjects = Subject.query.all()
     chapters = Chapter.query.all()
 
     if request.method == "POST":
 
-        chapter_id = request.form.get("chapter_id")
+        title = request.form["title"]
+        content = request.form["content"]
+        chapter_id = request.form["chapter_id"]
+        video_link = request.form["video_link"]
 
-        note = Note(
+        pdf = request.files["pdf_file"]
+
+        filename = None
+
+        if pdf and pdf.filename != "":
+            from werkzeug.utils import secure_filename
+            import os
+
+            filename = secure_filename(pdf.filename)
+            pdf.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+
+        new_note = Note(
+            title=title,
+            content=content,
             chapter_id=chapter_id,
-            content=request.form.get("content"),
-            video_link=request.form.get("video_link"),
-            pdf_file=request.form.get("pdf_file")
+            video_link=video_link,
+            pdf_file=filename
         )
 
-        db.session.add(note)
+        db.session.add(new_note)
         db.session.commit()
 
         return redirect("/dashboard")
 
-    return render_template("admin_add_note.html", chapters=chapters)
-
+    return render_template(
+        "add_note.html",
+        classes=classes,
+        subjects=subjects,
+        chapters=chapters
+    )
 
 # ================= ADMIN ANALYTICS =================
 
