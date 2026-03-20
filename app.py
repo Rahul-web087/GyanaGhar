@@ -1522,6 +1522,7 @@ app = Flask(__name__)
 UPLOAD_FOLDER = "static/uploads"
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.config['SECRET_KEY'] = os.getenv("SECRET_KEY", "gyanaghar_secret")
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 database_url = os.getenv("DATABASE_URL")
 
@@ -1848,32 +1849,32 @@ def subject_page(subject_id):
 @login_required
 def chapter_page(chapter_id):
 
-    # get all notes in this chapter
     notes = Note.query.filter_by(chapter_id=chapter_id).all()
 
-    # total notes
     total_notes = len(notes)
 
-    # completed notes by this user
-    completed_notes = db.session.query(Progress).join(
-        Note, Progress.note_id == Note.id
-    ).filter(
-        Progress.user_id == current_user.id,
-        Note.chapter_id == chapter_id
-    ).count()
+    completed_notes = Progress.query.filter_by(
+        user_id=current_user.id,
+        chapter_id=chapter_id
+    ).all()
 
-    # calculate progress
-    progress_percent = 0
+    completed_note_ids = [p.note_id for p in completed_notes]
 
-    if total_notes > 0:
-        progress_percent = int((completed_notes / total_notes) * 100)
+    if total_notes == 0:
+        progress_percent = 0
+    else:
+        progress_percent = int((len(completed_note_ids) / total_notes) * 100)
 
     return render_template(
         "notes.html",
         notes=notes,
-        chapter_id=chapter_id,
-        progress_percent=progress_percent
+        progress_percent=progress_percent,
+        completed_note_ids=completed_note_ids
     )
+
+
+
+
 
 # ================= COMPLETE CHAPTER =================
 
@@ -2030,19 +2031,30 @@ def add_subject():
 @login_required
 def edit_note(note_id):
 
+    if current_user.role != "admin":
+        return "Access Denied"
+
     note = Note.query.get_or_404(note_id)
 
     if request.method == "POST":
 
         note.title = request.form["title"]
         note.content = request.form["content"]
+        note.video_link = request.form["video_link"]
 
         pdf = request.files["pdf_file"]
 
+        # 🔥 If new PDF uploaded → replace old
         if pdf and pdf.filename != "":
+            from werkzeug.utils import secure_filename
+            import os
+
             filename = secure_filename(pdf.filename)
-            pdf.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
-            note.pdf_file = filename   # replace old pdf
+
+            filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+            pdf.save(filepath)
+
+            note.pdf_file = filename  # update
 
         db.session.commit()
 
@@ -2100,6 +2112,7 @@ def add_note():
         chapter_id = request.form["chapter_id"]
         video_link = request.form["video_link"]
 
+        # 🔥 THIS IS WHERE YOUR CODE GOES
         pdf = request.files["pdf_file"]
 
         filename = None
@@ -2109,8 +2122,12 @@ def add_note():
             import os
 
             filename = secure_filename(pdf.filename)
-            pdf.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
 
+            filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+
+            pdf.save(filepath)
+
+        # Save in DB
         new_note = Note(
             title=title,
             content=content,
@@ -2179,6 +2196,20 @@ def admin_courses():
 
     return render_template("admin_courses.html", courses=courses)
 
+# ======== Admin Edit Note ======
+@app.route("/admin/delete_note/<int:note_id>")
+@login_required
+def delete_note(note_id):
+
+    if current_user.role != "admin":
+        return "Access Denied"
+
+    note = Note.query.get_or_404(note_id)
+
+    db.session.delete(note)
+    db.session.commit()
+
+    return redirect("/admin/courses")
 
 # ================= DELETE COURSE =================
 
@@ -2234,6 +2265,55 @@ def edit_chapter(chapter_id):
         current_class_id=current_class_id
     )
 
+
+# ========== Mark as complete =========
+
+@app.route("/mark_complete/<int:note_id>")
+@login_required
+def mark_complete(note_id):
+
+    note = Note.query.get_or_404(note_id)
+
+    # check already completed
+    existing = Progress.query.filter_by(
+        user_id=current_user.id,
+        note_id=note_id
+    ).first()
+
+    if not existing:
+        progress = Progress(
+            user_id=current_user.id,
+            note_id=note_id,
+            chapter_id=note.chapter_id
+        )
+        db.session.add(progress)
+        db.session.commit()
+
+    return redirect(url_for("chapter_page", chapter_id=note.chapter_id))
+
+
+# ======== Student Dashboard ======
+@app.route("/student/dashboard")
+@login_required
+def student_dashboard():
+
+    total_notes = Note.query.count()
+
+    completed_notes = Progress.query.filter_by(
+        user_id=current_user.id
+    ).count()
+
+    if total_notes == 0:
+        progress = 0
+    else:
+        progress = int((completed_notes / total_notes) * 100)
+
+    return render_template(
+        "student_dashboard.html",
+        total_notes=total_notes,
+        completed_notes=completed_notes,
+        progress=progress
+    )
 
 
 

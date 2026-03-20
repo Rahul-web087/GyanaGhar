@@ -283,71 +283,150 @@
 <!--</body>-->
 <!--</html>-->
 
-
 <!DOCTYPE html>
 <html>
 <head>
-<title>Notes</title>
+<title>Chapter Notes</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+body{
+font-family:Arial;
+margin:0;
+background:#f5f5f5;
+}
+
+/* Navbar */
+.navbar{
+background:#1e3c72;
+color:white;
+padding:15px;
+display:flex;
+justify-content:space-between;
+}
+
+.navbar a{
+color:white;
+text-decoration:none;
+margin-left:15px;
+}
+
+/* Container */
+.container{
+width:90%;
+max-width:900px;
+margin:auto;
+margin-top:20px;
+}
+
+/* Progress */
+.progress-box{
+background:#ddd;
+border-radius:20px;
+overflow:hidden;
+margin-bottom:20px;
+}
+
+.progress-bar{
+background:green;
+color:white;
+padding:10px;
+text-align:center;
+}
+
+/* Note Card */
+.note-card{
+background:white;
+padding:20px;
+border-radius:10px;
+margin-bottom:20px;
+box-shadow:0 3px 10px rgba(0,0,0,0.1);
+}
+
+.note-card h3{
+margin-top:0;
+}
+
+/* Button */
+.btn{
+display:inline-block;
+padding:8px 15px;
+background:#2a5298;
+color:white;
+border-radius:5px;
+text-decoration:none;
+margin-top:10px;
+}
+
+.btn:hover{
+background:#1e3c72;
+}
+
+iframe{
+width:100%;
+border-radius:10px;
+margin-top:10px;
+}
+
+</style>
+
 </head>
 
 <body>
 
-<h3>Your Learning Progress</h3>
+<!-- Navbar -->
+<div class="navbar">
+<h2>📘 GyanaGhar</h2>
 
-<div style="width:100%; background:#ddd; border-radius:10px;">
-<div style="
-width:{{ progress_percent }}%;
-background:green;
-padding:8px;
-color:white;
-border-radius:10px;">
+<div>
+<a href="/dashboard">Dashboard</a>
+<a href="/logout">Logout</a>
+</div>
+</div>
+
+<!-- Main -->
+<div class="container">
+
+<h2>📖 Chapter Notes</h2>
+
+<!-- Progress -->
+<div class="progress-box">
+<div class="progress-bar" style="width:{{ progress_percent }}%;">
 {{ progress_percent }}% Completed
 </div>
 </div>
 
-<hr>
 
-<h2>Chapter Notes</h2>
 
+<!-- Notes Loop -->
 {% if notes %}
 
 {% for note in notes %}
 
-<div style="margin-bottom:30px; border-bottom:1px solid #ccc; padding-bottom:15px;">
+<div class="note-card">
 
 <h3>{{ note.title }}</h3>
 
-<div>
-{{ note.content | safe }}
-</div>
+<p>{{ note.content | safe }}</p>
 
-<br>
-
+<!-- Video -->
 {% if note.video_link %}
-
-<iframe width="560" height="315"
+<iframe height="315"
 src="{{ note.video_link }}"
 frameborder="0"
 allowfullscreen>
 </iframe>
-
-<br><br>
-
 {% endif %}
 
+<!-- PDF -->
 {% if note.pdf_file %}
-
-<a href="{{ note.pdf_file }}" target="_blank">
-
-📄 Download PDF
-
+<br>
+<a class="btn" href="/static/uploads/{{ note.pdf_file }}" target="_blank">
+📄 View PDF
 </a>
-
-<br><br>
-
 {% endif %}
-
-<a href="/note/{{ note.id }}">Mark as Read</a>
 
 </div>
 
@@ -355,14 +434,20 @@ allowfullscreen>
 
 {% else %}
 
-<p>No notes available yet.</p>
+<p>No notes available for this chapter.</p>
 
 {% endif %}
 
-{% if note.pdf_file %}
-<a href="{{ url_for('static', filename='uploads/' + note.pdf_file) }}" target="_blank">
-📄 Download PDF
+
+    <a href="/mark_complete/{{ note.id }}" class="btn">
+✔ Mark as Completed
 </a>
+
+    {% if note.id in completed_note_ids %}
+<span style="color:green;">✔ Completed</span>
 {% endif %}
+
+</div>
+
 </body>
 </html>
