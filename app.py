@@ -1586,15 +1586,11 @@ class Chapter(db.Model):
 
 
 class Note(db.Model):
-
     id = db.Column(db.Integer, primary_key=True)
-
-    chapter_id = db.Column(db.Integer, db.ForeignKey('chapter.id'))
-
+    title = db.Column(db.String(200))   #  ADD THIS
     content = db.Column(db.Text)
-
-    video_link = db.Column(db.String(300))
-
+    chapter_id = db.Column(db.Integer)
+    video_link = db.Column(db.String(200))
     pdf_file = db.Column(db.String(200))
 
 
