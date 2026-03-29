@@ -1,178 +1,609 @@
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+<!--<title>Chapter Notes</title>-->
+
+<!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+
+<!--<style>-->
+
+<!--body{-->
+<!--font-family:Arial;-->
+<!--margin:0;-->
+<!--background:#f5f5f5;-->
+<!--}-->
+
+<!--/* Navbar */-->
+<!--.navbar{-->
+<!--background:#1e3c72;-->
+<!--color:white;-->
+<!--padding:15px;-->
+<!--display:flex;-->
+<!--justify-content:space-between;-->
+<!--}-->
+
+<!--.navbar a{-->
+<!--color:white;-->
+<!--text-decoration:none;-->
+<!--margin-left:15px;-->
+<!--}-->
+
+<!--/* Container */-->
+<!--.container{-->
+<!--width:90%;-->
+<!--max-width:900px;-->
+<!--margin:auto;-->
+<!--margin-top:20px;-->
+<!--}-->
+
+<!--/* Progress */-->
+<!--.progress-box{-->
+<!--background:#ddd;-->
+<!--border-radius:20px;-->
+<!--overflow:hidden;-->
+<!--margin-bottom:20px;-->
+<!--}-->
+
+<!--.progress-bar{-->
+<!--background:linear-gradient(90deg,#00c853,#64dd17);-->
+<!--color:white;-->
+<!--padding:10px;-->
+<!--text-align:center;-->
+<!--font-weight:bold;-->
+<!--}-->
+
+<!--/* Note Card */-->
+<!--.note-card{-->
+<!--background:white;-->
+<!--padding:20px;-->
+<!--border-radius:10px;-->
+<!--margin-bottom:20px;-->
+<!--box-shadow:0 3px 10px rgba(0,0,0,0.1);-->
+<!--}-->
+
+<!--.note-card h3{-->
+<!--margin-top:0;-->
+<!--}-->
+
+<!--/* Button */-->
+<!--.btn{-->
+<!--display:inline-block;-->
+<!--padding:8px 15px;-->
+<!--background:#2a5298;-->
+<!--color:white;-->
+<!--border-radius:5px;-->
+<!--text-decoration:none;-->
+<!--margin-top:10px;-->
+<!--}-->
+
+<!--.btn:hover{-->
+<!--background:#1e3c72;-->
+<!--}-->
+
+<!--.completed{-->
+<!--color:green;-->
+<!--font-weight:bold;-->
+<!--margin-top:10px;-->
+<!--display:inline-block;-->
+<!--}-->
+
+<!--iframe{-->
+<!--width:100%;-->
+<!--border-radius:10px;-->
+<!--margin-top:10px;-->
+<!--}-->
+
+<!--</style>-->
+
+<!--</head>-->
+
+<!--<body>-->
+
+<!--&lt;!&ndash; Navbar &ndash;&gt;-->
+<!--<div class="navbar">-->
+<!--<h2>📘 GyanaGhar</h2>-->
+
+<!--<div>-->
+<!--<a href="/dashboard">Dashboard</a>-->
+<!--<a href="/logout">Logout</a>-->
+<!--</div>-->
+<!--</div>-->
+
+<!--&lt;!&ndash; Main &ndash;&gt;-->
+<!--<div class="container">-->
+
+<!--<h2>📖 Chapter Notes</h2>-->
+
+<!--&lt;!&ndash; Progress &ndash;&gt;-->
+<!--<div class="progress-box">-->
+<!--<div class="progress-bar" style="width:{{ progress_percent }}%;">-->
+<!--{{ progress_percent }}% Completed 🚀-->
+<!--</div>-->
+<!--</div>-->
+
+<!--&lt;!&ndash; Notes Loop &ndash;&gt;-->
+<!--{% if notes %}-->
+
+<!--{% for note in notes %}-->
+
+<!--<div class="note-card">-->
+
+<!--<h3>{{ note.title }}</h3>-->
+
+<!--<p>{{ note.content | safe }}</p>-->
+
+<!--&lt;!&ndash; Video &ndash;&gt;-->
+<!--{% if note.video_link %}-->
+<!--<iframe height="315"-->
+<!--src="{{ note.video_link }}"-->
+<!--frameborder="0"-->
+<!--allowfullscreen>-->
+<!--</iframe>-->
+<!--{% endif %}-->
+
+<!--&lt;!&ndash; PDF &ndash;&gt;-->
+<!--{% if note.pdf_file %}-->
+<!--<br>-->
+<!--<a class="btn" href="/static/uploads/{{ note.pdf_file }}" target="_blank">-->
+<!--📄 View PDF-->
+<!--</a>-->
+<!--{% endif %}-->
+
+<!--<br>-->
+
+<!--&lt;!&ndash; ✅ MARK COMPLETE BUTTON / STATUS &ndash;&gt;-->
+<!--{% if note.id in completed_note_ids %}-->
+
+<!--<span class="completed">✔ Completed</span>-->
+
+<!--{% else %}-->
+
+<!--<a href="/mark_complete/{{ note.id }}" class="btn">-->
+<!--✔ Mark as Completed-->
+<!--</a>-->
+
+<!--{% endif %}-->
+
+<!--</div>-->
+
+<!--{% endfor %}-->
+
+<!--{% else %}-->
+
+<!--<p>No notes available for this chapter.</p>-->
+
+<!--{% endif %}-->
+
+<!--</div>-->
+
+<!--</body>-->
+<!--</html>-->
+
+<!--<!DOCTYPE html>-->
+
+<!--<html>-->
+<!--<head>-->
+<!--    <title>Chapter Notes</title>-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+
+<!--```-->
+<!--<style>-->
+<!--    body{-->
+<!--        font-family: Arial, sans-serif;-->
+<!--        margin:0;-->
+<!--        background:#f5f5f5;-->
+<!--    }-->
+
+<!--    /* Navbar */-->
+<!--    .navbar{-->
+<!--        background:#1e3c72;-->
+<!--        color:white;-->
+<!--        padding:15px;-->
+<!--        display:flex;-->
+<!--        justify-content:space-between;-->
+<!--        align-items:center;-->
+<!--    }-->
+
+<!--    .navbar a{-->
+<!--        color:white;-->
+<!--        text-decoration:none;-->
+<!--        margin-left:15px;-->
+<!--    }-->
+
+<!--    /* Container */-->
+<!--    .container{-->
+<!--        width:90%;-->
+<!--        max-width:900px;-->
+<!--        margin:auto;-->
+<!--        margin-top:20px;-->
+<!--    }-->
+
+<!--    /* Progress */-->
+<!--    .progress-box{-->
+<!--        background:#ddd;-->
+<!--        border-radius:20px;-->
+<!--        overflow:hidden;-->
+<!--        margin-bottom:20px;-->
+<!--    }-->
+
+<!--    .progress-bar{-->
+<!--        background:linear-gradient(90deg,#00c853,#64dd17);-->
+<!--        color:white;-->
+<!--        padding:10px;-->
+<!--        text-align:center;-->
+<!--        font-weight:bold;-->
+<!--        transition: width 0.4s ease;-->
+<!--    }-->
+
+<!--    /* Note Card */-->
+<!--    .note-card{-->
+<!--        background:white;-->
+<!--        padding:20px;-->
+<!--        border-radius:10px;-->
+<!--        margin-bottom:20px;-->
+<!--        box-shadow:0 3px 10px rgba(0,0,0,0.1);-->
+<!--        transition:0.2s;-->
+<!--    }-->
+
+<!--    .note-card:hover{-->
+<!--        transform: scale(1.01);-->
+<!--    }-->
+
+<!--    .note-card h3{-->
+<!--        margin-top:0;-->
+<!--        color:#2a5298;-->
+<!--    }-->
+
+<!--    /* Q&A Style */-->
+<!--    .qa-box{-->
+<!--        background:#fff;-->
+<!--        border-left:5px solid #ff4b2b;-->
+<!--        padding:15px;-->
+<!--        margin-top:10px;-->
+<!--        border-radius:8px;-->
+<!--        line-height:1.6;-->
+<!--    }-->
+
+<!--    .question{-->
+<!--        font-weight:bold;-->
+<!--        color:#1e3c72;-->
+<!--        margin-bottom:5px;-->
+<!--    }-->
+
+<!--    .answer{-->
+<!--        color:#333;-->
+<!--    }-->
+
+<!--    /* Button */-->
+<!--    .btn{-->
+<!--        display:inline-block;-->
+<!--        padding:8px 15px;-->
+<!--        background:#2a5298;-->
+<!--        color:white;-->
+<!--        border-radius:5px;-->
+<!--        text-decoration:none;-->
+<!--        margin-top:10px;-->
+<!--    }-->
+
+<!--    .btn:hover{-->
+<!--        background:#1e3c72;-->
+<!--    }-->
+
+<!--    .completed{-->
+<!--        color:green;-->
+<!--        font-weight:bold;-->
+<!--        margin-top:10px;-->
+<!--        display:inline-block;-->
+<!--    }-->
+
+<!--    iframe{-->
+<!--        width:100%;-->
+<!--        border-radius:10px;-->
+<!--        margin-top:10px;-->
+<!--    }-->
+<!--</style>-->
+<!--```-->
+
+<!--</head>-->
+
+<!--<body>-->
+
+<!--&lt;!&ndash; Navbar &ndash;&gt;-->
+
+<!--<div class="navbar">-->
+<!--    <h2>📘 GyanaGhar</h2>-->
+
+<!--```-->
+<!--<div>-->
+<!--    <a href="/dashboard">Dashboard</a>-->
+<!--    <a href="/logout">Logout</a>-->
+<!--</div>-->
+<!--```-->
+
+<!--</div>-->
+
+<!--&lt;!&ndash; Main &ndash;&gt;-->
+
+<!--<div class="container">-->
+
+<!--```-->
+<!--<h2>📖 Chapter Notes</h2>-->
+
+<!--&lt;!&ndash; Progress &ndash;&gt;-->
+<!--<div class="progress-box">-->
+<!--    <div class="progress-bar" style="width: {{ progress_percent }}%;">-->
+<!--        {{ progress_percent }}% Completed 🚀-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--&lt;!&ndash; Notes &ndash;&gt;-->
+<!--{% if notes %}-->
+
+<!--    {% for note in notes %}-->
+<!--    <div class="note-card">-->
+
+<!--        &lt;!&ndash; Title &ndash;&gt;-->
+<!--        <h3>📘 {{ note.title }}</h3>-->
+
+<!--        &lt;!&ndash; Content &ndash;&gt;-->
+<!--        <div class="qa-box">-->
+<!--            <p class="question">📌 Note</p>-->
+<!--            <p class="answer">{{ note.content | safe }}</p>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Video &ndash;&gt;-->
+<!--        {% if note.video_link %}-->
+<!--        <iframe height="315"-->
+<!--            src="{{ note.video_link }}"-->
+<!--            frameborder="0"-->
+<!--            allowfullscreen>-->
+<!--        </iframe>-->
+<!--        {% endif %}-->
+
+<!--        &lt;!&ndash; PDF &ndash;&gt;-->
+<!--        {% if note.pdf_file %}-->
+<!--        <br>-->
+<!--        <a class="btn" href="/static/uploads/{{ note.pdf_file }}" target="_blank">-->
+<!--            📄 View PDF-->
+<!--        </a>-->
+<!--        {% endif %}-->
+
+<!--        <br>-->
+
+<!--        &lt;!&ndash; Mark Complete &ndash;&gt;-->
+<!--        {% if note.id in completed_note_ids %}-->
+<!--            <span class="completed">✔ Completed</span>-->
+<!--        {% else %}-->
+<!--            <a href="/mark_complete/{{ note.id }}" class="btn">-->
+<!--                ✔ Mark as Completed-->
+<!--            </a>-->
+<!--        {% endif %}-->
+
+<!--    </div>-->
+<!--    {% endfor %}-->
+
+<!--{% else %}-->
+<!--    <p>No notes available for this chapter.</p>-->
+<!--{% endif %}-->
+<!--```-->
+
+<!--</div>-->
+
+<!--</body>-->
+<!--</html>-->
+
+
+
+
+
+
 <!DOCTYPE html>
+
 <html>
 <head>
-<title>Chapter Notes</title>
+    <title>Chapter Notes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+```
 <style>
+    body{
+        font-family: Arial, sans-serif;
+        margin:0;
+        background:#f5f5f5;
+    }
 
-body{
-font-family:Arial;
-margin:0;
-background:#f5f5f5;
-}
+    /* Navbar */
+    .navbar{
+        background:#1e3c72;
+        color:white;
+        padding:15px;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+    }
 
-/* Navbar */
-.navbar{
-background:#1e3c72;
-color:white;
-padding:15px;
-display:flex;
-justify-content:space-between;
-}
+    .navbar a{
+        color:white;
+        text-decoration:none;
+        margin-left:15px;
+    }
 
-.navbar a{
-color:white;
-text-decoration:none;
-margin-left:15px;
-}
+    /* Container */
+    .container{
+        width:90%;
+        max-width:900px;
+        margin:auto;
+        margin-top:20px;
+    }
 
-/* Container */
-.container{
-width:90%;
-max-width:900px;
-margin:auto;
-margin-top:20px;
-}
+    /* Progress */
+    .progress-box{
+        background:#ddd;
+        border-radius:20px;
+        overflow:hidden;
+        margin-bottom:20px;
+    }
 
-/* Progress */
-.progress-box{
-background:#ddd;
-border-radius:20px;
-overflow:hidden;
-margin-bottom:20px;
-}
+    .progress-bar{
+        background:linear-gradient(90deg,#00c853,#64dd17);
+        color:white;
+        padding:10px;
+        text-align:center;
+        font-weight:bold;
+        transition: width 0.4s ease;
+    }
 
-.progress-bar{
-background:linear-gradient(90deg,#00c853,#64dd17);
-color:white;
-padding:10px;
-text-align:center;
-font-weight:bold;
-}
+    /* Note Card */
+    .note-card{
+        background:white;
+        padding:20px;
+        border-radius:10px;
+        margin-bottom:20px;
+        box-shadow:0 3px 10px rgba(0,0,0,0.1);
+        transition:0.2s;
+    }
 
-/* Note Card */
-.note-card{
-background:white;
-padding:20px;
-border-radius:10px;
-margin-bottom:20px;
-box-shadow:0 3px 10px rgba(0,0,0,0.1);
-}
+    .note-card:hover{
+        transform: scale(1.01);
+    }
 
-.note-card h3{
-margin-top:0;
-}
+    .note-card h3{
+        margin-top:0;
+        color:#2a5298;
+    }
 
-/* Button */
-.btn{
-display:inline-block;
-padding:8px 15px;
-background:#2a5298;
-color:white;
-border-radius:5px;
-text-decoration:none;
-margin-top:10px;
-}
+    /* Q&A Style */
+    .qa-box{
+        background:#fff;
+        border-left:5px solid #ff4b2b;
+        padding:15px;
+        margin-top:10px;
+        border-radius:8px;
+        line-height:1.6;
+    }
 
-.btn:hover{
-background:#1e3c72;
-}
+    .question{
+        font-weight:bold;
+        color:#1e3c72;
+        margin-bottom:5px;
+    }
 
-.completed{
-color:green;
-font-weight:bold;
-margin-top:10px;
-display:inline-block;
-}
+    .answer{
+        color:#333;
+    }
 
-iframe{
-width:100%;
-border-radius:10px;
-margin-top:10px;
-}
+    /* Button */
+    .btn{
+        display:inline-block;
+        padding:8px 15px;
+        background:#2a5298;
+        color:white;
+        border-radius:5px;
+        text-decoration:none;
+        margin-top:10px;
+    }
 
+    .btn:hover{
+        background:#1e3c72;
+    }
+
+    .completed{
+        color:green;
+        font-weight:bold;
+        margin-top:10px;
+        display:inline-block;
+    }
+
+    iframe{
+        width:100%;
+        border-radius:10px;
+        margin-top:10px;
+    }
 </style>
+```
 
 </head>
 
 <body>
 
 <!-- Navbar -->
-<div class="navbar">
-<h2>📘 GyanaGhar</h2>
 
+<div class="navbar">
+    <h2>📘 GyanaGhar</h2>
+
+```
 <div>
-<a href="/dashboard">Dashboard</a>
-<a href="/logout">Logout</a>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/logout">Logout</a>
 </div>
+```
+
 </div>
 
 <!-- Main -->
+
 <div class="container">
 
+```
 <h2>📖 Chapter Notes</h2>
 
 <!-- Progress -->
 <div class="progress-box">
-<div class="progress-bar" style="width:{{ progress_percent }}%;">
-{{ progress_percent }}% Completed 🚀
-</div>
+    <div class="progress-bar" style="width: {{ progress_percent }}%;">
+        {{ progress_percent }}% Completed 🚀
+    </div>
 </div>
 
-<!-- Notes Loop -->
+<!-- Notes -->
 {% if notes %}
 
-{% for note in notes %}
+    {% for note in notes %}
+    <div class="note-card">
 
-<div class="note-card">
+        <!-- Title -->
+        <h3>📘 {{ note.title }}</h3>
 
-<h3>{{ note.title }}</h3>
+        <!-- Content -->
+        <div class="qa-box">
+            <p class="question">📌 Note</p>
+            <p class="answer">{{ note.content | safe }}</p>
+        </div>
 
-<p>{{ note.content | safe }}</p>
+        <!-- Video -->
+        {% if note.video_link %}
+        <iframe height="315"
+            src="{{ note.video_link }}"
+            frameborder="0"
+            allowfullscreen>
+        </iframe>
+        {% endif %}
 
-<!-- Video -->
-{% if note.video_link %}
-<iframe height="315"
-src="{{ note.video_link }}"
-frameborder="0"
-allowfullscreen>
-</iframe>
-{% endif %}
+        <!-- PDF -->
+        {% if note.pdf_file %}
+        <br>
+        <a class="btn" href="/static/uploads/{{ note.pdf_file }}" target="_blank">
+            📄 View PDF
+        </a>
+        {% endif %}
 
-<!-- PDF -->
-{% if note.pdf_file %}
-<br>
-<a class="btn" href="/static/uploads/{{ note.pdf_file }}" target="_blank">
-📄 View PDF
-</a>
-{% endif %}
+        <br>
 
-<br>
+        <!-- Mark Complete -->
+        {% if note.id in completed_note_ids %}
+            <span class="completed">✔ Completed</span>
+        {% else %}
+            <a href="/mark_complete/{{ note.id }}" class="btn">
+                ✔ Mark as Completed
+            </a>
+        {% endif %}
 
-<!-- ✅ MARK COMPLETE BUTTON / STATUS -->
-{% if note.id in completed_note_ids %}
-
-<span class="completed">✔ Completed</span>
+    </div>
+    {% endfor %}
 
 {% else %}
-
-<a href="/mark_complete/{{ note.id }}" class="btn">
-✔ Mark as Completed
-</a>
-
+    <p>No notes available for this chapter.</p>
 {% endif %}
-
-</div>
-
-{% endfor %}
-
-{% else %}
-
-<p>No notes available for this chapter.</p>
-
-{% endif %}
+```
 
 </div>
 
