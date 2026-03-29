@@ -1847,25 +1847,25 @@ def chapter_page(chapter_id):
 
     notes = Note.query.filter_by(chapter_id=chapter_id).all()
 
-    total_notes = len(notes)
+    note_ids = [note.id for note in notes]
 
-    completed_notes = Progress.query.filter_by(
-        user_id=current_user.id,
-        chapter_id=chapter_id
+    completed_notes = Progress.query.filter(
+        Progress.user_id == current_user.id,
+        Progress.note_id.in_(note_ids)
     ).all()
 
-    completed_note_ids = [p.note_id for p in completed_notes]
+    total_notes = len(notes)
+    completed_count = len(completed_notes)
 
-    if total_notes == 0:
-        progress_percent = 0
+    if total_notes > 0:
+        progress_percent = int((completed_count / total_notes) * 100)
     else:
-        progress_percent = int((len(completed_note_ids) / total_notes) * 100)
+        progress_percent = 0
 
     return render_template(
         "notes.html",
         notes=notes,
-        progress_percent=progress_percent,
-        completed_note_ids=completed_note_ids
+        progress_percent=progress_percent
     )
 
 
