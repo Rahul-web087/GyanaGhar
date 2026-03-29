@@ -1604,6 +1604,8 @@ class Progress(db.Model):
 
     completed = db.Column(db.Boolean, default=True)
 
+    chapter_id = db.Column(db.Integer, db.ForeignKey('chapter.id'))
+
 
 @login_manager.user_loader
 def load_user(user_id):
