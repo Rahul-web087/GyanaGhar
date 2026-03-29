@@ -2040,7 +2040,7 @@ def edit_note(note_id):
 
         pdf = request.files["pdf_file"]
 
-        # 🔥 If new PDF uploaded → replace old
+        # If new PDF uploaded → replace old
         if pdf and pdf.filename != "":
             from werkzeug.utils import secure_filename
             import os
@@ -2108,7 +2108,7 @@ def add_note():
         chapter_id = request.form["chapter_id"]
         video_link = request.form["video_link"]
 
-        # 🔥 THIS IS WHERE YOUR CODE GOES
+        #  THIS IS WHERE YOUR CODE GOES
         pdf = request.files["pdf_file"]
 
         filename = None
@@ -2182,11 +2182,17 @@ def admin_courses():
         SELECT 
             chapter.id AS chapter_id,
             chapter.name AS chapter_name,
+
+            subject.id AS subject_id,
             subject.name AS subject_name,
+
+            class.id AS class_id,
             class.name AS class_name
+
         FROM chapter
         JOIN subject ON chapter.subject_id = subject.id
         JOIN class ON subject.class_id = class.id
+
         ORDER BY class.name, subject.name, chapter.name
     """)).fetchall()
 
@@ -2206,6 +2212,53 @@ def delete_note(note_id):
     db.session.commit()
 
     return redirect("/admin/courses")
+
+# ============ Delete Class ===============
+
+
+@app.route("/admin/delete_class/<int:class_id>")
+@login_required
+def delete_class(class_id):
+
+    if current_user.role != "admin":
+        return "Access Denied"
+
+    cls = Class.query.get_or_404(class_id)
+
+    db.session.delete(cls)
+    db.session.commit()
+
+    return redirect(url_for("admin_courses"))
+
+
+
+
+
+
+# ======== Delete Subject ============
+
+
+@app.route("/admin/delete_subject/<int:subject_id>")
+@login_required
+def delete_subject(subject_id):
+
+    if current_user.role != "admin":
+        return "Access Denied"
+
+    subject = Subject.query.get_or_404(subject_id)
+
+    # delete chapters first
+    for chapter in subject.chapters:
+        db.session.delete(chapter)
+
+    db.session.delete(subject)
+    db.session.commit()
+
+    return redirect(url_for("admin_courses"))
+
+
+
+
 
 # ================= DELETE COURSE =================
 
