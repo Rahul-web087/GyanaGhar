@@ -137,7 +137,7 @@ iframe{
 
 {% if note.qa_data %}
 
-```
+
 {% set qa_list = note.qa_data | from_json %}
 
 {% for qa in qa_list %}
@@ -146,15 +146,15 @@ iframe{
     <p class="answer">👉 {{ qa.answer }}</p>
 </div>
 {% endfor %}
-```
+
 
 {% else %}
 
-```
+
 <div class="qa-box">
     <p class="answer">No questions available</p>
 </div>
-```
+
 
 {% endif %}
 

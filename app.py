@@ -1272,11 +1272,11 @@ def from_json(value):
 #
 # ================delete =========== it --=-=-
 
-@app.route("/init_db")
-def init_db():
-    db.drop_all()
-    db.create_all()
-    return "Database recreated successfully!"
+# @app.route("/init_db")
+# def init_db():
+#     db.drop_all()
+#     db.create_all()
+#     return "Database recreated successfully!"
 
 
 
@@ -1304,33 +1304,33 @@ def init_db():
 
 # -------- CREATE ADMIN --------
 
-
-@app.route('/create_admin')
-def create_admin():
-
-    try:
-
-        if User.query.filter_by(email="admin@gyanaghar.com").first():
-            return "Admin already exists!"
-
-        admin = User(
-            name="Admin",
-            email="admin@gyanaghar.com",
-            password=generate_password_hash("Rahul@001"),
-            role="admin",
-            secret_question="Your first school name?",
-            secret_answer="demo"
-        )
-
-        db.session.add(admin)
-        db.session.commit()
-
-        return "Admin Created Successfully!"
-
-    except Exception as e:
-        return f"Error: {str(e)}"
-
-
+#
+# @app.route('/create_admin')
+# def create_admin():
+#
+#     try:
+#
+#         if User.query.filter_by(email="admin@gyanaghar.com").first():
+#             return "Admin already exists!"
+#
+#         admin = User(
+#             name="Admin",
+#             email="admin@gyanaghar.com",
+#             password=generate_password_hash("Rahul@001"),
+#             role="admin",
+#             secret_question="Your first school name?",
+#             secret_answer="demo"
+#         )
+#
+#         db.session.add(admin)
+#         db.session.commit()
+#
+#         return "Admin Created Successfully!"
+#
+#     except Exception as e:
+#         return f"Error: {str(e)}"
+#
+#
 
 # -------- FORGOT PASSWORD --------
 @app.route('/forgot_password', methods=['GET', 'POST'])
@@ -1614,27 +1614,34 @@ def edit_note(note_id):
     if request.method == "POST":
 
         note.title = request.form["title"]
-        note.video_link = request.form["video_link"]
+        note.video_link = request.form.get("video_link")
 
-        #  MULTIPLE Q&A UPDATE
+        #  MULTIPLE Q&A UPDATE (SAFE)
         questions = request.form.getlist("question[]")
         answers = request.form.getlist("answer[]")
 
         qa_list = []
 
         for q, a in zip(questions, answers):
-            if q.strip() and a.strip():
+            q = q.strip()
+            a = a.strip()
+
+            if q and a:
                 qa_list.append({
                     "question": q,
                     "answer": a
                 })
 
+        # if not
+        if not qa_list:
+            qa_list = []
+
         note.qa_data = json.dumps(qa_list)
 
-        # PDF update
-        pdf = request.files["pdf_file"]
+        #  PDF UPDATE (SAFE)
+        pdf = request.files.get("pdf_file")
 
-        if pdf and pdf.filename != "":
+        if pdf and pdf.filename:
             from werkzeug.utils import secure_filename
             import os
 
@@ -1644,7 +1651,12 @@ def edit_note(note_id):
 
             note.pdf_file = filename
 
-        db.session.commit()
+        #  SAFE COMMIT
+        try:
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            return f"Error: {str(e)}"
 
         return redirect("/admin/courses")
 

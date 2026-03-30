@@ -1,5 +1,5 @@
-
 <!DOCTYPE html>
+
 <html>
 <head>
 <title>Edit Note</title>
@@ -13,7 +13,7 @@ margin:0;
 
 .container{
 width:90%;
-max-width:500px;
+max-width:600px;
 margin:auto;
 margin-top:40px;
 }
@@ -48,7 +48,15 @@ button:hover{
 background:#1e3c72;
 }
 
+.qa-item{
+margin-top:15px;
+padding:10px;
+border:1px solid #ddd;
+border-radius:8px;
+background:#fafafa;
+}
 </style>
+
 </head>
 
 <body>
@@ -61,28 +69,46 @@ background:#1e3c72;
 
 <form method="POST" enctype="multipart/form-data">
 
-<label>Title</label>
-<input type="text" name="title" value="{{ note.title }}" required>
+<label>Title</label> <input type="text" name="title" value="{{ note.title }}" required>
 
-<label>Question</label>
-<textarea name="question" required>{{ note.question }}</textarea>
+<!-- MULTIPLE Q&A -->
 
-<label>Answer</label>
-<textarea name="answer" required>{{ note.answer }}</textarea>
+<div id="qa-container">
 
-<label>Video Link</label>
-<input type="text" name="video_link" value="{{ note.video_link }}">
+{% if note.qa_data %}
+{% set qa_list = note.qa_data | from_json %}
 
-<!-- Show old PDF -->
+
+{% for qa in qa_list %}
+<div class="qa-item">
+    <label>Question</label>
+    <textarea name="question[]" required>{{ qa.question }}</textarea>
+
+    <label>Answer</label>
+    <textarea name="answer[]" required>{{ qa.answer }}</textarea>
+
+    <button type="button" onclick="this.parentElement.remove()">❌ Remove</button>
+</div>
+{% endfor %}
+
+
+{% endif %}
+
+</div>
+
+<button type="button" onclick="addQA()">➕ Add More Question</button>
+
+<label>Video Link</label> <input type="text" name="video_link" value="{{ note.video_link }}">
+
 {% if note.pdf_file %}
+
 <p>Current PDF:</p>
 <a href="/static/uploads/{{ note.pdf_file }}" target="_blank">
 📄 View PDF
 </a>
 {% endif %}
 
-<label>Replace PDF</label>
-<input type="file" name="pdf_file">
+<label>Replace PDF</label> <input type="file" name="pdf_file">
 
 <button type="submit">Update Note</button>
 
@@ -91,6 +117,27 @@ background:#1e3c72;
 </div>
 
 </div>
+
+<script>
+function addQA(){
+    let div = document.createElement("div");
+    div.classList.add("qa-item");
+
+    div.innerHTML =
+        <label>Question</label>
+        <textarea name="question[]" placeholder="Enter Question"></textarea>
+
+
+    <label>Answer</label>
+    <textarea name="answer[]" placeholder="Enter Answer"></textarea>
+
+    <button type="button" onclick="this.parentElement.remove()">❌ Remove</button>
+
+
+document.getElementById("qa-container").appendChild(div);
+
+
+} </script>
 
 </body>
 </html>
