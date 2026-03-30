@@ -1507,6 +1507,7 @@
 
 
 import os
+import json
 from flask import Flask, render_template, redirect, url_for, request, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
@@ -1587,7 +1588,8 @@ class Chapter(db.Model):
 
 class Note(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(200))   #  ADD THIS
+    title = db.Column(db.String(200))
+    qa_data = db.Column(db.Text)
     content = db.Column(db.Text)
     chapter_id = db.Column(db.Integer)
     video_link = db.Column(db.String(200))
@@ -1694,6 +1696,13 @@ def profile():
     )
 
 
+# ============ Json ===========
+
+import json
+
+@app.template_filter('from_json')
+def from_json(value):
+    return json.loads(value)
 
 
 #
@@ -2148,6 +2157,7 @@ def add_chapter():
 #         chapters=chapters
 #     )
 
+import json
 
 @app.route("/admin/add_note", methods=["GET", "POST"])
 @login_required
@@ -2160,10 +2170,23 @@ def add_note():
     if request.method == "POST":
 
         title = request.form["title"]
-        question = request.form["question"]
-        answer = request.form["answer"]
         chapter_id = request.form["chapter_id"]
         video_link = request.form["video_link"]
+
+        # MULTIPLE Q&A
+        questions = request.form.getlist("question[]")
+        answers = request.form.getlist("answer[]")
+
+        qa_list = []
+
+        for q, a in zip(questions, answers):
+            if q.strip() and a.strip():
+                qa_list.append({
+                    "question": q,
+                    "answer": a
+                })
+
+        qa_json = json.dumps(qa_list)
 
         # PDF upload
         pdf = request.files["pdf_file"]
@@ -2180,8 +2203,7 @@ def add_note():
         # Save in DB
         new_note = Note(
             title=title,
-            question=question,
-            answer=answer,
+            qa_data=qa_json,   #  STORE JSON
             chapter_id=chapter_id,
             video_link=video_link,
             pdf_file=filename
@@ -2198,7 +2220,6 @@ def add_note():
         subjects=subjects,
         chapters=chapters
     )
-
 
 
 

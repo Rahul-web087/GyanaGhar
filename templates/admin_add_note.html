@@ -525,6 +525,19 @@ background:#0056b3;
 
 <label>Note Title</label> <input type="text" name="title" placeholder="Enter Note Title" required>
 
+
+    <div id="qa-container">
+
+<div class="qa-item">
+<textarea name="question[]" placeholder="Enter Question" required></textarea>
+<textarea name="answer[]" placeholder="Enter Answer" required></textarea>
+</div>
+
+</div>
+
+<button type="button" onclick="addQA()">➕ Add More Q&A</button>
+
+
 <label>Question</label>
 
 <textarea name="question" placeholder="Enter Question..." rows="3" required></textarea>
@@ -546,6 +559,26 @@ background:#0056b3;
 </div>
 
 <!-- JavaScript -->
+
+<script>
+function addQA() {
+    let container = document.getElementById("qa-container");
+
+    let div = document.createElement("div");
+    div.classList.add("qa-item");
+
+    div.innerHTML = `
+        <textarea name="question[]" placeholder="Enter Question" required></textarea>
+        <textarea name="answer[]" placeholder="Enter Answer" required></textarea>
+        <br>
+    `;
+
+    container.appendChild(div);
+}
+</script>
+
+
+
 
 <script>
 const classSelect = document.getElementById("classSelect");
