@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 
 <html>
@@ -14,7 +12,6 @@ body{
     background:#eef2f7;
 }
 
-/* Navbar */
 .navbar{
     background:linear-gradient(90deg,#1e3c72,#2a5298);
     color:white;
@@ -30,7 +27,6 @@ body{
     margin-left:15px;
 }
 
-/* Container */
 .container{
     width:95%;
     max-width:900px;
@@ -38,7 +34,6 @@ body{
     margin-top:20px;
 }
 
-/* Progress */
 .progress-box{
     background:#ddd;
     border-radius:30px;
@@ -54,7 +49,6 @@ body{
     font-weight:bold;
 }
 
-/* Card */
 .note-card{
     background:white;
     padding:18px;
@@ -63,12 +57,10 @@ body{
     box-shadow:0 6px 20px rgba(0,0,0,0.1);
 }
 
-/* Title */
 .note-card h3{
     color:#2a5298;
 }
 
-/* Q&A */
 .qa-box{
     background:#f9fafc;
     border-left:5px solid #ff4b2b;
@@ -87,7 +79,6 @@ body{
     margin-top:5px;
 }
 
-/* Button */
 .btn{
     display:inline-block;
     padding:8px 15px;
@@ -140,10 +131,13 @@ iframe{
 
 <div class="note-card">
 
-```
 <h3>📘 {{ note.title }}</h3>
 
-<!-- MULTIPLE Q&A -->
+<!-- SAFE MULTIPLE Q&A -->
+
+{% if note.qa_data %}
+
+```
 {% set qa_list = note.qa_data | from_json %}
 
 {% for qa in qa_list %}
@@ -152,28 +146,33 @@ iframe{
     <p class="answer">👉 {{ qa.answer }}</p>
 </div>
 {% endfor %}
+```
+
+{% else %}
+
+```
+<div class="qa-box">
+    <p class="answer">No questions available</p>
+</div>
+```
+
+{% endif %}
 
 {% if note.video_link %}
+
 <iframe height="315" src="{{ note.video_link }}" frameborder="0" allowfullscreen></iframe>
 {% endif %}
 
-{% if note.pdf_file %}
-<br>
-<a class="btn" href="/static/uploads/{{ note.pdf_file }}" target="_blank">
-    📄 View PDF
-</a>
+{% if note.pdf_file %} <br> <a class="btn" href="/static/uploads/{{ note.pdf_file }}" target="_blank">
+📄 View PDF </a>
 {% endif %}
 
 <br>
 
-{% if note.id in completed_note_ids %}
-    <span class="completed">✔ Completed</span>
-{% else %}
-    <a href="/mark_complete/{{ note.id }}" class="btn">
-        ✔ Mark as Completed
-    </a>
+{% if note.id in completed_note_ids %} <span class="completed">✔ Completed</span>
+{% else %} <a href="/mark_complete/{{ note.id }}" class="btn">
+✔ Mark as Completed </a>
 {% endif %}
-```
 
 </div>
 {% endfor %}
@@ -181,6 +180,7 @@ iframe{
 {% else %}
 
 <p>No notes available for this chapter.</p>
+
 {% endif %}
 
 </div>
