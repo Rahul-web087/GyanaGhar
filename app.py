@@ -1435,6 +1435,9 @@ def chapter_page(chapter_id):
         Progress.note_id.in_(note_ids)
     ).all()
 
+    #  ADD THIS LINE
+    completed_note_ids = [p.note_id for p in completed_notes]
+
     total_notes = len(notes)
     completed_count = len(completed_notes)
 
@@ -1446,7 +1449,8 @@ def chapter_page(chapter_id):
     return render_template(
         "notes.html",
         notes=notes,
-        progress_percent=progress_percent
+        progress_percent=progress_percent,
+        completed_note_ids=completed_note_ids   #  PASS THIS
     )
 
 
