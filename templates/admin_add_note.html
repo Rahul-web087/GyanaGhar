@@ -130,22 +130,19 @@ margin-top:10px;
 
 <script>
 function addQA() {
-    let container = document.getElementById("qa-container");
+    var container = document.getElementById("qa-container");
 
-    let div = document.createElement("div");
-    div.classList.add("qa-item");
+    var div = document.createElement("div");
+    div.className = "qa-item";
 
-    div.innerHTML = `
-        <textarea name="question[]" placeholder="Enter Question" required></textarea>
+    div.innerHTML =
+        '<textarea name="question[]" placeholder="Enter Question" required></textarea>' +
+        '<textarea name="answer[]" placeholder="Enter Answer" required></textarea>' +
+        '<button type="button" onclick="this.parentElement.remove()">❌ Remove</button>';
 
-```
-    <textarea name="answer[]" placeholder="Enter Answer" required></textarea>
-`;
-
-container.appendChild(div);
-```
-
-} </script>
+    container.appendChild(div);
+}
+</script>
 
 <!-- Filter Script -->
 
