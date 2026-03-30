@@ -119,25 +119,19 @@ background:#fafafa;
 </div>
 
 <script>
-function addQA(){
-    let div = document.createElement("div");
-    div.classList.add("qa-item");
+function addQA() {
+    var container = document.getElementById("qa-container");
+
+    var div = document.createElement("div");
+    div.className = "qa-item";
 
     div.innerHTML =
-        <label>Question</label>
-        <textarea name="question[]" placeholder="Enter Question"></textarea>
+        '<textarea name="question[]" placeholder="Enter Question" required></textarea>' +
+        '<textarea name="answer[]" placeholder="Enter Answer" required></textarea>' +
+        '<button type="button" onclick="this.parentElement.remove()">❌ Remove</button>';
 
-
-    <label>Answer</label>
-    <textarea name="answer[]" placeholder="Enter Answer"></textarea>
-
-    <button type="button" onclick="this.parentElement.remove()">❌ Remove</button>
-
-
-document.getElementById("qa-container").appendChild(div);
-
-
-} </script>
-
+    container.appendChild(div);
+}
+</script>
 </body>
 </html>
