@@ -135,7 +135,7 @@ iframe{
 
 <!-- SAFE MULTIPLE Q&A -->
 
-{% if note.qa_data %}
+{% if note.qa_data and note.qa_data != '[]' %}
 
 
 {% set qa_list = note.qa_data | from_json %}

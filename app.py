@@ -1266,7 +1266,11 @@ import json
 
 @app.template_filter('from_json')
 def from_json(value):
-    return json.loads(value)
+    import json
+    try:
+        return json.loads(value)
+    except:
+        return []
 
 
 #
