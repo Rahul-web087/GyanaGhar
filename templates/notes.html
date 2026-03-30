@@ -1,183 +1,401 @@
-<!--<!DOCTYPE html>-->
-<!--<html>-->
-<!--<head>-->
-<!--<title>Chapter Notes</title>-->
+<!--&lt;!&ndash;<!DOCTYPE html>&ndash;&gt;-->
+<!--&lt;!&ndash;<html>&ndash;&gt;-->
+<!--&lt;!&ndash;<head>&ndash;&gt;-->
+<!--&lt;!&ndash;<title>Chapter Notes</title>&ndash;&gt;-->
 
-<!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--&lt;!&ndash;<meta name="viewport" content="width=device-width, initial-scale=1.0">&ndash;&gt;-->
 
-<!--<style>-->
+<!--&lt;!&ndash;<style>&ndash;&gt;-->
 
-<!--body{-->
-<!--font-family:Arial;-->
-<!--margin:0;-->
-<!--background:#f5f5f5;-->
-<!--}-->
+<!--&lt;!&ndash;body{&ndash;&gt;-->
+<!--&lt;!&ndash;font-family:Arial;&ndash;&gt;-->
+<!--&lt;!&ndash;margin:0;&ndash;&gt;-->
+<!--&lt;!&ndash;background:#f5f5f5;&ndash;&gt;-->
+<!--&lt;!&ndash;}&ndash;&gt;-->
 
-<!--/* Navbar */-->
-<!--.navbar{-->
-<!--background:#1e3c72;-->
-<!--color:white;-->
-<!--padding:15px;-->
-<!--display:flex;-->
-<!--justify-content:space-between;-->
-<!--}-->
+<!--&lt;!&ndash;/* Navbar */&ndash;&gt;-->
+<!--&lt;!&ndash;.navbar{&ndash;&gt;-->
+<!--&lt;!&ndash;background:#1e3c72;&ndash;&gt;-->
+<!--&lt;!&ndash;color:white;&ndash;&gt;-->
+<!--&lt;!&ndash;padding:15px;&ndash;&gt;-->
+<!--&lt;!&ndash;display:flex;&ndash;&gt;-->
+<!--&lt;!&ndash;justify-content:space-between;&ndash;&gt;-->
+<!--&lt;!&ndash;}&ndash;&gt;-->
 
-<!--.navbar a{-->
-<!--color:white;-->
-<!--text-decoration:none;-->
-<!--margin-left:15px;-->
-<!--}-->
+<!--&lt;!&ndash;.navbar a{&ndash;&gt;-->
+<!--&lt;!&ndash;color:white;&ndash;&gt;-->
+<!--&lt;!&ndash;text-decoration:none;&ndash;&gt;-->
+<!--&lt;!&ndash;margin-left:15px;&ndash;&gt;-->
+<!--&lt;!&ndash;}&ndash;&gt;-->
 
-<!--/* Container */-->
-<!--.container{-->
-<!--width:90%;-->
-<!--max-width:900px;-->
-<!--margin:auto;-->
-<!--margin-top:20px;-->
-<!--}-->
+<!--&lt;!&ndash;/* Container */&ndash;&gt;-->
+<!--&lt;!&ndash;.container{&ndash;&gt;-->
+<!--&lt;!&ndash;width:90%;&ndash;&gt;-->
+<!--&lt;!&ndash;max-width:900px;&ndash;&gt;-->
+<!--&lt;!&ndash;margin:auto;&ndash;&gt;-->
+<!--&lt;!&ndash;margin-top:20px;&ndash;&gt;-->
+<!--&lt;!&ndash;}&ndash;&gt;-->
 
-<!--/* Progress */-->
-<!--.progress-box{-->
-<!--background:#ddd;-->
-<!--border-radius:20px;-->
-<!--overflow:hidden;-->
-<!--margin-bottom:20px;-->
-<!--}-->
+<!--&lt;!&ndash;/* Progress */&ndash;&gt;-->
+<!--&lt;!&ndash;.progress-box{&ndash;&gt;-->
+<!--&lt;!&ndash;background:#ddd;&ndash;&gt;-->
+<!--&lt;!&ndash;border-radius:20px;&ndash;&gt;-->
+<!--&lt;!&ndash;overflow:hidden;&ndash;&gt;-->
+<!--&lt;!&ndash;margin-bottom:20px;&ndash;&gt;-->
+<!--&lt;!&ndash;}&ndash;&gt;-->
 
-<!--.progress-bar{-->
-<!--background:linear-gradient(90deg,#00c853,#64dd17);-->
-<!--color:white;-->
-<!--padding:10px;-->
-<!--text-align:center;-->
-<!--font-weight:bold;-->
-<!--}-->
+<!--&lt;!&ndash;.progress-bar{&ndash;&gt;-->
+<!--&lt;!&ndash;background:linear-gradient(90deg,#00c853,#64dd17);&ndash;&gt;-->
+<!--&lt;!&ndash;color:white;&ndash;&gt;-->
+<!--&lt;!&ndash;padding:10px;&ndash;&gt;-->
+<!--&lt;!&ndash;text-align:center;&ndash;&gt;-->
+<!--&lt;!&ndash;font-weight:bold;&ndash;&gt;-->
+<!--&lt;!&ndash;}&ndash;&gt;-->
 
-<!--/* Note Card */-->
-<!--.note-card{-->
-<!--background:white;-->
-<!--padding:20px;-->
-<!--border-radius:10px;-->
-<!--margin-bottom:20px;-->
-<!--box-shadow:0 3px 10px rgba(0,0,0,0.1);-->
-<!--}-->
+<!--&lt;!&ndash;/* Note Card */&ndash;&gt;-->
+<!--&lt;!&ndash;.note-card{&ndash;&gt;-->
+<!--&lt;!&ndash;background:white;&ndash;&gt;-->
+<!--&lt;!&ndash;padding:20px;&ndash;&gt;-->
+<!--&lt;!&ndash;border-radius:10px;&ndash;&gt;-->
+<!--&lt;!&ndash;margin-bottom:20px;&ndash;&gt;-->
+<!--&lt;!&ndash;box-shadow:0 3px 10px rgba(0,0,0,0.1);&ndash;&gt;-->
+<!--&lt;!&ndash;}&ndash;&gt;-->
 
-<!--.note-card h3{-->
-<!--margin-top:0;-->
-<!--}-->
+<!--&lt;!&ndash;.note-card h3{&ndash;&gt;-->
+<!--&lt;!&ndash;margin-top:0;&ndash;&gt;-->
+<!--&lt;!&ndash;}&ndash;&gt;-->
 
-<!--/* Button */-->
-<!--.btn{-->
-<!--display:inline-block;-->
-<!--padding:8px 15px;-->
-<!--background:#2a5298;-->
-<!--color:white;-->
-<!--border-radius:5px;-->
-<!--text-decoration:none;-->
-<!--margin-top:10px;-->
-<!--}-->
+<!--&lt;!&ndash;/* Button */&ndash;&gt;-->
+<!--&lt;!&ndash;.btn{&ndash;&gt;-->
+<!--&lt;!&ndash;display:inline-block;&ndash;&gt;-->
+<!--&lt;!&ndash;padding:8px 15px;&ndash;&gt;-->
+<!--&lt;!&ndash;background:#2a5298;&ndash;&gt;-->
+<!--&lt;!&ndash;color:white;&ndash;&gt;-->
+<!--&lt;!&ndash;border-radius:5px;&ndash;&gt;-->
+<!--&lt;!&ndash;text-decoration:none;&ndash;&gt;-->
+<!--&lt;!&ndash;margin-top:10px;&ndash;&gt;-->
+<!--&lt;!&ndash;}&ndash;&gt;-->
 
-<!--.btn:hover{-->
-<!--background:#1e3c72;-->
-<!--}-->
+<!--&lt;!&ndash;.btn:hover{&ndash;&gt;-->
+<!--&lt;!&ndash;background:#1e3c72;&ndash;&gt;-->
+<!--&lt;!&ndash;}&ndash;&gt;-->
 
-<!--.completed{-->
-<!--color:green;-->
-<!--font-weight:bold;-->
-<!--margin-top:10px;-->
-<!--display:inline-block;-->
-<!--}-->
+<!--&lt;!&ndash;.completed{&ndash;&gt;-->
+<!--&lt;!&ndash;color:green;&ndash;&gt;-->
+<!--&lt;!&ndash;font-weight:bold;&ndash;&gt;-->
+<!--&lt;!&ndash;margin-top:10px;&ndash;&gt;-->
+<!--&lt;!&ndash;display:inline-block;&ndash;&gt;-->
+<!--&lt;!&ndash;}&ndash;&gt;-->
 
-<!--iframe{-->
-<!--width:100%;-->
-<!--border-radius:10px;-->
-<!--margin-top:10px;-->
-<!--}-->
+<!--&lt;!&ndash;iframe{&ndash;&gt;-->
+<!--&lt;!&ndash;width:100%;&ndash;&gt;-->
+<!--&lt;!&ndash;border-radius:10px;&ndash;&gt;-->
+<!--&lt;!&ndash;margin-top:10px;&ndash;&gt;-->
+<!--&lt;!&ndash;}&ndash;&gt;-->
 
-<!--</style>-->
+<!--&lt;!&ndash;</style>&ndash;&gt;-->
 
-<!--</head>-->
+<!--&lt;!&ndash;</head>&ndash;&gt;-->
 
-<!--<body>-->
+<!--&lt;!&ndash;<body>&ndash;&gt;-->
 
-<!--&lt;!&ndash; Navbar &ndash;&gt;-->
-<!--<div class="navbar">-->
-<!--<h2>📘 GyanaGhar</h2>-->
+<!--&lt;!&ndash;&lt;!&ndash; Navbar &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="navbar">&ndash;&gt;-->
+<!--&lt;!&ndash;<h2>📘 GyanaGhar</h2>&ndash;&gt;-->
 
-<!--<div>-->
-<!--<a href="/dashboard">Dashboard</a>-->
-<!--<a href="/logout">Logout</a>-->
-<!--</div>-->
-<!--</div>-->
+<!--&lt;!&ndash;<div>&ndash;&gt;-->
+<!--&lt;!&ndash;<a href="/dashboard">Dashboard</a>&ndash;&gt;-->
+<!--&lt;!&ndash;<a href="/logout">Logout</a>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
 
-<!--&lt;!&ndash; Main &ndash;&gt;-->
-<!--<div class="container">-->
+<!--&lt;!&ndash;&lt;!&ndash; Main &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="container">&ndash;&gt;-->
 
-<!--<h2>📖 Chapter Notes</h2>-->
+<!--&lt;!&ndash;<h2>📖 Chapter Notes</h2>&ndash;&gt;-->
 
-<!--&lt;!&ndash; Progress &ndash;&gt;-->
-<!--<div class="progress-box">-->
-<!--<div class="progress-bar" style="width:{{ progress_percent }}%;">-->
-<!--{{ progress_percent }}% Completed 🚀-->
-<!--</div>-->
-<!--</div>-->
+<!--&lt;!&ndash;&lt;!&ndash; Progress &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="progress-box">&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="progress-bar" style="width:{{ progress_percent }}%;">&ndash;&gt;-->
+<!--&lt;!&ndash;{{ progress_percent }}% Completed 🚀&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
 
-<!--&lt;!&ndash; Notes Loop &ndash;&gt;-->
-<!--{% if notes %}-->
+<!--&lt;!&ndash;&lt;!&ndash; Notes Loop &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;{% if notes %}&ndash;&gt;-->
 
-<!--{% for note in notes %}-->
+<!--&lt;!&ndash;{% for note in notes %}&ndash;&gt;-->
 
-<!--<div class="note-card">-->
+<!--&lt;!&ndash;<div class="note-card">&ndash;&gt;-->
 
-<!--<h3>{{ note.title }}</h3>-->
+<!--&lt;!&ndash;<h3>{{ note.title }}</h3>&ndash;&gt;-->
 
-<!--<p>{{ note.content | safe }}</p>-->
+<!--&lt;!&ndash;<p>{{ note.content | safe }}</p>&ndash;&gt;-->
 
-<!--&lt;!&ndash; Video &ndash;&gt;-->
-<!--{% if note.video_link %}-->
-<!--<iframe height="315"-->
-<!--src="{{ note.video_link }}"-->
-<!--frameborder="0"-->
-<!--allowfullscreen>-->
-<!--</iframe>-->
-<!--{% endif %}-->
+<!--&lt;!&ndash;&lt;!&ndash; Video &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;{% if note.video_link %}&ndash;&gt;-->
+<!--&lt;!&ndash;<iframe height="315"&ndash;&gt;-->
+<!--&lt;!&ndash;src="{{ note.video_link }}"&ndash;&gt;-->
+<!--&lt;!&ndash;frameborder="0"&ndash;&gt;-->
+<!--&lt;!&ndash;allowfullscreen>&ndash;&gt;-->
+<!--&lt;!&ndash;</iframe>&ndash;&gt;-->
+<!--&lt;!&ndash;{% endif %}&ndash;&gt;-->
 
-<!--&lt;!&ndash; PDF &ndash;&gt;-->
-<!--{% if note.pdf_file %}-->
-<!--<br>-->
-<!--<a class="btn" href="/static/uploads/{{ note.pdf_file }}" target="_blank">-->
-<!--📄 View PDF-->
-<!--</a>-->
-<!--{% endif %}-->
+<!--&lt;!&ndash;&lt;!&ndash; PDF &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;{% if note.pdf_file %}&ndash;&gt;-->
+<!--&lt;!&ndash;<br>&ndash;&gt;-->
+<!--&lt;!&ndash;<a class="btn" href="/static/uploads/{{ note.pdf_file }}" target="_blank">&ndash;&gt;-->
+<!--&lt;!&ndash;📄 View PDF&ndash;&gt;-->
+<!--&lt;!&ndash;</a>&ndash;&gt;-->
+<!--&lt;!&ndash;{% endif %}&ndash;&gt;-->
 
-<!--<br>-->
+<!--&lt;!&ndash;<br>&ndash;&gt;-->
 
-<!--&lt;!&ndash; ✅ MARK COMPLETE BUTTON / STATUS &ndash;&gt;-->
-<!--{% if note.id in completed_note_ids %}-->
+<!--&lt;!&ndash;&lt;!&ndash; ✅ MARK COMPLETE BUTTON / STATUS &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;{% if note.id in completed_note_ids %}&ndash;&gt;-->
 
-<!--<span class="completed">✔ Completed</span>-->
+<!--&lt;!&ndash;<span class="completed">✔ Completed</span>&ndash;&gt;-->
 
-<!--{% else %}-->
+<!--&lt;!&ndash;{% else %}&ndash;&gt;-->
 
-<!--<a href="/mark_complete/{{ note.id }}" class="btn">-->
-<!--✔ Mark as Completed-->
-<!--</a>-->
+<!--&lt;!&ndash;<a href="/mark_complete/{{ note.id }}" class="btn">&ndash;&gt;-->
+<!--&lt;!&ndash;✔ Mark as Completed&ndash;&gt;-->
+<!--&lt;!&ndash;</a>&ndash;&gt;-->
 
-<!--{% endif %}-->
+<!--&lt;!&ndash;{% endif %}&ndash;&gt;-->
 
-<!--</div>-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
 
-<!--{% endfor %}-->
+<!--&lt;!&ndash;{% endfor %}&ndash;&gt;-->
 
-<!--{% else %}-->
+<!--&lt;!&ndash;{% else %}&ndash;&gt;-->
 
-<!--<p>No notes available for this chapter.</p>-->
+<!--&lt;!&ndash;<p>No notes available for this chapter.</p>&ndash;&gt;-->
 
-<!--{% endif %}-->
+<!--&lt;!&ndash;{% endif %}&ndash;&gt;-->
 
-<!--</div>-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
 
-<!--</body>-->
-<!--</html>-->
+<!--&lt;!&ndash;</body>&ndash;&gt;-->
+<!--&lt;!&ndash;</html>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<!DOCTYPE html>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<html>&ndash;&gt;-->
+<!--&lt;!&ndash;<head>&ndash;&gt;-->
+<!--&lt;!&ndash;    <title>Chapter Notes</title>&ndash;&gt;-->
+<!--&lt;!&ndash;    <meta name="viewport" content="width=device-width, initial-scale=1.0">&ndash;&gt;-->
+
+<!--&lt;!&ndash;```&ndash;&gt;-->
+<!--&lt;!&ndash;<style>&ndash;&gt;-->
+<!--&lt;!&ndash;    body{&ndash;&gt;-->
+<!--&lt;!&ndash;        font-family: Arial, sans-serif;&ndash;&gt;-->
+<!--&lt;!&ndash;        margin:0;&ndash;&gt;-->
+<!--&lt;!&ndash;        background:#f5f5f5;&ndash;&gt;-->
+<!--&lt;!&ndash;    }&ndash;&gt;-->
+
+<!--&lt;!&ndash;    /* Navbar */&ndash;&gt;-->
+<!--&lt;!&ndash;    .navbar{&ndash;&gt;-->
+<!--&lt;!&ndash;        background:#1e3c72;&ndash;&gt;-->
+<!--&lt;!&ndash;        color:white;&ndash;&gt;-->
+<!--&lt;!&ndash;        padding:15px;&ndash;&gt;-->
+<!--&lt;!&ndash;        display:flex;&ndash;&gt;-->
+<!--&lt;!&ndash;        justify-content:space-between;&ndash;&gt;-->
+<!--&lt;!&ndash;        align-items:center;&ndash;&gt;-->
+<!--&lt;!&ndash;    }&ndash;&gt;-->
+
+<!--&lt;!&ndash;    .navbar a{&ndash;&gt;-->
+<!--&lt;!&ndash;        color:white;&ndash;&gt;-->
+<!--&lt;!&ndash;        text-decoration:none;&ndash;&gt;-->
+<!--&lt;!&ndash;        margin-left:15px;&ndash;&gt;-->
+<!--&lt;!&ndash;    }&ndash;&gt;-->
+
+<!--&lt;!&ndash;    /* Container */&ndash;&gt;-->
+<!--&lt;!&ndash;    .container{&ndash;&gt;-->
+<!--&lt;!&ndash;        width:90%;&ndash;&gt;-->
+<!--&lt;!&ndash;        max-width:900px;&ndash;&gt;-->
+<!--&lt;!&ndash;        margin:auto;&ndash;&gt;-->
+<!--&lt;!&ndash;        margin-top:20px;&ndash;&gt;-->
+<!--&lt;!&ndash;    }&ndash;&gt;-->
+
+<!--&lt;!&ndash;    /* Progress */&ndash;&gt;-->
+<!--&lt;!&ndash;    .progress-box{&ndash;&gt;-->
+<!--&lt;!&ndash;        background:#ddd;&ndash;&gt;-->
+<!--&lt;!&ndash;        border-radius:20px;&ndash;&gt;-->
+<!--&lt;!&ndash;        overflow:hidden;&ndash;&gt;-->
+<!--&lt;!&ndash;        margin-bottom:20px;&ndash;&gt;-->
+<!--&lt;!&ndash;    }&ndash;&gt;-->
+
+<!--&lt;!&ndash;    .progress-bar{&ndash;&gt;-->
+<!--&lt;!&ndash;        background:linear-gradient(90deg,#00c853,#64dd17);&ndash;&gt;-->
+<!--&lt;!&ndash;        color:white;&ndash;&gt;-->
+<!--&lt;!&ndash;        padding:10px;&ndash;&gt;-->
+<!--&lt;!&ndash;        text-align:center;&ndash;&gt;-->
+<!--&lt;!&ndash;        font-weight:bold;&ndash;&gt;-->
+<!--&lt;!&ndash;        transition: width 0.4s ease;&ndash;&gt;-->
+<!--&lt;!&ndash;    }&ndash;&gt;-->
+
+<!--&lt;!&ndash;    /* Note Card */&ndash;&gt;-->
+<!--&lt;!&ndash;    .note-card{&ndash;&gt;-->
+<!--&lt;!&ndash;        background:white;&ndash;&gt;-->
+<!--&lt;!&ndash;        padding:20px;&ndash;&gt;-->
+<!--&lt;!&ndash;        border-radius:10px;&ndash;&gt;-->
+<!--&lt;!&ndash;        margin-bottom:20px;&ndash;&gt;-->
+<!--&lt;!&ndash;        box-shadow:0 3px 10px rgba(0,0,0,0.1);&ndash;&gt;-->
+<!--&lt;!&ndash;        transition:0.2s;&ndash;&gt;-->
+<!--&lt;!&ndash;    }&ndash;&gt;-->
+
+<!--&lt;!&ndash;    .note-card:hover{&ndash;&gt;-->
+<!--&lt;!&ndash;        transform: scale(1.01);&ndash;&gt;-->
+<!--&lt;!&ndash;    }&ndash;&gt;-->
+
+<!--&lt;!&ndash;    .note-card h3{&ndash;&gt;-->
+<!--&lt;!&ndash;        margin-top:0;&ndash;&gt;-->
+<!--&lt;!&ndash;        color:#2a5298;&ndash;&gt;-->
+<!--&lt;!&ndash;    }&ndash;&gt;-->
+
+<!--&lt;!&ndash;    /* Q&A Style */&ndash;&gt;-->
+<!--&lt;!&ndash;    .qa-box{&ndash;&gt;-->
+<!--&lt;!&ndash;        background:#fff;&ndash;&gt;-->
+<!--&lt;!&ndash;        border-left:5px solid #ff4b2b;&ndash;&gt;-->
+<!--&lt;!&ndash;        padding:15px;&ndash;&gt;-->
+<!--&lt;!&ndash;        margin-top:10px;&ndash;&gt;-->
+<!--&lt;!&ndash;        border-radius:8px;&ndash;&gt;-->
+<!--&lt;!&ndash;        line-height:1.6;&ndash;&gt;-->
+<!--&lt;!&ndash;    }&ndash;&gt;-->
+
+<!--&lt;!&ndash;    .question{&ndash;&gt;-->
+<!--&lt;!&ndash;        font-weight:bold;&ndash;&gt;-->
+<!--&lt;!&ndash;        color:#1e3c72;&ndash;&gt;-->
+<!--&lt;!&ndash;        margin-bottom:5px;&ndash;&gt;-->
+<!--&lt;!&ndash;    }&ndash;&gt;-->
+
+<!--&lt;!&ndash;    .answer{&ndash;&gt;-->
+<!--&lt;!&ndash;        color:#333;&ndash;&gt;-->
+<!--&lt;!&ndash;    }&ndash;&gt;-->
+
+<!--&lt;!&ndash;    /* Button */&ndash;&gt;-->
+<!--&lt;!&ndash;    .btn{&ndash;&gt;-->
+<!--&lt;!&ndash;        display:inline-block;&ndash;&gt;-->
+<!--&lt;!&ndash;        padding:8px 15px;&ndash;&gt;-->
+<!--&lt;!&ndash;        background:#2a5298;&ndash;&gt;-->
+<!--&lt;!&ndash;        color:white;&ndash;&gt;-->
+<!--&lt;!&ndash;        border-radius:5px;&ndash;&gt;-->
+<!--&lt;!&ndash;        text-decoration:none;&ndash;&gt;-->
+<!--&lt;!&ndash;        margin-top:10px;&ndash;&gt;-->
+<!--&lt;!&ndash;    }&ndash;&gt;-->
+
+<!--&lt;!&ndash;    .btn:hover{&ndash;&gt;-->
+<!--&lt;!&ndash;        background:#1e3c72;&ndash;&gt;-->
+<!--&lt;!&ndash;    }&ndash;&gt;-->
+
+<!--&lt;!&ndash;    .completed{&ndash;&gt;-->
+<!--&lt;!&ndash;        color:green;&ndash;&gt;-->
+<!--&lt;!&ndash;        font-weight:bold;&ndash;&gt;-->
+<!--&lt;!&ndash;        margin-top:10px;&ndash;&gt;-->
+<!--&lt;!&ndash;        display:inline-block;&ndash;&gt;-->
+<!--&lt;!&ndash;    }&ndash;&gt;-->
+
+<!--&lt;!&ndash;    iframe{&ndash;&gt;-->
+<!--&lt;!&ndash;        width:100%;&ndash;&gt;-->
+<!--&lt;!&ndash;        border-radius:10px;&ndash;&gt;-->
+<!--&lt;!&ndash;        margin-top:10px;&ndash;&gt;-->
+<!--&lt;!&ndash;    }&ndash;&gt;-->
+<!--&lt;!&ndash;</style>&ndash;&gt;-->
+<!--&lt;!&ndash;```&ndash;&gt;-->
+
+<!--&lt;!&ndash;</head>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<body>&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash; Navbar &ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;<div class="navbar">&ndash;&gt;-->
+<!--&lt;!&ndash;    <h2>📘 GyanaGhar</h2>&ndash;&gt;-->
+
+<!--&lt;!&ndash;```&ndash;&gt;-->
+<!--&lt;!&ndash;<div>&ndash;&gt;-->
+<!--&lt;!&ndash;    <a href="/dashboard">Dashboard</a>&ndash;&gt;-->
+<!--&lt;!&ndash;    <a href="/logout">Logout</a>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;```&ndash;&gt;-->
+
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash; Main &ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;<div class="container">&ndash;&gt;-->
+
+<!--&lt;!&ndash;```&ndash;&gt;-->
+<!--&lt;!&ndash;<h2>📖 Chapter Notes</h2>&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash; Progress &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="progress-box">&ndash;&gt;-->
+<!--&lt;!&ndash;    <div class="progress-bar" style="width: {{ progress_percent }}%;">&ndash;&gt;-->
+<!--&lt;!&ndash;        {{ progress_percent }}% Completed 🚀&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash; Notes &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;{% if notes %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;    {% for note in notes %}&ndash;&gt;-->
+<!--&lt;!&ndash;    <div class="note-card">&ndash;&gt;-->
+
+<!--&lt;!&ndash;        &lt;!&ndash; Title &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;        <h3>📘 {{ note.title }}</h3>&ndash;&gt;-->
+
+<!--&lt;!&ndash;        &lt;!&ndash; Content &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;        <div class="qa-box">&ndash;&gt;-->
+<!--&lt;!&ndash;            <p class="question">📌 Note</p>&ndash;&gt;-->
+<!--&lt;!&ndash;            <p class="answer">{{ note.content | safe }}</p>&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;        &lt;!&ndash; Video &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;        {% if note.video_link %}&ndash;&gt;-->
+<!--&lt;!&ndash;        <iframe height="315"&ndash;&gt;-->
+<!--&lt;!&ndash;            src="{{ note.video_link }}"&ndash;&gt;-->
+<!--&lt;!&ndash;            frameborder="0"&ndash;&gt;-->
+<!--&lt;!&ndash;            allowfullscreen>&ndash;&gt;-->
+<!--&lt;!&ndash;        </iframe>&ndash;&gt;-->
+<!--&lt;!&ndash;        {% endif %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;        &lt;!&ndash; PDF &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;        {% if note.pdf_file %}&ndash;&gt;-->
+<!--&lt;!&ndash;        <br>&ndash;&gt;-->
+<!--&lt;!&ndash;        <a class="btn" href="/static/uploads/{{ note.pdf_file }}" target="_blank">&ndash;&gt;-->
+<!--&lt;!&ndash;            📄 View PDF&ndash;&gt;-->
+<!--&lt;!&ndash;        </a>&ndash;&gt;-->
+<!--&lt;!&ndash;        {% endif %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;        <br>&ndash;&gt;-->
+
+<!--&lt;!&ndash;        &lt;!&ndash; Mark Complete &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;        {% if note.id in completed_note_ids %}&ndash;&gt;-->
+<!--&lt;!&ndash;            <span class="completed">✔ Completed</span>&ndash;&gt;-->
+<!--&lt;!&ndash;        {% else %}&ndash;&gt;-->
+<!--&lt;!&ndash;            <a href="/mark_complete/{{ note.id }}" class="btn">&ndash;&gt;-->
+<!--&lt;!&ndash;                ✔ Mark as Completed&ndash;&gt;-->
+<!--&lt;!&ndash;            </a>&ndash;&gt;-->
+<!--&lt;!&ndash;        {% endif %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endfor %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;{% else %}&ndash;&gt;-->
+<!--&lt;!&ndash;    <p>No notes available for this chapter.</p>&ndash;&gt;-->
+<!--&lt;!&ndash;{% endif %}&ndash;&gt;-->
+<!--&lt;!&ndash;```&ndash;&gt;-->
+
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;</body>&ndash;&gt;-->
+<!--&lt;!&ndash;</html>&ndash;&gt;-->
+
+
+
+
+
 
 <!--<!DOCTYPE html>-->
 
@@ -186,7 +404,7 @@
 <!--    <title>Chapter Notes</title>-->
 <!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
 
-<!--```-->
+
 <!--<style>-->
 <!--    body{-->
 <!--        font-family: Arial, sans-serif;-->
@@ -302,7 +520,7 @@
 <!--        margin-top:10px;-->
 <!--    }-->
 <!--</style>-->
-<!--```-->
+
 
 <!--</head>-->
 
@@ -313,12 +531,12 @@
 <!--<div class="navbar">-->
 <!--    <h2>📘 GyanaGhar</h2>-->
 
-<!--```-->
+
 <!--<div>-->
 <!--    <a href="/dashboard">Dashboard</a>-->
 <!--    <a href="/logout">Logout</a>-->
 <!--</div>-->
-<!--```-->
+
 
 <!--</div>-->
 
@@ -326,7 +544,7 @@
 
 <!--<div class="container">-->
 
-<!--```-->
+
 <!--<h2>📖 Chapter Notes</h2>-->
 
 <!--&lt;!&ndash; Progress &ndash;&gt;-->
@@ -385,12 +603,14 @@
 <!--{% else %}-->
 <!--    <p>No notes available for this chapter.</p>-->
 <!--{% endif %}-->
-<!--```-->
+
 
 <!--</div>-->
 
 <!--</body>-->
 <!--</html>-->
+
+
 
 
 
@@ -404,22 +624,27 @@
     <title>Chapter Notes</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-```
+
 <style>
     body{
-        font-family: Arial, sans-serif;
+        font-family:'Poppins', sans-serif;
         margin:0;
-        background:#f5f5f5;
+        background:#eef2f7;
     }
 
     /* Navbar */
     .navbar{
-        background:#1e3c72;
+        background:linear-gradient(90deg,#1e3c72,#2a5298);
         color:white;
         padding:15px;
         display:flex;
         justify-content:space-between;
         align-items:center;
+        box-shadow:0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    .navbar h2{
+        font-size:20px;
     }
 
     .navbar a{
@@ -430,7 +655,7 @@
 
     /* Container */
     .container{
-        width:90%;
+        width:95%;
         max-width:900px;
         margin:auto;
         margin-top:20px;
@@ -439,7 +664,7 @@
     /* Progress */
     .progress-box{
         background:#ddd;
-        border-radius:20px;
+        border-radius:30px;
         overflow:hidden;
         margin-bottom:20px;
     }
@@ -447,49 +672,55 @@
     .progress-bar{
         background:linear-gradient(90deg,#00c853,#64dd17);
         color:white;
-        padding:10px;
+        padding:12px;
         text-align:center;
         font-weight:bold;
-        transition: width 0.4s ease;
+        border-radius:30px;
+        transition: width 0.5s ease;
     }
 
-    /* Note Card */
+    /* Card */
     .note-card{
         background:white;
-        padding:20px;
-        border-radius:10px;
+        padding:18px;
+        border-radius:15px;
         margin-bottom:20px;
-        box-shadow:0 3px 10px rgba(0,0,0,0.1);
-        transition:0.2s;
+        box-shadow:0 6px 20px rgba(0,0,0,0.1);
+        transition:0.3s;
     }
 
     .note-card:hover{
-        transform: scale(1.01);
+        transform:translateY(-3px);
     }
 
+    /* Title */
     .note-card h3{
-        margin-top:0;
+        margin:0;
         color:#2a5298;
+        font-size:18px;
     }
 
-    /* Q&A Style */
+    /* Q&A Box */
     .qa-box{
-        background:#fff;
+        background:#f9fafc;
         border-left:5px solid #ff4b2b;
-        padding:15px;
-        margin-top:10px;
-        border-radius:8px;
-        line-height:1.6;
+        padding:12px;
+        margin-top:12px;
+        border-radius:10px;
     }
 
+    /* Question */
     .question{
         font-weight:bold;
         color:#1e3c72;
         margin-bottom:5px;
     }
 
+    /* Answer */
     .answer{
         color:#333;
+        font-size:15px;
+        line-height:1.6;
     }
 
     /* Button */
@@ -498,9 +729,10 @@
         padding:8px 15px;
         background:#2a5298;
         color:white;
-        border-radius:5px;
+        border-radius:20px;
         text-decoration:none;
         margin-top:10px;
+        font-size:14px;
     }
 
     .btn:hover{
@@ -508,7 +740,7 @@
     }
 
     .completed{
-        color:green;
+        color:#00c853;
         font-weight:bold;
         margin-top:10px;
         display:inline-block;
@@ -516,11 +748,11 @@
 
     iframe{
         width:100%;
-        border-radius:10px;
+        border-radius:12px;
         margin-top:10px;
     }
 </style>
-```
+
 
 </head>
 
@@ -531,12 +763,12 @@
 <div class="navbar">
     <h2>📘 GyanaGhar</h2>
 
-```
+
 <div>
     <a href="/dashboard">Dashboard</a>
     <a href="/logout">Logout</a>
 </div>
-```
+
 
 </div>
 
@@ -544,7 +776,7 @@
 
 <div class="container">
 
-```
+
 <h2>📖 Chapter Notes</h2>
 
 <!-- Progress -->
@@ -563,11 +795,22 @@
         <!-- Title -->
         <h3>📘 {{ note.title }}</h3>
 
-        <!-- Content -->
-        <div class="qa-box">
-            <p class="question">📌 Note</p>
-            <p class="answer">{{ note.content | safe }}</p>
-        </div>
+        <!-- AUTO Q&A LOGIC -->
+        {% set content = note.content %}
+
+        {% if 'Answer:' in content %}
+            {% set parts = content.split('Answer:') %}
+
+            <div class="qa-box">
+                <p class="question">📌 {{ parts[0] }}</p>
+                <p class="answer">👉 {{ parts[1] }}</p>
+            </div>
+
+        {% else %}
+            <div class="qa-box">
+                <p class="answer">{{ content | safe }}</p>
+            </div>
+        {% endif %}
 
         <!-- Video -->
         {% if note.video_link %}
@@ -603,7 +846,7 @@
 {% else %}
     <p>No notes available for this chapter.</p>
 {% endif %}
-```
+
 
 </div>
 
