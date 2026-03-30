@@ -1592,6 +1592,8 @@ class Note(db.Model):
     chapter_id = db.Column(db.Integer)
     video_link = db.Column(db.String(200))
     pdf_file = db.Column(db.String(200))
+    question = db.Column(db.Text)
+    answer = db.Column(db.Text)
 
 
 class Progress(db.Model):
@@ -2037,22 +2039,22 @@ def edit_note(note_id):
     if request.method == "POST":
 
         note.title = request.form["title"]
-        note.content = request.form["content"]
+        note.question = request.form["question"]
+        note.answer = request.form["answer"]
         note.video_link = request.form["video_link"]
 
         pdf = request.files["pdf_file"]
 
-        # If new PDF uploaded → replace old
+        # Replace PDF if new uploaded
         if pdf and pdf.filename != "":
             from werkzeug.utils import secure_filename
             import os
 
             filename = secure_filename(pdf.filename)
-
             filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
             pdf.save(filepath)
 
-            note.pdf_file = filename  # update
+            note.pdf_file = filename
 
         db.session.commit()
 
@@ -2095,6 +2097,58 @@ def add_chapter():
 
 
 # ================= ADMIN ADD NOTE =================
+# @app.route("/admin/add_note", methods=["GET", "POST"])
+# @login_required
+# def add_note():
+#
+#     classes = Class.query.all()
+#     subjects = Subject.query.all()
+#     chapters = Chapter.query.all()
+#
+#     if request.method == "POST":
+#
+#         title = request.form["title"]
+#         content = request.form["content"]
+#         chapter_id = request.form["chapter_id"]
+#         video_link = request.form["video_link"]
+#
+#         #  THIS IS WHERE YOUR CODE GOES
+#         pdf = request.files["pdf_file"]
+#
+#         filename = None
+#
+#         if pdf and pdf.filename != "":
+#             from werkzeug.utils import secure_filename
+#             import os
+#
+#             filename = secure_filename(pdf.filename)
+#
+#             filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+#
+#             pdf.save(filepath)
+#
+#         # Save in DB
+#         new_note = Note(
+#             title=title,
+#             content=content,
+#             chapter_id=chapter_id,
+#             video_link=video_link,
+#             pdf_file=filename
+#         )
+#
+#         db.session.add(new_note)
+#         db.session.commit()
+#
+#         return redirect("/dashboard")
+#
+#     return render_template(
+#         "admin_add_note.html",
+#         classes=classes,
+#         subjects=subjects,
+#         chapters=chapters
+#     )
+
+
 @app.route("/admin/add_note", methods=["GET", "POST"])
 @login_required
 def add_note():
@@ -2106,13 +2160,13 @@ def add_note():
     if request.method == "POST":
 
         title = request.form["title"]
-        content = request.form["content"]
+        question = request.form["question"]
+        answer = request.form["answer"]
         chapter_id = request.form["chapter_id"]
         video_link = request.form["video_link"]
 
-        #  THIS IS WHERE YOUR CODE GOES
+        # PDF upload
         pdf = request.files["pdf_file"]
-
         filename = None
 
         if pdf and pdf.filename != "":
@@ -2120,15 +2174,14 @@ def add_note():
             import os
 
             filename = secure_filename(pdf.filename)
-
             filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
-
             pdf.save(filepath)
 
         # Save in DB
         new_note = Note(
             title=title,
-            content=content,
+            question=question,
+            answer=answer,
             chapter_id=chapter_id,
             video_link=video_link,
             pdf_file=filename
@@ -2145,6 +2198,13 @@ def add_note():
         subjects=subjects,
         chapters=chapters
     )
+
+
+
+
+
+
+
 
 # ================= ADMIN ANALYTICS =================
 

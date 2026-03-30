@@ -1,40 +1,3 @@
-<!--<!DOCTYPE html>-->
-<!--<html>-->
-<!--<head>-->
-<!--<title>Edit Note</title>-->
-<!--</head>-->
-
-<!--<body>-->
-
-<!--<h2>Edit Note</h2>-->
-
-<!--<form method="POST" enctype="multipart/form-data">-->
-
-<!--<input type="text" name="title" value="{{ note.title }}" required>-->
-
-<!--<br><br>-->
-
-<!--<textarea name="content" rows="5" cols="40">-->
-<!--{{ note.content }}-->
-<!--</textarea>-->
-
-<!--<br><br>-->
-
-<!--<p>Current PDF: {{ note.pdf_file }}</p>-->
-
-<!--<input type="file" name="pdf_file">-->
-
-<!--<br><br>-->
-
-<!--<button type="submit">Update Note</button>-->
-
-<!--</form>-->
-
-<!--</body>-->
-<!--</html>-->
-
-
-
 
 <!DOCTYPE html>
 <html>
@@ -101,8 +64,11 @@ background:#1e3c72;
 <label>Title</label>
 <input type="text" name="title" value="{{ note.title }}" required>
 
-<label>Content</label>
-<textarea name="content">{{ note.content }}</textarea>
+<label>Question</label>
+<textarea name="question" required>{{ note.question }}</textarea>
+
+<label>Answer</label>
+<textarea name="answer" required>{{ note.answer }}</textarea>
 
 <label>Video Link</label>
 <input type="text" name="video_link" value="{{ note.video_link }}">
