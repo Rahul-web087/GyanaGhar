@@ -171,10 +171,10 @@ iframe{
 <div class="card-header">
     <h3>{{ note.title }}</h3>
 
-```
+
 <!-- Edit Button -->
 <a class="btn" href="{{ url_for('edit_note', note_id=note.id) }}">✏ Edit</a>
-```
+
 
 </div>
 
@@ -182,7 +182,7 @@ iframe{
 
 {% if note.qa_data and note.qa_data != '[]' %}
 
-```
+
 {% set qa_list = note.qa_data | from_json %}
 
 {% for qa in qa_list %}
@@ -191,7 +191,7 @@ iframe{
     <p class="answer">👉 {{ qa.answer }}</p>
 </div>
 {% endfor %}
-```
+
 
 {% else %} <div class="qa-box"> <p class="answer">No questions available</p> </div>
 {% endif %}
