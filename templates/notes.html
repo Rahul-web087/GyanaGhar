@@ -12,7 +12,6 @@ body{
     background:#eef2f7;
 }
 
-/* Navbar */
 .navbar{
     background:linear-gradient(90deg,#1e3c72,#2a5298);
     color:white;
@@ -28,7 +27,6 @@ body{
     margin-left:15px;
 }
 
-/* Container */
 .container{
     width:95%;
     max-width:900px;
@@ -36,7 +34,6 @@ body{
     margin-top:20px;
 }
 
-/* Progress */
 .progress-box{
     background:#ddd;
     border-radius:30px;
@@ -52,7 +49,6 @@ body{
     font-weight:bold;
 }
 
-/* Card */
 .note-card{
     background:white;
     padding:20px;
@@ -66,13 +62,17 @@ body{
     transform:translateY(-3px);
 }
 
-/* Title */
-.note-card h3{
-    color:#2a5298;
-    margin-bottom:10px;
+.note-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 }
 
-/* Q&A */
+.note-title{
+    color:#2a5298;
+    font-size:18px;
+}
+
 .qa-box{
     background:#f9fafc;
     border-left:5px solid #ff4b2b;
@@ -91,17 +91,15 @@ body{
     margin-top:5px;
 }
 
-/* Buttons */
 .btn{
     display:inline-block;
-    padding:8px 14px;
+    padding:7px 12px;
     background:#2a5298;
     color:white;
     border-radius:20px;
     text-decoration:none;
-    margin-top:10px;
-    margin-right:5px;
-    font-size:14px;
+    font-size:13px;
+    margin-left:5px;
 }
 
 .btn:hover{
@@ -123,18 +121,10 @@ body{
     display:inline-block;
 }
 
-/* Video */
 iframe{
     width:100%;
     border-radius:12px;
     margin-top:10px;
-}
-
-/* Header row */
-.card-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
 }
 </style>
 
@@ -164,18 +154,36 @@ iframe{
 
 {% for note in notes %}
 
+{% set show_note = (note.title or (note.qa_data and note.qa_data != '[]')) %}
+
+{% if show_note %}
+
 <div class="note-card">
 
 <!-- Header -->
 
-<div class="card-header">
-    <h3>{{ note.title }}</h3>
+<div class="note-header">
 
 
-<!-- Edit Button -->
-{% if current_user.role == "admin" %}
-<a class="btn" href="{{ url_for('edit_note', note_id=note.id) }}">✏ Edit</a>
+{% if note.title %}
+    <div class="note-title">📘 {{ note.title }}</div>
+{% else %}
+    <div class="note-title" style="color:gray;">📘 No Title</div>
 {% endif %}
+
+<!-- Admin Controls -->
+{% if current_user.role == "admin" %}
+<div>
+    <a class="btn" href="{{ url_for('edit_note', note_id=note.id) }}">✏ Edit</a>
+
+    <a class="btn btn-danger"
+       href="/admin/delete_note/{{ note.id }}"
+       onclick="return confirm('Delete this note?')">
+       🗑 Delete
+    </a>
+</div>
+{% endif %}
+
 
 </div>
 
@@ -186,15 +194,21 @@ iframe{
 
 {% set qa_list = note.qa_data | from_json %}
 
-{% for qa in qa_list %}
-<div class="qa-box">
-    <p class="question">📌 {{ qa.question }}</p>
-    <p class="answer">👉 {{ qa.answer }}</p>
-</div>
-{% endfor %}
+{% if qa_list %}
+    {% for qa in qa_list %}
+    <div class="qa-box">
+        <div class="question">📌 {{ qa.question }}</div>
+        <div class="answer">👉 {{ qa.answer }}</div>
+    </div>
+    {% endfor %}
+{% else %}
+    <div class="qa-box">
+        <div class="answer">No questions available</div>
+    </div>
+{% endif %}
 
 
-{% else %} <div class="qa-box"> <p class="answer">No questions available</p> </div>
+{% else %} <div class="qa-box"> <div class="answer">No questions available</div> </div>
 {% endif %}
 
 <!-- Video -->
@@ -220,11 +234,15 @@ iframe{
 {% endif %}
 
 </div>
+
+{% endif %}
+
 {% endfor %}
 
 {% else %}
 
 <p>No notes available for this chapter.</p>
+
 {% endif %}
 
 </div>
