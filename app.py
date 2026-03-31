@@ -1804,6 +1804,7 @@ def analytics():
 
 # ================= ADMIN COURSE MANAGER =================
 
+
 @app.route('/admin/courses')
 @login_required
 def admin_courses():
@@ -1820,11 +1821,14 @@ def admin_courses():
             subject.name AS subject_name,
 
             class.id AS class_id,
-            class.name AS class_name
+            class.name AS class_name,
+
+            note.id AS note_id
 
         FROM chapter
         JOIN subject ON chapter.subject_id = subject.id
         JOIN class ON subject.class_id = class.id
+        LEFT JOIN note ON note.chapter_id = chapter.id
 
         ORDER BY class.name, subject.name, chapter.name
     """)).fetchall()

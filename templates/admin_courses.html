@@ -1,14 +1,384 @@
+<!--&lt;!&ndash;<!DOCTYPE html>&ndash;&gt;-->
+<!--&lt;!&ndash;<html>&ndash;&gt;-->
+<!--&lt;!&ndash;<head>&ndash;&gt;-->
+<!--&lt;!&ndash;<title>Manage Courses</title>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<meta name="viewport" content="width=device-width, initial-scale=1.0">&ndash;&gt;-->
+
+<!--&lt;!&ndash;<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">&ndash;&gt;-->
+
+<!--&lt;!&ndash;<style>&ndash;&gt;-->
+
+<!--&lt;!&ndash;body{&ndash;&gt;-->
+<!--&lt;!&ndash;margin:0;&ndash;&gt;-->
+<!--&lt;!&ndash;font-family:Arial;&ndash;&gt;-->
+<!--&lt;!&ndash;background:#f4f6f9;&ndash;&gt;-->
+<!--&lt;!&ndash;}&ndash;&gt;-->
+
+<!--&lt;!&ndash;/* Navbar */&ndash;&gt;-->
+<!--&lt;!&ndash;.navbar{&ndash;&gt;-->
+<!--&lt;!&ndash;background:#1e3c72;&ndash;&gt;-->
+<!--&lt;!&ndash;color:white;&ndash;&gt;-->
+<!--&lt;!&ndash;padding:15px 30px;&ndash;&gt;-->
+<!--&lt;!&ndash;display:flex;&ndash;&gt;-->
+<!--&lt;!&ndash;justify-content:space-between;&ndash;&gt;-->
+<!--&lt;!&ndash;align-items:center;&ndash;&gt;-->
+<!--&lt;!&ndash;}&ndash;&gt;-->
+
+<!--&lt;!&ndash;.navbar a{&ndash;&gt;-->
+<!--&lt;!&ndash;color:white;&ndash;&gt;-->
+<!--&lt;!&ndash;text-decoration:none;&ndash;&gt;-->
+<!--&lt;!&ndash;margin-left:15px;&ndash;&gt;-->
+<!--&lt;!&ndash;}&ndash;&gt;-->
+
+<!--&lt;!&ndash;/* Container */&ndash;&gt;-->
+<!--&lt;!&ndash;.container{&ndash;&gt;-->
+<!--&lt;!&ndash;width:95%;&ndash;&gt;-->
+<!--&lt;!&ndash;margin:auto;&ndash;&gt;-->
+<!--&lt;!&ndash;margin-top:20px;&ndash;&gt;-->
+<!--&lt;!&ndash;}&ndash;&gt;-->
+
+<!--&lt;!&ndash;/* Table */&ndash;&gt;-->
+<!--&lt;!&ndash;table{&ndash;&gt;-->
+<!--&lt;!&ndash;width:100%;&ndash;&gt;-->
+<!--&lt;!&ndash;border-collapse:collapse;&ndash;&gt;-->
+<!--&lt;!&ndash;background:white;&ndash;&gt;-->
+<!--&lt;!&ndash;border-radius:10px;&ndash;&gt;-->
+<!--&lt;!&ndash;overflow:hidden;&ndash;&gt;-->
+<!--&lt;!&ndash;box-shadow:0 4px 15px rgba(0,0,0,0.1);&ndash;&gt;-->
+<!--&lt;!&ndash;}&ndash;&gt;-->
+
+<!--&lt;!&ndash;th{&ndash;&gt;-->
+<!--&lt;!&ndash;background:#2a5298;&ndash;&gt;-->
+<!--&lt;!&ndash;color:white;&ndash;&gt;-->
+<!--&lt;!&ndash;padding:12px;&ndash;&gt;-->
+<!--&lt;!&ndash;}&ndash;&gt;-->
+
+<!--&lt;!&ndash;td{&ndash;&gt;-->
+<!--&lt;!&ndash;padding:12px;&ndash;&gt;-->
+<!--&lt;!&ndash;text-align:center;&ndash;&gt;-->
+<!--&lt;!&ndash;border-bottom:1px solid #ddd;&ndash;&gt;-->
+<!--&lt;!&ndash;}&ndash;&gt;-->
+
+<!--&lt;!&ndash;/* Buttons */&ndash;&gt;-->
+<!--&lt;!&ndash;.btn{&ndash;&gt;-->
+<!--&lt;!&ndash;padding:6px 12px;&ndash;&gt;-->
+<!--&lt;!&ndash;border-radius:5px;&ndash;&gt;-->
+<!--&lt;!&ndash;text-decoration:none;&ndash;&gt;-->
+<!--&lt;!&ndash;color:white;&ndash;&gt;-->
+<!--&lt;!&ndash;margin:2px;&ndash;&gt;-->
+<!--&lt;!&ndash;display:inline-block;&ndash;&gt;-->
+<!--&lt;!&ndash;}&ndash;&gt;-->
+
+<!--&lt;!&ndash;.edit-btn{ background:#3498db; }&ndash;&gt;-->
+<!--&lt;!&ndash;.note-btn{ background:#8e44ad; }&ndash;&gt;-->
+<!--&lt;!&ndash;.chapter-btn{ background:#e74c3c; }&ndash;&gt;-->
+<!--&lt;!&ndash;.subject-btn{ background:#f39c12; }&ndash;&gt;-->
+<!--&lt;!&ndash;.class-btn{ background:#c0392b; }&ndash;&gt;-->
+
+<!--&lt;!&ndash;.btn:hover{&ndash;&gt;-->
+<!--&lt;!&ndash;opacity:0.85;&ndash;&gt;-->
+<!--&lt;!&ndash;cursor:pointer;&ndash;&gt;-->
+<!--&lt;!&ndash;}&ndash;&gt;-->
+
+<!--&lt;!&ndash;/* Modal */&ndash;&gt;-->
+<!--&lt;!&ndash;.modal{&ndash;&gt;-->
+<!--&lt;!&ndash;display:none;&ndash;&gt;-->
+<!--&lt;!&ndash;position:fixed;&ndash;&gt;-->
+<!--&lt;!&ndash;top:0;&ndash;&gt;-->
+<!--&lt;!&ndash;left:0;&ndash;&gt;-->
+<!--&lt;!&ndash;width:100%;&ndash;&gt;-->
+<!--&lt;!&ndash;height:100%;&ndash;&gt;-->
+<!--&lt;!&ndash;background:rgba(0,0,0,0.6);&ndash;&gt;-->
+<!--&lt;!&ndash;}&ndash;&gt;-->
+
+<!--&lt;!&ndash;.modal-content{&ndash;&gt;-->
+<!--&lt;!&ndash;background:white;&ndash;&gt;-->
+<!--&lt;!&ndash;padding:20px;&ndash;&gt;-->
+<!--&lt;!&ndash;border-radius:10px;&ndash;&gt;-->
+<!--&lt;!&ndash;width:300px;&ndash;&gt;-->
+<!--&lt;!&ndash;margin:15% auto;&ndash;&gt;-->
+<!--&lt;!&ndash;text-align:center;&ndash;&gt;-->
+<!--&lt;!&ndash;}&ndash;&gt;-->
+
+<!--&lt;!&ndash;</style>&ndash;&gt;-->
+
+<!--&lt;!&ndash;</head>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<body>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<div class="navbar">&ndash;&gt;-->
+<!--&lt;!&ndash;<h2>📚 Manage Courses</h2>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<div>&ndash;&gt;-->
+<!--&lt;!&ndash;<a href="/dashboard">Dashboard</a>&ndash;&gt;-->
+<!--&lt;!&ndash;<a href="/logout">Logout</a>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<div class="container">&ndash;&gt;-->
+
+<!--&lt;!&ndash;<h3>Course List</h3>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<table>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<tr>&ndash;&gt;-->
+<!--&lt;!&ndash;<th>Class</th>&ndash;&gt;-->
+<!--&lt;!&ndash;<th>Subject</th>&ndash;&gt;-->
+<!--&lt;!&ndash;<th>Chapter</th>&ndash;&gt;-->
+<!--&lt;!&ndash;<th>Actions</th>&ndash;&gt;-->
+<!--&lt;!&ndash;</tr>&ndash;&gt;-->
+
+<!--&lt;!&ndash;{% set last_class = None %}&ndash;&gt;-->
+<!--&lt;!&ndash;{% set last_subject = None %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;{% for course in courses %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;<tr>&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash; CLASS &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;<td>&ndash;&gt;-->
+<!--&lt;!&ndash;{{ course.class_name }}&ndash;&gt;-->
+
+<!--&lt;!&ndash;{% if last_class != course.class_id %}&ndash;&gt;-->
+<!--&lt;!&ndash;<br>&ndash;&gt;-->
+<!--&lt;!&ndash;<button class="btn class-btn"&ndash;&gt;-->
+<!--&lt;!&ndash;onclick="openModal('class', {{ course.class_id }})">&ndash;&gt;-->
+<!--&lt;!&ndash;🏫 Delete&ndash;&gt;-->
+<!--&lt;!&ndash;</button>&ndash;&gt;-->
+<!--&lt;!&ndash;{% set last_class = course.class_id %}&ndash;&gt;-->
+<!--&lt;!&ndash;{% endif %}&ndash;&gt;-->
+<!--&lt;!&ndash;</td>&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash; SUBJECT &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;<td>&ndash;&gt;-->
+<!--&lt;!&ndash;{{ course.subject_name }}&ndash;&gt;-->
+
+<!--&lt;!&ndash;{% if last_subject != course.subject_id %}&ndash;&gt;-->
+<!--&lt;!&ndash;<br>&ndash;&gt;-->
+<!--&lt;!&ndash;<button class="btn subject-btn"&ndash;&gt;-->
+<!--&lt;!&ndash;onclick="openModal('subject', {{ course.subject_id }})">&ndash;&gt;-->
+<!--&lt;!&ndash;📚 Delete&ndash;&gt;-->
+<!--&lt;!&ndash;</button>&ndash;&gt;-->
+<!--&lt;!&ndash;{% set last_subject = course.subject_id %}&ndash;&gt;-->
+<!--&lt;!&ndash;{% endif %}&ndash;&gt;-->
+<!--&lt;!&ndash;</td>&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash; CHAPTER &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;<td>{{ course.chapter_name }}</td>&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash; ACTION &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;<td>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<a class="btn edit-btn"&ndash;&gt;-->
+<!--&lt;!&ndash;href="/admin/edit_chapter/{{ course.chapter_id }}">&ndash;&gt;-->
+<!--&lt;!&ndash;✏ Edit&ndash;&gt;-->
+<!--&lt;!&ndash;</a>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<a class="btn note-btn"&ndash;&gt;-->
+<!--&lt;!&ndash;href="/admin/edit_note/{{ course.chapter_id }}">&ndash;&gt;-->
+<!--&lt;!&ndash;📝 Note&ndash;&gt;-->
+<!--&lt;!&ndash;</a>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<button class="btn chapter-btn"&ndash;&gt;-->
+<!--&lt;!&ndash;onclick="openModal('chapter', {{ course.chapter_id }})">&ndash;&gt;-->
+<!--&lt;!&ndash;🗑 Delete&ndash;&gt;-->
+<!--&lt;!&ndash;</button>&ndash;&gt;-->
+
+<!--&lt;!&ndash;</td>&ndash;&gt;-->
+
+<!--&lt;!&ndash;</tr>&ndash;&gt;-->
+
+<!--&lt;!&ndash;{% endfor %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;</table>&ndash;&gt;-->
+
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash; Modal &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;<div id="deleteModal" class="modal">&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="modal-content">&ndash;&gt;-->
+
+<!--&lt;!&ndash;<h3>⚠ Confirm Delete</h3>&ndash;&gt;-->
+<!--&lt;!&ndash;<p id="modalText"></p>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<button class="btn chapter-btn" onclick="confirmDelete()">&ndash;&gt;-->
+<!--&lt;!&ndash;Yes Delete&ndash;&gt;-->
+<!--&lt;!&ndash;</button>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<br><br>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<button onclick="closeModal()">Cancel</button>&ndash;&gt;-->
+
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<script>&ndash;&gt;-->
+
+<!--&lt;!&ndash;let deleteType = "";&ndash;&gt;-->
+<!--&lt;!&ndash;let deleteId = "";&ndash;&gt;-->
+
+<!--&lt;!&ndash;function openModal(type, id){&ndash;&gt;-->
+<!--&lt;!&ndash;    deleteType = type;&ndash;&gt;-->
+<!--&lt;!&ndash;    deleteId = id;&ndash;&gt;-->
+
+<!--&lt;!&ndash;    document.getElementById("deleteModal").style.display = "block";&ndash;&gt;-->
+<!--&lt;!&ndash;    document.getElementById("modalText").innerText =&ndash;&gt;-->
+<!--&lt;!&ndash;        "Are you sure you want to delete this " + type + "?";&ndash;&gt;-->
+<!--&lt;!&ndash;}&ndash;&gt;-->
+
+<!--&lt;!&ndash;function closeModal(){&ndash;&gt;-->
+<!--&lt;!&ndash;    document.getElementById("deleteModal").style.display = "none";&ndash;&gt;-->
+<!--&lt;!&ndash;}&ndash;&gt;-->
+
+<!--&lt;!&ndash;function confirmDelete(){&ndash;&gt;-->
+
+<!--&lt;!&ndash;    if(deleteType === "chapter"){&ndash;&gt;-->
+<!--&lt;!&ndash;        window.location.href = "/admin/delete_course/" + deleteId;&ndash;&gt;-->
+<!--&lt;!&ndash;    }&ndash;&gt;-->
+<!--&lt;!&ndash;    else if(deleteType === "subject"){&ndash;&gt;-->
+<!--&lt;!&ndash;        window.location.href = "/admin/delete_subject/" + deleteId;&ndash;&gt;-->
+<!--&lt;!&ndash;    }&ndash;&gt;-->
+<!--&lt;!&ndash;    else if(deleteType === "class"){&ndash;&gt;-->
+<!--&lt;!&ndash;        window.location.href = "/admin/delete_class/" + deleteId;&ndash;&gt;-->
+<!--&lt;!&ndash;    }&ndash;&gt;-->
+
+<!--&lt;!&ndash;}&ndash;&gt;-->
+
+<!--&lt;!&ndash;</script>&ndash;&gt;-->
+
+<!--&lt;!&ndash;</body>&ndash;&gt;-->
+<!--&lt;!&ndash;</html>&ndash;&gt;-->
+
+
+
+
+<!--<!DOCTYPE html>-->
+
+<!--<html>-->
+<!--<head>-->
+<!--    <title>Manage Courses</title>-->
+
+<!--<style>-->
+<!--body{-->
+<!--    font-family:Arial;-->
+<!--    background:#f5f5f5;-->
+<!--}-->
+
+<!--table{-->
+<!--    width:90%;-->
+<!--    margin:auto;-->
+<!--    border-collapse:collapse;-->
+<!--    background:white;-->
+<!--}-->
+
+<!--th, td{-->
+<!--    padding:12px;-->
+<!--    border:1px solid #ddd;-->
+<!--    text-align:center;-->
+<!--}-->
+
+<!--th{-->
+<!--    background:#2a5298;-->
+<!--    color:white;-->
+<!--}-->
+
+<!--a{-->
+<!--    text-decoration:none;-->
+<!--    display:inline-block;-->
+<!--    margin:3px;-->
+<!--    padding:5px 10px;-->
+<!--    border-radius:5px;-->
+<!--    font-size:13px;-->
+<!--}-->
+
+<!--.edit{-->
+<!--    background:#4CAF50;-->
+<!--    color:white;-->
+<!--}-->
+
+<!--.delete{-->
+<!--    background:#e53935;-->
+<!--    color:white;-->
+<!--}-->
+<!--</style>-->
+
+<!--</head>-->
+
+<!--<body>-->
+
+<!--<h2 style="text-align:center;">Manage Courses</h2>-->
+
+<!--<table>-->
+<!--<tr>-->
+<!--<th>Class</th>-->
+<!--<th>Subject</th>-->
+<!--<th>Chapter</th>-->
+<!--<th>Action</th>-->
+<!--</tr>-->
+
+<!--{% for note in notes %}-->
+
+<!--<tr>-->
+<!--<td>{{ note.class_num }}</td>-->
+<!--<td>{{ note.subject }}</td>-->
+<!--<td>{{ note.chapter }}</td>-->
+
+<!--<td>-->
+
+<!--<a class="edit" href="{{ url_for('edit_note', note_id=note.id) }}">-->
+<!--    ✏ Edit-->
+<!--</a>-->
+
+<!--<br>-->
+
+<!--<a class="delete"-->
+<!--href="/admin/delete_note/{{ note.id }}"-->
+<!--onclick="return confirm('Delete this note?')">-->
+<!--❌ Delete Note </a>-->
+
+<!--<br>-->
+
+<!--<a class="delete" href="/admin/delete_subject/{{ note.subject }}">-->
+<!--   ❌ Delete Subject-->
+<!--</a>-->
+
+<!--<br>-->
+
+<!--<a class="delete" href="/admin/delete_class/{{ note.class_num }}">-->
+<!--   ❌ Delete Class-->
+<!--</a>-->
+
+<!--</td>-->
+
+<!--</tr>-->
+
+<!--{% endfor %}-->
+
+<!--</table>-->
+
+<!--</body>-->
+<!--</html>-->
+
+
+
+
+
+
+
+
+
+
+
 <!DOCTYPE html>
+
 <html>
 <head>
 <title>Manage Courses</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
 <style>
-
 body{
 margin:0;
 font-family:Arial;
@@ -66,8 +436,9 @@ padding:6px 12px;
 border-radius:5px;
 text-decoration:none;
 color:white;
-margin:2px;
+margin:3px;
 display:inline-block;
+font-size:13px;
 }
 
 .edit-btn{ background:#3498db; }
@@ -80,27 +451,6 @@ display:inline-block;
 opacity:0.85;
 cursor:pointer;
 }
-
-/* Modal */
-.modal{
-display:none;
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.6);
-}
-
-.modal-content{
-background:white;
-padding:20px;
-border-radius:10px;
-width:300px;
-margin:15% auto;
-text-align:center;
-}
-
 </style>
 
 </head>
@@ -137,53 +487,74 @@ text-align:center;
 <tr>
 
 <!-- CLASS -->
+
 <td>
 {{ course.class_name }}
 
-{% if last_class != course.class_id %}
-<br>
-<button class="btn class-btn"
-onclick="openModal('class', {{ course.class_id }})">
-🏫 Delete
-</button>
+{% if last_class != course.class_id %} <br> <a class="btn class-btn"
+href="/admin/delete_class/{{ course.class_id }}"
+onclick="return confirm('Delete this class?')">
+🏫 Delete </a>
 {% set last_class = course.class_id %}
 {% endif %}
+
 </td>
 
 <!-- SUBJECT -->
+
 <td>
 {{ course.subject_name }}
 
-{% if last_subject != course.subject_id %}
-<br>
-<button class="btn subject-btn"
-onclick="openModal('subject', {{ course.subject_id }})">
-📚 Delete
-</button>
+{% if last_subject != course.subject_id %} <br> <a class="btn subject-btn"
+href="/admin/delete_subject/{{ course.subject_id }}"
+onclick="return confirm('Delete this subject?')">
+📚 Delete </a>
 {% set last_subject = course.subject_id %}
 {% endif %}
+
 </td>
 
 <!-- CHAPTER -->
-<td>{{ course.chapter_name }}</td>
+
+<td>
+{{ course.chapter_name }}
+
+<br>
+
+<a class="btn chapter-btn"
+href="/admin/delete_course/{{ course.chapter_id }}"
+onclick="return confirm('Delete this chapter?')">
+🗑 Delete </a>
+
+</td>
 
 <!-- ACTION -->
+
 <td>
+
+<!-- EDIT CHAPTER -->
 
 <a class="btn edit-btn"
 href="/admin/edit_chapter/{{ course.chapter_id }}">
-✏ Edit
-</a>
+✏ Edit Chapter </a>
+
+<br>
+
+<!-- NOTE ACTION -->
+
+{% if course.note_id %}
 
 <a class="btn note-btn"
-href="/admin/edit_note/{{ course.chapter_id }}">
-📝 Note
-</a>
+href="{{ url_for('edit_note', note_id=course.note_id) }}">
+📝 Edit Note </a>
 
-<button class="btn chapter-btn"
-onclick="openModal('chapter', {{ course.chapter_id }})">
-🗑 Delete
-</button>
+{% else %}
+
+<a class="btn note-btn"
+href="/admin/add_note?chapter_id={{ course.chapter_id }}">
+➕ Add Note </a>
+
+{% endif %}
 
 </td>
 
@@ -194,58 +565,6 @@ onclick="openModal('chapter', {{ course.chapter_id }})">
 </table>
 
 </div>
-
-<!-- Modal -->
-<div id="deleteModal" class="modal">
-<div class="modal-content">
-
-<h3>⚠ Confirm Delete</h3>
-<p id="modalText"></p>
-
-<button class="btn chapter-btn" onclick="confirmDelete()">
-Yes Delete
-</button>
-
-<br><br>
-
-<button onclick="closeModal()">Cancel</button>
-
-</div>
-</div>
-
-<script>
-
-let deleteType = "";
-let deleteId = "";
-
-function openModal(type, id){
-    deleteType = type;
-    deleteId = id;
-
-    document.getElementById("deleteModal").style.display = "block";
-    document.getElementById("modalText").innerText =
-        "Are you sure you want to delete this " + type + "?";
-}
-
-function closeModal(){
-    document.getElementById("deleteModal").style.display = "none";
-}
-
-function confirmDelete(){
-
-    if(deleteType === "chapter"){
-        window.location.href = "/admin/delete_course/" + deleteId;
-    }
-    else if(deleteType === "subject"){
-        window.location.href = "/admin/delete_subject/" + deleteId;
-    }
-    else if(deleteType === "class"){
-        window.location.href = "/admin/delete_class/" + deleteId;
-    }
-
-}
-
-</script>
 
 </body>
 </html>
