@@ -1,52 +1,60 @@
-<!--<!DOCTYPE html>-->
-<!--<html>-->
-<!--<head>-->
-<!--    <title>All Notes - Admin</title>-->
-<!--    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">-->
-<!--</head>-->
-<!--<body>-->
-<!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--<div class="navbar">-->
-<!--    <h1>Admin - All Notes</h1>-->
-<!--    <a href="/admin">Back</a>-->
-<!--</div>-->
-
-<!--<div class="container">-->
-<!--    <h3>All Notes</h3>-->
-
-<!--    {% for note in notes %}-->
-<!--        <div style="border:1px solid #ccc; padding:15px; margin-bottom:10px;">-->
-<!--            <b>Class:</b> {{ note.class_num }} <br>-->
-<!--            <b>Subject:</b> {{ note.subject }} <br>-->
-<!--            <b>Chapter:</b> {{ note.chapter }} <br><br>-->
-
-<!--            <a href="/admin/delete_note/{{ note.id }}"-->
-<!--               onclick="return confirm('Are you sure?')"-->
-<!--               style="color:red;">-->
-<!--               Delete-->
-<!--            </a>-->
-<!--        </div>-->
-<!--    {% endfor %}-->
-
-<!--</div>-->
-
-<!--</body>-->
-<!--</html>-->
-
-
-
-
-
 <!DOCTYPE html>
+
 <html>
 <head>
     <title>Manage Courses</title>
+
+<style>
+body{
+    font-family:Arial;
+    background:#f5f5f5;
+}
+
+table{
+    width:90%;
+    margin:auto;
+    border-collapse:collapse;
+    background:white;
+}
+
+th, td{
+    padding:12px;
+    border:1px solid #ddd;
+    text-align:center;
+}
+
+th{
+    background:#2a5298;
+    color:white;
+}
+
+a{
+    text-decoration:none;
+    display:inline-block;
+    margin:3px;
+    padding:5px 10px;
+    border-radius:5px;
+    font-size:13px;
+}
+
+.edit{
+    background:#4CAF50;
+    color:white;
+}
+
+.delete{
+    background:#e53935;
+    color:white;
+}
+</style>
+
 </head>
+
 <body>
 
-<h2>Manage Courses</h2>
+<h2 style="text-align:center;">Manage Courses</h2>
 
-<table border="1" cellpadding="10">
+<table>
 <tr>
 <th>Class</th>
 <th>Subject</th>
@@ -62,9 +70,30 @@
 <td>{{ note.chapter }}</td>
 
 <td>
-<a href="/admin/delete_note/{{ note.id }}">Delete Chapter</a>
-<a href="/admin/delete_subject/{{ note.subject }}">Delete Subject</a>
-<a href="/admin/delete_class/{{ note.class_num }}">Delete Class</a>
+
+<a class="edit" href="{{ url_for('edit_note', note_id=note.id) }}">
+    ✏ Edit
+</a>
+
+<br>
+
+<a class="delete"
+href="/admin/delete_note/{{ note.id }}"
+onclick="return confirm('Delete this note?')">
+❌ Delete Note </a>
+
+<br>
+
+<a class="delete" href="/admin/delete_subject/{{ note.subject }}">
+   ❌ Delete Subject
+</a>
+
+<br>
+
+<a class="delete" href="/admin/delete_class/{{ note.class_num }}">
+   ❌ Delete Class
+</a>
+
 </td>
 
 </tr>
