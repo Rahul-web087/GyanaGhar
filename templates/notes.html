@@ -2,8 +2,8 @@
 
 <html>
 <head>
-    <title>Chapter Notes</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter Notes</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body{
@@ -12,6 +12,7 @@ body{
     background:#eef2f7;
 }
 
+/* Navbar */
 .navbar{
     background:linear-gradient(90deg,#1e3c72,#2a5298);
     color:white;
@@ -27,6 +28,7 @@ body{
     margin-left:15px;
 }
 
+/* Container */
 .container{
     width:95%;
     max-width:900px;
@@ -34,6 +36,7 @@ body{
     margin-top:20px;
 }
 
+/* Progress */
 .progress-box{
     background:#ddd;
     border-radius:30px;
@@ -49,23 +52,32 @@ body{
     font-weight:bold;
 }
 
+/* Card */
 .note-card{
     background:white;
-    padding:18px;
+    padding:20px;
     border-radius:15px;
     margin-bottom:20px;
     box-shadow:0 6px 20px rgba(0,0,0,0.1);
+    transition:0.2s;
 }
 
+.note-card:hover{
+    transform:translateY(-3px);
+}
+
+/* Title */
 .note-card h3{
     color:#2a5298;
+    margin-bottom:10px;
 }
 
+/* Q&A */
 .qa-box{
     background:#f9fafc;
     border-left:5px solid #ff4b2b;
     padding:12px;
-    margin-top:12px;
+    margin-top:10px;
     border-radius:10px;
 }
 
@@ -79,14 +91,29 @@ body{
     margin-top:5px;
 }
 
+/* Buttons */
 .btn{
     display:inline-block;
-    padding:8px 15px;
+    padding:8px 14px;
     background:#2a5298;
     color:white;
     border-radius:20px;
     text-decoration:none;
     margin-top:10px;
+    margin-right:5px;
+    font-size:14px;
+}
+
+.btn:hover{
+    background:#1e3c72;
+}
+
+.btn-danger{
+    background:#e53935;
+}
+
+.btn-danger:hover{
+    background:#b71c1c;
 }
 
 .completed{
@@ -96,10 +123,18 @@ body{
     display:inline-block;
 }
 
+/* Video */
 iframe{
     width:100%;
     border-radius:12px;
     margin-top:10px;
+}
+
+/* Header row */
+.card-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 }
 </style>
 
@@ -131,13 +166,23 @@ iframe{
 
 <div class="note-card">
 
-<h3>📘 {{ note.title }}</h3>
+<!-- Header -->
 
-<!-- SAFE MULTIPLE Q&A -->
+<div class="card-header">
+    <h3>{{ note.title }}</h3>
+
+```
+<!-- Edit Button -->
+<a class="btn" href="{{ url_for('edit_note', note_id=note.id) }}">✏ Edit</a>
+```
+
+</div>
+
+<!-- Q&A -->
 
 {% if note.qa_data and note.qa_data != '[]' %}
 
-
+```
 {% set qa_list = note.qa_data | from_json %}
 
 {% for qa in qa_list %}
@@ -146,22 +191,19 @@ iframe{
     <p class="answer">👉 {{ qa.answer }}</p>
 </div>
 {% endfor %}
+```
 
-
-{% else %}
-
-
-<div class="qa-box">
-    <p class="answer">No questions available</p>
-</div>
-
-
+{% else %} <div class="qa-box"> <p class="answer">No questions available</p> </div>
 {% endif %}
+
+<!-- Video -->
 
 {% if note.video_link %}
 
 <iframe height="315" src="{{ note.video_link }}" frameborder="0" allowfullscreen></iframe>
 {% endif %}
+
+<!-- PDF -->
 
 {% if note.pdf_file %} <br> <a class="btn" href="/static/uploads/{{ note.pdf_file }}" target="_blank">
 📄 View PDF </a>
@@ -169,9 +211,11 @@ iframe{
 
 <br>
 
+<!-- Completion -->
+
 {% if note.id in completed_note_ids %} <span class="completed">✔ Completed</span>
 {% else %} <a href="/mark_complete/{{ note.id }}" class="btn">
-✔ Mark as Completed </a>
+✔ Mark Complete </a>
 {% endif %}
 
 </div>
@@ -180,7 +224,6 @@ iframe{
 {% else %}
 
 <p>No notes available for this chapter.</p>
-
 {% endif %}
 
 </div>
