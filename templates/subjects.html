@@ -97,244 +97,14 @@
 <!--</html>-->
 
 
-<!DOCTYPE html>
-<html>
-<head>
-<title>Subjects - GyanaGhar</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-
-<body>
-
-<div class="navbar">
-<h1>GyanaGhar 🎓</h1>
-
-<div>
-<a href="/dashboard">Home</a>
-<a href="/logout">Logout</a>
-</div>
-</div>
-
-
-<div class="container">
-
-<h2>Subjects</h2>
-
-<div class="card-container">
-
-{% for subject in subjects %}
-
-<div class="card">
-
-<a href="/subject/{{ subject.id }}">
-📚 {{ subject.name }}
-
-</a>
-
-</div>
-
-{% endfor %}
-
-</div>
-
-<br>
-
-<a href="/dashboard">⬅ Back</a>
-
-</div>
-
-</body>
-</html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <!--<!DOCTYPE html>-->
 <!--<html>-->
 <!--<head>-->
 <!--<title>Subjects - GyanaGhar</title>-->
-
-<!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-
-<!--<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">-->
-
-<!--<style>-->
-
-<!--body{-->
-<!--margin:0;-->
-<!--font-family:'Poppins', sans-serif;-->
-<!--background:linear-gradient(135deg,#0f0f0f,#1c1c1c);-->
-<!--color:white;-->
-<!--}-->
-
-<!--/* NAVBAR */-->
-
-<!--.navbar{-->
-<!--display:flex;-->
-<!--justify-content:space-between;-->
-<!--align-items:center;-->
-<!--padding:15px 40px;-->
-<!--background:rgba(255,255,255,0.05);-->
-<!--backdrop-filter:blur(10px);-->
-<!--box-shadow:0 4px 15px rgba(0,0,0,0.4);-->
-<!--}-->
-
-<!--.navbar h1{-->
-<!--margin:0;-->
-<!--}-->
-
-<!--.navbar a{-->
-<!--color:white;-->
-<!--text-decoration:none;-->
-<!--margin-left:20px;-->
-<!--transition:0.3s;-->
-<!--}-->
-
-<!--.navbar a:hover{-->
-<!--color:#ff4d4d;-->
-<!--}-->
-
-
-<!--/* MAIN */-->
-
-<!--.container{-->
-<!--width:90%;-->
-<!--margin:auto;-->
-<!--margin-top:40px;-->
-<!--text-align:center;-->
-<!--}-->
-
-<!--h2{-->
-<!--font-size:28px;-->
-<!--}-->
-
-
-<!--/* GRID */-->
-
-<!--.card-container{-->
-<!--margin-top:30px;-->
-<!--display:grid;-->
-<!--grid-template-columns:repeat(auto-fit,minmax(220px,1fr));-->
-<!--gap:25px;-->
-<!--}-->
-
-
-<!--/* CARD */-->
-
-<!--.card{-->
-<!--background:rgba(255,255,255,0.08);-->
-<!--padding:30px;-->
-<!--border-radius:15px;-->
-<!--backdrop-filter:blur(10px);-->
-<!--transition:0.3s;-->
-<!--box-shadow:0 5px 20px rgba(0,0,0,0.4);-->
-<!--}-->
-
-<!--.card:hover{-->
-<!--transform:translateY(-10px) scale(1.03);-->
-<!--background:rgba(255,0,0,0.2);-->
-<!--}-->
-
-<!--.card a{-->
-<!--text-decoration:none;-->
-<!--color:white;-->
-<!--font-size:18px;-->
-<!--font-weight:600;-->
-<!--display:block;-->
-<!--}-->
-
-
-<!--/* BACK BUTTON */-->
-
-<!--.back-btn{-->
-<!--display:inline-block;-->
-<!--margin-top:30px;-->
-<!--padding:10px 25px;-->
-<!--background:#ff4d4d;-->
-<!--color:white;-->
-<!--border-radius:8px;-->
-<!--text-decoration:none;-->
-<!--transition:0.3s;-->
-<!--}-->
-
-<!--.back-btn:hover{-->
-<!--background:#e60000;-->
-<!--}-->
-
-<!--</style>-->
-
+<!--<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">-->
 <!--</head>-->
 
 <!--<body>-->
-
-<!--&lt;!&ndash; NAVBAR &ndash;&gt;-->
 
 <!--<div class="navbar">-->
 <!--<h1>GyanaGhar 🎓</h1>-->
@@ -348,29 +118,259 @@
 
 <!--<div class="container">-->
 
-<!--<h2>📚 Subjects</h2>-->
-
-<!--&lt;!&ndash; SUBJECT GRID &ndash;&gt;-->
+<!--<h2>Subjects</h2>-->
 
 <!--<div class="card-container">-->
 
 <!--{% for subject in subjects %}-->
 
 <!--<div class="card">-->
+
 <!--<a href="/subject/{{ subject.id }}">-->
-<!--📘 {{ subject.name }}-->
+<!--📚 {{ subject.name }}-->
+
 <!--</a>-->
+
 <!--</div>-->
 
 <!--{% endfor %}-->
 
 <!--</div>-->
 
-<!--&lt;!&ndash; BACK BUTTON &ndash;&gt;-->
+<!--<br>-->
 
-<!--<a href="/dashboard" class="back-btn">⬅ Back to Dashboard</a>-->
+<!--<a href="/dashboard">⬅ Back</a>-->
 
 <!--</div>-->
 
 <!--</body>-->
 <!--</html>-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Subjects - GyanaGhar</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+margin:0;
+font-family:'Poppins', sans-serif;
+background:linear-gradient(135deg,#0f0f0f,#1c1c1c);
+color:white;
+}
+
+/* NAVBAR */
+
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 40px;
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(10px);
+box-shadow:0 4px 15px rgba(0,0,0,0.4);
+}
+
+.navbar h1{
+margin:0;
+}
+
+.navbar a{
+color:white;
+text-decoration:none;
+margin-left:20px;
+transition:0.3s;
+}
+
+.navbar a:hover{
+color:#ff4d4d;
+}
+
+
+/* MAIN */
+
+.container{
+width:90%;
+margin:auto;
+margin-top:40px;
+text-align:center;
+}
+
+h2{
+font-size:28px;
+}
+
+
+/* GRID */
+
+.card-container{
+margin-top:30px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:25px;
+}
+
+
+/* CARD */
+
+.card{
+background:rgba(255,255,255,0.08);
+padding:30px;
+border-radius:15px;
+backdrop-filter:blur(10px);
+transition:0.3s;
+box-shadow:0 5px 20px rgba(0,0,0,0.4);
+}
+
+.card:hover{
+transform:translateY(-10px) scale(1.03);
+background:rgba(255,0,0,0.2);
+}
+
+.card a{
+text-decoration:none;
+color:white;
+font-size:18px;
+font-weight:600;
+display:block;
+}
+
+
+/* BACK BUTTON */
+
+.back-btn{
+display:inline-block;
+margin-top:30px;
+padding:10px 25px;
+background:#ff4d4d;
+color:white;
+border-radius:8px;
+text-decoration:none;
+transition:0.3s;
+}
+
+.back-btn:hover{
+background:#e60000;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<div class="navbar">
+<h1>GyanaGhar 🎓</h1>
+
+<div>
+<a href="/dashboard">Home</a>
+<a href="/logout">Logout</a>
+</div>
+</div>
+
+
+<div class="container">
+
+<h2>📚 Subjects</h2>
+
+<!-- SUBJECT GRID -->
+
+<div class="card-container">
+
+{% for subject in subjects %}
+
+<div class="card">
+<a href="/subject/{{ subject.id }}">
+📘 {{ subject.name }}
+</a>
+</div>
+
+{% endfor %}
+
+</div>
+
+<!-- BACK BUTTON -->
+
+<a href="/dashboard" class="back-btn">⬅ Back to Dashboard</a>
+
+</div>
+
+</body>
+</html>

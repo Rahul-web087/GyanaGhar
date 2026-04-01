@@ -1400,11 +1400,15 @@ def dashboard():
     total_notes = db.session.execute(text("SELECT COUNT(*) FROM note")).scalar()
     total_users = db.session.execute(text("SELECT COUNT(*) FROM user")).scalar()
 
+    #  ADD THIS
+    classes = db.session.execute(text("SELECT * FROM class")).fetchall()
+
     return render_template("dashboard.html",
                            subjects=total_subjects,
                            chapters=total_chapters,
                            notes=total_notes,
-                           users=total_users)
+                           users=total_users,
+                           classes=classes)   #  PASS THIS
 
 # ================= CLASS PAGE =================
 
