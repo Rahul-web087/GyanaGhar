@@ -2,228 +2,6 @@
 
 
 
-<!--<!DOCTYPE html>-->
-<!--<html>-->
-<!--<head>-->
-
-<!--<title>Chapters - GyanaGhar</title>-->
-
-<!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-
-<!--<style>-->
-
-<!--body{-->
-<!--margin:0;-->
-<!--font-family:Arial, Helvetica, sans-serif;-->
-<!--background:linear-gradient(135deg,#1e3c72,#2a5298);-->
-<!--color:white;-->
-<!--}-->
-
-<!--/* NAVBAR */-->
-
-<!--.navbar{-->
-<!--display:flex;-->
-<!--justify-content:space-between;-->
-<!--align-items:center;-->
-<!--padding:15px 40px;-->
-<!--background:#1e3c72;-->
-<!--box-shadow:0 4px 10px rgba(0,0,0,0.2);-->
-<!--}-->
-
-<!--.logo{-->
-<!--display:flex;-->
-<!--align-items:center;-->
-<!--gap:10px;-->
-<!--}-->
-
-<!--.logo img{-->
-<!--height:40px;-->
-<!--}-->
-
-<!--.navbar a{-->
-<!--color:white;-->
-<!--text-decoration:none;-->
-<!--margin-left:20px;-->
-<!--font-weight:bold;-->
-<!--}-->
-
-<!--/* MAIN */-->
-
-<!--.container{-->
-<!--width:90%;-->
-<!--margin:auto;-->
-<!--margin-top:40px;-->
-<!--text-align:center;-->
-<!--}-->
-
-<!--/* TITLE */-->
-
-<!--.section-title{-->
-<!--font-size:24px;-->
-<!--margin-bottom:30px;-->
-<!--}-->
-
-<!--/* CHAPTER GRID */-->
-
-<!--.chapter-grid{-->
-<!--display:grid;-->
-<!--grid-template-columns:repeat(auto-fit,minmax(250px,1fr));-->
-<!--gap:25px;-->
-<!--}-->
-
-<!--/* CHAPTER CARD */-->
-
-<!--.chapter-card{-->
-<!--background:white;-->
-<!--color:#333;-->
-<!--padding:25px;-->
-<!--border-radius:12px;-->
-<!--box-shadow:0 5px 20px rgba(0,0,0,0.3);-->
-<!--transition:0.3s;-->
-<!--}-->
-
-<!--.chapter-card:hover{-->
-<!--transform:translateY(-5px);-->
-<!--box-shadow:0 10px 30px rgba(0,0,0,0.4);-->
-<!--}-->
-
-<!--.chapter-card h3{-->
-<!--margin-bottom:10px;-->
-<!--}-->
-
-<!--.chapter-btn{-->
-<!--display:inline-block;-->
-<!--padding:10px 20px;-->
-<!--background:#2a5298;-->
-<!--color:white;-->
-<!--border-radius:6px;-->
-<!--text-decoration:none;-->
-<!--font-weight:bold;-->
-<!--}-->
-
-<!--.chapter-btn:hover{-->
-<!--background:#1e3c72;-->
-<!--}-->
-
-<!--/* BACK BUTTON */-->
-
-<!--.back{-->
-<!--margin-top:40px;-->
-<!--display:inline-block;-->
-<!--color:white;-->
-<!--text-decoration:none;-->
-<!--font-weight:bold;-->
-<!--}-->
-
-<!--footer{-->
-<!--margin-top:70px;-->
-<!--padding:20px;-->
-<!--background:#1e3c72;-->
-<!--text-align:center;-->
-<!--}-->
-
-<!--</style>-->
-
-<!--</head>-->
-
-
-<!--<body>-->
-
-<!--&lt;!&ndash; NAVBAR &ndash;&gt;-->
-
-<!--<div class="navbar">-->
-
-<!--<div class="logo">-->
-
-<!--<img src="{{ url_for('static', filename='gyanagharlogo.png') }}">-->
-
-<!--<h2>GyanaGhar</h2>-->
-
-<!--</div>-->
-
-<!--<div>-->
-
-<!--<a href="/dashboard">Home</a>-->
-<!--<a href="/profile">Profile</a>-->
-<!--<a href="/logout">Logout</a>-->
-
-<!--</div>-->
-
-<!--</div>-->
-
-
-
-<!--<div class="container">-->
-
-<!--<h2 class="section-title">📖 Chapters</h2>-->
-
-<!--<div class="chapter-grid">-->
-
-<!--{% for chapter in chapters %}-->
-
-<!--<div class="chapter-card">-->
-
-<!--<h3>{{ chapter.name }}</h3>-->
-
-<!--<a class="chapter-btn" href="/chapter/{{ chapter.id }}">-->
-<!--Open Chapter-->
-<!--</a>-->
-
-<!--</div>-->
-
-<!--{% endfor %}-->
-
-<!--</div>-->
-
-
-<!--<br>-->
-
-<!--<a class="back" href="/dashboard">⬅ Back to Dashboard</a>-->
-
-<!--</div>-->
-
-
-<!--<footer>-->
-<!--© 2026 GyanaGhar | Built by Rahul Nayak-->
-<!--</footer>-->
-
-<!--</body>-->
-<!--</html>-->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -232,14 +10,12 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-
 <style>
 
 body{
 margin:0;
-font-family:'Poppins', sans-serif;
-background:linear-gradient(135deg,#0f0f0f,#1c1c1c);
+font-family:Arial, Helvetica, sans-serif;
+background:linear-gradient(135deg,#1e3c72,#2a5298);
 color:white;
 }
 
@@ -250,9 +26,8 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 padding:15px 40px;
-background:rgba(255,255,255,0.05);
-backdrop-filter:blur(10px);
-box-shadow:0 4px 15px rgba(0,0,0,0.4);
+background:#1e3c72;
+box-shadow:0 4px 10px rgba(0,0,0,0.2);
 }
 
 .logo{
@@ -269,11 +44,7 @@ height:40px;
 color:white;
 text-decoration:none;
 margin-left:20px;
-transition:0.3s;
-}
-
-.navbar a:hover{
-color:#ff4d4d;
+font-weight:bold;
 }
 
 /* MAIN */
@@ -285,79 +56,69 @@ margin-top:40px;
 text-align:center;
 }
 
+/* TITLE */
+
 .section-title{
-font-size:26px;
+font-size:24px;
 margin-bottom:30px;
 }
 
-/* GRID */
+/* CHAPTER GRID */
 
 .chapter-grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
 gap:25px;
 }
 
-/* CARD */
+/* CHAPTER CARD */
 
 .chapter-card{
-background:rgba(255,255,255,0.08);
+background:white;
+color:#333;
 padding:25px;
-border-radius:15px;
-backdrop-filter:blur(10px);
+border-radius:12px;
+box-shadow:0 5px 20px rgba(0,0,0,0.3);
 transition:0.3s;
-box-shadow:0 5px 20px rgba(0,0,0,0.4);
 }
 
 .chapter-card:hover{
-transform:translateY(-10px) scale(1.03);
-background:rgba(255,0,0,0.2);
+transform:translateY(-5px);
+box-shadow:0 10px 30px rgba(0,0,0,0.4);
 }
 
 .chapter-card h3{
-margin-bottom:15px;
+margin-bottom:10px;
 }
-
-/* BUTTON */
 
 .chapter-btn{
 display:inline-block;
-padding:10px 22px;
-background:#ff4d4d;
+padding:10px 20px;
+background:#2a5298;
 color:white;
-border-radius:8px;
+border-radius:6px;
 text-decoration:none;
 font-weight:bold;
-transition:0.3s;
 }
 
 .chapter-btn:hover{
-background:#e60000;
+background:#1e3c72;
 }
 
-/* BACK */
+/* BACK BUTTON */
 
 .back{
 margin-top:40px;
 display:inline-block;
-padding:10px 25px;
-background:#ff4d4d;
-border-radius:8px;
-text-decoration:none;
 color:white;
-transition:0.3s;
+text-decoration:none;
+font-weight:bold;
 }
-
-.back:hover{
-background:#e60000;
-}
-
-/* FOOTER */
 
 footer{
 margin-top:70px;
 padding:20px;
-background:rgba(255,255,255,0.05);
+background:#1e3c72;
 text-align:center;
 }
 
@@ -373,14 +134,19 @@ text-align:center;
 <div class="navbar">
 
 <div class="logo">
+
 <img src="{{ url_for('static', filename='gyanagharlogo.png') }}">
-<h2>GyanaGhar 🚀</h2>
+
+<h2>GyanaGhar</h2>
+
 </div>
 
 <div>
+
 <a href="/dashboard">Home</a>
 <a href="/profile">Profile</a>
 <a href="/logout">Logout</a>
+
 </div>
 
 </div>
@@ -409,6 +175,7 @@ Open Chapter
 
 </div>
 
+
 <br>
 
 <a class="back" href="/dashboard">⬅ Back to Dashboard</a>
@@ -422,3 +189,236 @@ Open Chapter
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+
+<!--<title>Chapters - GyanaGhar</title>-->
+
+<!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+
+<!--<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">-->
+
+<!--<style>-->
+
+<!--body{-->
+<!--margin:0;-->
+<!--font-family:'Poppins', sans-serif;-->
+<!--background:linear-gradient(135deg,#0f0f0f,#1c1c1c);-->
+<!--color:white;-->
+<!--}-->
+
+<!--/* NAVBAR */-->
+
+<!--.navbar{-->
+<!--display:flex;-->
+<!--justify-content:space-between;-->
+<!--align-items:center;-->
+<!--padding:15px 40px;-->
+<!--background:rgba(255,255,255,0.05);-->
+<!--backdrop-filter:blur(10px);-->
+<!--box-shadow:0 4px 15px rgba(0,0,0,0.4);-->
+<!--}-->
+
+<!--.logo{-->
+<!--display:flex;-->
+<!--align-items:center;-->
+<!--gap:10px;-->
+<!--}-->
+
+<!--.logo img{-->
+<!--height:40px;-->
+<!--}-->
+
+<!--.navbar a{-->
+<!--color:white;-->
+<!--text-decoration:none;-->
+<!--margin-left:20px;-->
+<!--transition:0.3s;-->
+<!--}-->
+
+<!--.navbar a:hover{-->
+<!--color:#ff4d4d;-->
+<!--}-->
+
+<!--/* MAIN */-->
+
+<!--.container{-->
+<!--width:90%;-->
+<!--margin:auto;-->
+<!--margin-top:40px;-->
+<!--text-align:center;-->
+<!--}-->
+
+<!--.section-title{-->
+<!--font-size:26px;-->
+<!--margin-bottom:30px;-->
+<!--}-->
+
+<!--/* GRID */-->
+
+<!--.chapter-grid{-->
+<!--display:grid;-->
+<!--grid-template-columns:repeat(auto-fit,minmax(260px,1fr));-->
+<!--gap:25px;-->
+<!--}-->
+
+<!--/* CARD */-->
+
+<!--.chapter-card{-->
+<!--background:rgba(255,255,255,0.08);-->
+<!--padding:25px;-->
+<!--border-radius:15px;-->
+<!--backdrop-filter:blur(10px);-->
+<!--transition:0.3s;-->
+<!--box-shadow:0 5px 20px rgba(0,0,0,0.4);-->
+<!--}-->
+
+<!--.chapter-card:hover{-->
+<!--transform:translateY(-10px) scale(1.03);-->
+<!--background:rgba(255,0,0,0.2);-->
+<!--}-->
+
+<!--.chapter-card h3{-->
+<!--margin-bottom:15px;-->
+<!--}-->
+
+<!--/* BUTTON */-->
+
+<!--.chapter-btn{-->
+<!--display:inline-block;-->
+<!--padding:10px 22px;-->
+<!--background:#ff4d4d;-->
+<!--color:white;-->
+<!--border-radius:8px;-->
+<!--text-decoration:none;-->
+<!--font-weight:bold;-->
+<!--transition:0.3s;-->
+<!--}-->
+
+<!--.chapter-btn:hover{-->
+<!--background:#e60000;-->
+<!--}-->
+
+<!--/* BACK */-->
+
+<!--.back{-->
+<!--margin-top:40px;-->
+<!--display:inline-block;-->
+<!--padding:10px 25px;-->
+<!--background:#ff4d4d;-->
+<!--border-radius:8px;-->
+<!--text-decoration:none;-->
+<!--color:white;-->
+<!--transition:0.3s;-->
+<!--}-->
+
+<!--.back:hover{-->
+<!--background:#e60000;-->
+<!--}-->
+
+<!--/* FOOTER */-->
+
+<!--footer{-->
+<!--margin-top:70px;-->
+<!--padding:20px;-->
+<!--background:rgba(255,255,255,0.05);-->
+<!--text-align:center;-->
+<!--}-->
+
+<!--</style>-->
+
+<!--</head>-->
+
+
+<!--<body>-->
+
+<!--&lt;!&ndash; NAVBAR &ndash;&gt;-->
+
+<!--<div class="navbar">-->
+
+<!--<div class="logo">-->
+<!--<img src="{{ url_for('static', filename='gyanagharlogo.png') }}">-->
+<!--<h2>GyanaGhar 🚀</h2>-->
+<!--</div>-->
+
+<!--<div>-->
+<!--<a href="/dashboard">Home</a>-->
+<!--<a href="/profile">Profile</a>-->
+<!--<a href="/logout">Logout</a>-->
+<!--</div>-->
+
+<!--</div>-->
+
+
+
+<!--<div class="container">-->
+
+<!--<h2 class="section-title">📖 Chapters</h2>-->
+
+<!--<div class="chapter-grid">-->
+
+<!--{% for chapter in chapters %}-->
+
+<!--<div class="chapter-card">-->
+
+<!--<h3>{{ chapter.name }}</h3>-->
+
+<!--<a class="chapter-btn" href="/chapter/{{ chapter.id }}">-->
+<!--Open Chapter-->
+<!--</a>-->
+
+<!--</div>-->
+
+<!--{% endfor %}-->
+
+<!--</div>-->
+
+<!--<br>-->
+
+<!--<a class="back" href="/dashboard">⬅ Back to Dashboard</a>-->
+
+<!--</div>-->
+
+
+<!--<footer>-->
+<!--© 2026 GyanaGhar | Built by Rahul Nayak-->
+<!--</footer>-->
+
+<!--</body>-->
+<!--</html>-->

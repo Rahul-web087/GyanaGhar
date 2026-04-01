@@ -1087,6 +1087,8 @@ app = Flask(__name__)
 UPLOAD_FOLDER = "static/uploads"
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.config['SECRET_KEY'] = os.getenv("SECRET_KEY", "gyanaghar_secret")
+app.config['SESSION_COOKIE_SECURE'] = False  # new add
+app.config['SESSION_COOKIE_SAMESITE'] = "Lax" # new add
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 database_url = os.getenv("DATABASE_URL")
