@@ -1881,34 +1881,38 @@ def delete_class(class_id):
         return "Access Denied"
 
     try:
-        # 1. Subjects
+        cls = Class.query.get(class_id)
+
+        if not cls:
+            return "Class not found"
+
+        # 🔥 Delete related data step-by-step
+
         subjects = Subject.query.filter_by(class_id=class_id).all()
 
         for subject in subjects:
 
-            # 2. Chapters
             chapters = Chapter.query.filter_by(subject_id=subject.id).all()
 
             for chapter in chapters:
 
-                # 3. Notes
                 notes = Note.query.filter_by(chapter_id=chapter.id).all()
 
                 for note in notes:
-                    # 4. Delete Progress
+                    # Delete progress first
                     Progress.query.filter_by(note_id=note.id).delete()
 
-                # 5. Delete Notes
+                # Delete notes
                 Note.query.filter_by(chapter_id=chapter.id).delete()
 
-            # 6. Delete Chapters
+            # Delete chapters
             Chapter.query.filter_by(subject_id=subject.id).delete()
 
-        # 7. Delete Subjects
+        # Delete subjects
         Subject.query.filter_by(class_id=class_id).delete()
 
-        # 8. Delete Class
-        Class.query.filter_by(id=class_id).delete()
+        # Delete class
+        db.session.delete(cls)
 
         db.session.commit()
 
