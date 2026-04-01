@@ -1377,18 +1377,32 @@ def reset_password():
 
 # ================= DASHBOARD =================
 
-@app.route('/dashboard')
+# @app.route('/dashboard')
+# @login_required
+# def dashboard():
+#
+#     classes = Class.query.all()
+#
+#     return render_template(
+#         "dashboard.html",
+#         name=current_user.name,
+#         classes=classes
+#     )
+
+@app.route("/dashboard")
 @login_required
 def dashboard():
 
-    classes = Class.query.all()
+    total_subjects = db.session.execute(text("SELECT COUNT(*) FROM subject")).scalar()
+    total_chapters = db.session.execute(text("SELECT COUNT(*) FROM chapter")).scalar()
+    total_notes = db.session.execute(text("SELECT COUNT(*) FROM note")).scalar()
+    total_users = db.session.execute(text("SELECT COUNT(*) FROM user")).scalar()
 
-    return render_template(
-        "dashboard.html",
-        name=current_user.name,
-        classes=classes
-    )
-
+    return render_template("dashboard.html",
+                           subjects=total_subjects,
+                           chapters=total_chapters,
+                           notes=total_notes,
+                           users=total_users)
 
 # ================= CLASS PAGE =================
 

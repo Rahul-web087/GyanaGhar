@@ -370,6 +370,247 @@
 
 
 
+<!--<!DOCTYPE html>-->
+
+<!--<html>-->
+<!--<head>-->
+<!--<title>Manage Courses</title>-->
+
+<!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+
+<!--<style>-->
+<!--body{-->
+<!--margin:0;-->
+<!--font-family:Arial;-->
+<!--background:#f4f6f9;-->
+<!--}-->
+
+<!--/* Navbar */-->
+<!--.navbar{-->
+<!--background:#1e3c72;-->
+<!--color:white;-->
+<!--padding:15px 30px;-->
+<!--display:flex;-->
+<!--justify-content:space-between;-->
+<!--align-items:center;-->
+<!--}-->
+
+<!--.navbar a{-->
+<!--color:white;-->
+<!--text-decoration:none;-->
+<!--margin-left:15px;-->
+<!--}-->
+
+<!--/* Container */-->
+<!--.container{-->
+<!--width:95%;-->
+<!--margin:auto;-->
+<!--margin-top:20px;-->
+<!--}-->
+
+<!--/* Table */-->
+<!--table{-->
+<!--width:100%;-->
+<!--border-collapse:collapse;-->
+<!--background:white;-->
+<!--border-radius:10px;-->
+<!--overflow:hidden;-->
+<!--box-shadow:0 4px 15px rgba(0,0,0,0.1);-->
+<!--}-->
+
+<!--th{-->
+<!--background:#2a5298;-->
+<!--color:white;-->
+<!--padding:12px;-->
+<!--}-->
+
+<!--td{-->
+<!--padding:12px;-->
+<!--text-align:center;-->
+<!--border-bottom:1px solid #ddd;-->
+<!--}-->
+
+<!--/* Buttons */-->
+<!--.btn{-->
+<!--padding:6px 12px;-->
+<!--border-radius:5px;-->
+<!--text-decoration:none;-->
+<!--color:white;-->
+<!--margin:3px;-->
+<!--display:inline-block;-->
+<!--font-size:13px;-->
+<!--}-->
+
+<!--.edit-btn{ background:#3498db; }-->
+<!--.note-btn{ background:#8e44ad; }-->
+<!--.chapter-btn{ background:#e74c3c; }-->
+<!--.subject-btn{ background:#f39c12; }-->
+<!--.class-btn{ background:#c0392b; }-->
+
+<!--.btn:hover{-->
+<!--opacity:0.85;-->
+<!--cursor:pointer;-->
+<!--}-->
+<!--</style>-->
+
+<!--</head>-->
+
+<!--<body>-->
+
+<!--<div class="navbar">-->
+<!--<h2>📚 Manage Courses</h2>-->
+
+<!--<div>-->
+<!--<a href="/dashboard">Dashboard</a>-->
+<!--<a href="/logout">Logout</a>-->
+<!--</div>-->
+<!--</div>-->
+
+<!--<div class="container">-->
+
+<!--<h3>Course List</h3>-->
+
+<!--<table>-->
+
+<!--<tr>-->
+<!--<th>Class</th>-->
+<!--<th>Subject</th>-->
+<!--<th>Chapter</th>-->
+<!--<th>Actions</th>-->
+<!--</tr>-->
+
+<!--{% set last_class = None %}-->
+<!--{% set last_subject = None %}-->
+
+<!--{% for course in courses %}-->
+
+<!--<tr>-->
+
+<!--&lt;!&ndash; CLASS &ndash;&gt;-->
+
+<!--<td>-->
+<!--{{ course.class_name }}-->
+
+<!--{% if last_class != course.class_id %} <br> <a class="btn class-btn"-->
+<!--href="/admin/delete_class/{{ course.class_id }}"-->
+<!--onclick="return confirm('Delete this class?')">-->
+<!--🏫 Delete </a>-->
+<!--{% set last_class = course.class_id %}-->
+<!--{% endif %}-->
+
+<!--</td>-->
+
+<!--&lt;!&ndash; SUBJECT &ndash;&gt;-->
+
+<!--<td>-->
+<!--{{ course.subject_name }}-->
+
+<!--{% if last_subject != course.subject_id %} <br> <a class="btn subject-btn"-->
+<!--href="/admin/delete_subject/{{ course.subject_id }}"-->
+<!--onclick="return confirm('Delete this subject?')">-->
+<!--📚 Delete </a>-->
+<!--{% set last_subject = course.subject_id %}-->
+<!--{% endif %}-->
+
+<!--</td>-->
+
+<!--&lt;!&ndash; CHAPTER &ndash;&gt;-->
+
+<!--<td>-->
+<!--{{ course.chapter_name }}-->
+
+<!--<br>-->
+
+<!--<a class="btn chapter-btn"-->
+<!--href="/admin/delete_course/{{ course.chapter_id }}"-->
+<!--onclick="return confirm('Delete this chapter?')">-->
+<!--🗑 Delete </a>-->
+
+<!--</td>-->
+
+<!--&lt;!&ndash; ACTION &ndash;&gt;-->
+
+<!--<td>-->
+
+<!--&lt;!&ndash; EDIT CHAPTER &ndash;&gt;-->
+
+<!--<a class="btn edit-btn"-->
+<!--href="/admin/edit_chapter/{{ course.chapter_id }}">-->
+<!--✏ Edit Chapter </a>-->
+
+<!--<br>-->
+
+<!--&lt;!&ndash; NOTE ACTION &ndash;&gt;-->
+
+<!--{% if course.note_id %}-->
+
+<!--<a class="btn note-btn"-->
+<!--href="{{ url_for('edit_note', note_id=course.note_id) }}">-->
+<!--📝 Edit Note </a>-->
+
+<!--{% else %}-->
+
+<!--<a class="btn note-btn"-->
+<!--href="/admin/add_note?chapter_id={{ course.chapter_id }}">-->
+<!--➕ Add Note </a>-->
+
+<!--{% endif %}-->
+
+<!--</td>-->
+
+<!--</tr>-->
+
+<!--{% endfor %}-->
+
+<!--</table>-->
+
+<!--</div>-->
+
+<!--</body>-->
+<!--</html>-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!DOCTYPE html>
 
 <html>
@@ -381,15 +622,15 @@
 <style>
 body{
 margin:0;
-font-family:Arial;
-background:#f4f6f9;
+font-family:'Poppins', sans-serif;
+background:#eef2f7;
 }
 
 /* Navbar */
 .navbar{
-background:#1e3c72;
+background:linear-gradient(90deg,#1e3c72,#2a5298);
 color:white;
-padding:15px 30px;
+padding:15px 25px;
 display:flex;
 justify-content:space-between;
 align-items:center;
@@ -408,48 +649,63 @@ margin:auto;
 margin-top:20px;
 }
 
-/* Table */
-table{
-width:100%;
-border-collapse:collapse;
+/* Filters */
+.filters{
+display:flex;
+gap:10px;
+margin-bottom:15px;
+flex-wrap:wrap;
+}
+
+.filters input, .filters select{
+padding:8px;
+border-radius:5px;
+border:1px solid #ccc;
+}
+
+/* Grid */
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:15px;
+}
+
+/* Card */
+.card{
 background:white;
-border-radius:10px;
-overflow:hidden;
-box-shadow:0 4px 15px rgba(0,0,0,0.1);
+padding:15px;
+border-radius:12px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+transition:0.2s;
 }
 
-th{
-background:#2a5298;
-color:white;
-padding:12px;
+.card:hover{
+transform:translateY(-4px);
 }
 
-td{
-padding:12px;
-text-align:center;
-border-bottom:1px solid #ddd;
+.title{
+font-weight:bold;
+color:#2a5298;
 }
 
 /* Buttons */
 .btn{
-padding:6px 12px;
+padding:6px 10px;
 border-radius:5px;
 text-decoration:none;
 color:white;
-margin:3px;
+font-size:12px;
 display:inline-block;
-font-size:13px;
+margin-top:8px;
+margin-right:5px;
 }
 
-.edit-btn{ background:#3498db; }
-.note-btn{ background:#8e44ad; }
-.chapter-btn{ background:#e74c3c; }
-.subject-btn{ background:#f39c12; }
-.class-btn{ background:#c0392b; }
+.edit{ background:#3498db; }
+.note{ background:#8e44ad; }
+.delete{ background:#e74c3c; }
 
 .btn:hover{
 opacity:0.85;
-cursor:pointer;
 }
 </style>
 
@@ -468,103 +724,128 @@ cursor:pointer;
 
 <div class="container">
 
-<h3>Course List</h3>
+<!-- FILTERS -->
 
-<table>
+<div class="filters">
+<input type="text" id="searchInput" placeholder="🔍 Search...">
 
-<tr>
-<th>Class</th>
-<th>Subject</th>
-<th>Chapter</th>
-<th>Actions</th>
-</tr>
+<select id="classFilter">
+<option value="">All Classes</option>
+</select>
 
-{% set last_class = None %}
-{% set last_subject = None %}
+<select id="subjectFilter">
+<option value="">All Subjects</option>
+</select>
+</div>
+
+<!-- GRID -->
+
+<div class="grid" id="courseGrid">
 
 {% for course in courses %}
 
-<tr>
+<div class="card"
+data-class="{{ course.class_name }}"
+data-subject="{{ course.subject_name }}"
+data-chapter="{{ course.chapter_name }}">
 
-<!-- CLASS -->
+<div class="title">📘 {{ course.chapter_name }}</div>
 
-<td>
-{{ course.class_name }}
+<p>🏫 {{ course.class_name }}</p>
+<p>📚 {{ course.subject_name }}</p>
 
-{% if last_class != course.class_id %} <br> <a class="btn class-btn"
-href="/admin/delete_class/{{ course.class_id }}"
-onclick="return confirm('Delete this class?')">
-🏫 Delete </a>
-{% set last_class = course.class_id %}
-{% endif %}
+<!-- Actions -->
 
-</td>
-
-<!-- SUBJECT -->
-
-<td>
-{{ course.subject_name }}
-
-{% if last_subject != course.subject_id %} <br> <a class="btn subject-btn"
-href="/admin/delete_subject/{{ course.subject_id }}"
-onclick="return confirm('Delete this subject?')">
-📚 Delete </a>
-{% set last_subject = course.subject_id %}
-{% endif %}
-
-</td>
-
-<!-- CHAPTER -->
-
-<td>
-{{ course.chapter_name }}
-
-<br>
-
-<a class="btn chapter-btn"
-href="/admin/delete_course/{{ course.chapter_id }}"
-onclick="return confirm('Delete this chapter?')">
-🗑 Delete </a>
-
-</td>
-
-<!-- ACTION -->
-
-<td>
-
-<!-- EDIT CHAPTER -->
-
-<a class="btn edit-btn"
+<a class="btn edit"
 href="/admin/edit_chapter/{{ course.chapter_id }}">
 ✏ Edit Chapter </a>
 
 <br>
 
-<!-- NOTE ACTION -->
-
-{% if course.note_id %}
-
-<a class="btn note-btn"
+{% if course.note_id %} <a class="btn note"
 href="{{ url_for('edit_note', note_id=course.note_id) }}">
 📝 Edit Note </a>
-
-{% else %}
-
-<a class="btn note-btn"
+{% else %} <a class="btn note"
 href="/admin/add_note?chapter_id={{ course.chapter_id }}">
 ➕ Add Note </a>
-
 {% endif %}
 
-</td>
+<br>
 
-</tr>
+<a class="btn delete"
+href="/admin/delete_course/{{ course.chapter_id }}"
+onclick="return confirm('Delete this chapter?')">
+🗑 Delete </a>
+
+</div>
 
 {% endfor %}
 
-</table>
+</div>
 
 </div>
+
+<script>
+
+// SEARCH
+document.getElementById("searchInput").addEventListener("keyup", function(){
+    let value = this.value.toLowerCase();
+    filterCards();
+});
+
+// FILTER FUNCTION
+function filterCards(){
+    let search = document.getElementById("searchInput").value.toLowerCase();
+    let classVal = document.getElementById("classFilter").value;
+    let subjectVal = document.getElementById("subjectFilter").value;
+
+    let cards = document.querySelectorAll(".card");
+
+    cards.forEach(card => {
+        let text = card.innerText.toLowerCase();
+        let c = card.dataset.class;
+        let s = card.dataset.subject;
+
+        let show = true;
+
+        if(search && !text.includes(search)) show = false;
+        if(classVal && c !== classVal) show = false;
+        if(subjectVal && s !== subjectVal) show = false;
+
+        card.style.display = show ? "block" : "none";
+    });
+}
+
+// AUTO POPULATE FILTERS
+let classes = new Set();
+let subjects = new Set();
+
+document.querySelectorAll(".card").forEach(card=>{
+    classes.add(card.dataset.class);
+    subjects.add(card.dataset.subject);
+});
+
+let classFilter = document.getElementById("classFilter");
+let subjectFilter = document.getElementById("subjectFilter");
+
+classes.forEach(c=>{
+    let opt = document.createElement("option");
+    opt.value = c;
+    opt.textContent = c;
+    classFilter.appendChild(opt);
+});
+
+subjects.forEach(s=>{
+    let opt = document.createElement("option");
+    opt.value = s;
+    opt.textContent = s;
+    subjectFilter.appendChild(opt);
+});
+
+classFilter.addEventListener("change", filterCards);
+subjectFilter.addEventListener("change", filterCards);
+
+</script>
 
 </body>
 </html>
