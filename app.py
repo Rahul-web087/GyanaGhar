@@ -1400,15 +1400,15 @@ def dashboard():
     total_notes = db.session.execute(text("SELECT COUNT(*) FROM note")).scalar()
     total_users = db.session.execute(text("SELECT COUNT(*) FROM user")).scalar()
 
-    #  ADD THIS
-    classes = db.session.execute(text("SELECT * FROM class")).fetchall()
+    # 🔥 FIX
+    classes = Class.query.all()
 
     return render_template("dashboard.html",
                            subjects=total_subjects,
                            chapters=total_chapters,
                            notes=total_notes,
                            users=total_users,
-                           classes=classes)   #  PASS THIS
+                           classes=classes)
 
 # ================= CLASS PAGE =================
 
@@ -1880,38 +1880,38 @@ def delete_class(class_id):
     if current_user.role != "admin":
         return "Access Denied"
 
-    # 1. Subjects
-    subjects = Subject.query.filter_by(class_id=class_id).all()
-
-    for subject in subjects:
-
-        # 2. Chapters
-        chapters = Chapter.query.filter_by(subject_id=subject.id).all()
-
-        for chapter in chapters:
-
-            # 3. Notes
-            notes = Note.query.filter_by(chapter_id=chapter.id).all()
-
-            for note in notes:
-                # 4. Delete Progress first
-                Progress.query.filter_by(note_id=note.id).delete()
-
-            # 5. Delete Notes
-            Note.query.filter_by(chapter_id=chapter.id).delete()
-
-        # 6. Delete Chapters
-        Chapter.query.filter_by(subject_id=subject.id).delete()
-
-    # 7. Delete Subjects
-    Subject.query.filter_by(class_id=class_id).delete()
-
-    # 8. Delete Class
-    Class.query.filter_by(id=class_id).delete()
-
-    # TRY-EXCEPT HERE
     try:
+        # 1. Subjects
+        subjects = Subject.query.filter_by(class_id=class_id).all()
+
+        for subject in subjects:
+
+            # 2. Chapters
+            chapters = Chapter.query.filter_by(subject_id=subject.id).all()
+
+            for chapter in chapters:
+
+                # 3. Notes
+                notes = Note.query.filter_by(chapter_id=chapter.id).all()
+
+                for note in notes:
+                    # 4. Delete Progress
+                    Progress.query.filter_by(note_id=note.id).delete()
+
+                # 5. Delete Notes
+                Note.query.filter_by(chapter_id=chapter.id).delete()
+
+            # 6. Delete Chapters
+            Chapter.query.filter_by(subject_id=subject.id).delete()
+
+        # 7. Delete Subjects
+        Subject.query.filter_by(class_id=class_id).delete()
+
+        # 8. Delete Class
+        Class.query.filter_by(id=class_id).delete()
+
         db.session.commit()
+
     except Exception as e:
         db.session.rollback()
         return f"Error: {str(e)}"
