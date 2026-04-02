@@ -1420,7 +1420,16 @@ color:white;
 font-size:20px;
 text-decoration:none;
 }
+ /* Delete bottom */
 
+.delete-btn {
+    margin-top: 10px;
+    background: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+}
 </style>
 
 </head>
@@ -1432,14 +1441,14 @@ text-decoration:none;
 
 <!-- NAVBAR -->
 <div class="navbar">
-<h3>GyanaGhar 🚀</h3>
+<h3>GyanaGhar </h3>
 </div>
 
 <div class="container">
 
 <!-- WELCOME -->
 <div class="welcome-card">
-<h2>Welcome 👋</h2>
+<h2>Welcome ,{{ current_user.username }} </h2>
 <p>Select your class to start learning.</p>
 </div>
 
@@ -1449,8 +1458,16 @@ text-decoration:none;
 {% if classes %}
 {% for c in classes %}
 <div class="class-card">
-<h3>{{ c.name }}</h3>
-<a href="/class/{{ c.id }}">Enter</a>
+    <h3>{{ c.name }}</h3>
+
+    <a href="/class/{{ c.id }}">Enter</a>
+
+    <!-- ADMIN DELETE BUTTON -->
+    {% if current_user.role == "admin" %}
+        <button onclick="deleteClass({{ c.id }})" class="delete-btn">
+            Delete ❌
+        </button>
+    {% endif %}
 </div>
 {% endfor %}
 {% else %}
@@ -1485,6 +1502,14 @@ text-decoration:none;
 <a href="/profile">👤</a>
 <a href="/logout">🚪</a>
 </div>
+
+<script>
+function deleteClass(id) {
+    if(confirm("Delete this class?")) {
+        window.location.href = "/delete_class/" + id;
+    }
+}
+</script>
 
 <script>
 window.onload = function(){
