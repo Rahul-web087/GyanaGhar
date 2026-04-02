@@ -1449,7 +1449,7 @@ text-decoration:none;
 <!-- WELCOME -->
 <div class="welcome-card">
 <h2>
-Welcome, {{ current_user.username if current_user.is_authenticated else "User" }} 👋
+Welcome, {{ current_user.name or current_user.email }} 👋
 </h2>
 <p>Select your class to start learning.</p>
 </div>
