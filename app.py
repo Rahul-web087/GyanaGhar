@@ -1192,6 +1192,8 @@ class User(UserMixin, db.Model):
     secret_answer = db.Column(db.String(200))
 
 
+
+
 class Class(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
@@ -1229,6 +1231,7 @@ class Note(db.Model):
     pdf_file = db.Column(db.String(200))
     question = db.Column(db.Text)
     answer = db.Column(db.Text)
+    pdf_url = db.Column(db.String(500))
 
 
 class Progress(db.Model):
@@ -1344,6 +1347,12 @@ def from_json(value):
 
 #
 # ================delete =========== it --=-=-
+
+
+@app.route("/update_db")
+def update_db():
+    db.create_all()
+    return "DB updated"
 
 # @app.route("/init_db")
 # def init_db():
@@ -1476,6 +1485,23 @@ def dashboard():
                            notes=total_notes,
                            users=total_users,
                            classes=classes)
+
+
+
+
+
+# ========== VIEW PDF ============
+
+@app.route("/view_pdf")
+@login_required
+def view_pdf():
+    pdf_url = request.args.get("url")
+    return render_template("pdf_viewer.html", pdf_url=pdf_url)
+
+
+
+
+
 
 # ================= CLASS PAGE =================
 
@@ -1827,23 +1853,23 @@ def add_note():
 
         # PDF upload
         pdf = request.files["pdf_file"]
-        filename = None
+        pdf_url = None
 
         if pdf and pdf.filename != "":
-            from werkzeug.utils import secure_filename
-            import os
+            upload = cloudinary.uploader.upload(
+                pdf,
+                resource_type="raw"
+            )
 
-            filename = secure_filename(pdf.filename)
-            filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
-            pdf.save(filepath)
+            pdf_url = upload['secure_url']
 
         # Save in DB
         new_note = Note(
             title=title,
-            qa_data=qa_json,   #  STORE JSON
+            qa_data=qa_json,
             chapter_id=chapter_id,
             video_link=video_link,
-            pdf_file=filename
+            pdf_url=pdf_url
         )
 
         db.session.add(new_note)

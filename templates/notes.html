@@ -554,8 +554,8 @@ iframe{
 
 {% if note.pdf_file %}
 <br>
-<a class="btn" href="/static/uploads/{{ note.pdf_file }}" target="_blank">
-📄 View PDF
+<a class="btn" href="/view_pdf?url={{ note.pdf_url }}">
+📄 Open PDF
 </a>
 {% endif %}
 
