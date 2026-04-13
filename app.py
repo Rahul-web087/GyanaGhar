@@ -1069,41 +1069,108 @@
 
 
 
+#
+# import os
+# import json
+# import cloudinary
+# import cloudinary.uploader
+# from dotenv import load_dotenv
+# load_dotenv()
+# from flask import Flask, render_template, redirect, url_for, request, session
+# from flask_sqlalchemy import SQLAlchemy
+# from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+# from werkzeug.security import generate_password_hash, check_password_hash
+# from sqlalchemy import text
+#
+# app = Flask(__name__)
+#
+# # ================= CONFIG =================
+#
+#
+#
+# UPLOAD_FOLDER = "static/uploads"
+# app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+# app.config['SECRET_KEY'] = os.getenv("SECRET_KEY", "gyanaghar_secret")
+# app.config['SESSION_COOKIE_SECURE'] = False  # new add
+# app.config['SESSION_COOKIE_SAMESITE'] = "Lax" # new add
+# os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+#
+# cloudinary.config(
+#     cloud_name=os.getenv("CLOUD_NAME"), # new api
+#     api_key=os.getenv("API_KEY"),
+#     api_secret=os.getenv("API_SECRET")
+# )
+#
+#
+# database_url = os.getenv("DATABASE_URL")
+#
+# if database_url:
+#     database_url = database_url.replace("postgres://", "postgresql://")
+#
+# app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+#
+# db = SQLAlchemy(app)
+#
+# login_manager = LoginManager()
+# login_manager.init_app(app)
+# login_manager.login_view = "login"
+
+
+
+
+
+
 
 import os
 import json
+import cloudinary
+import cloudinary.uploader
+from dotenv import load_dotenv
 from flask import Flask, render_template, redirect, url_for, request, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import text
 
+load_dotenv()
+
 app = Flask(__name__)
 
 # ================= CONFIG =================
 
+app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
 
+app.config['SESSION_COOKIE_SECURE'] = False  # change to True in production
+app.config['SESSION_COOKIE_SAMESITE'] = "Lax"
 
-UPLOAD_FOLDER = "static/uploads"
-app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
-app.config['SECRET_KEY'] = os.getenv("SECRET_KEY", "gyanaghar_secret")
-app.config['SESSION_COOKIE_SECURE'] = False  # new add
-app.config['SESSION_COOKIE_SAMESITE'] = "Lax" # new add
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+# Cloudinary config
+cloudinary.config(
+    cloud_name=os.getenv("CLOUD_NAME"),
+    api_key=os.getenv("API_KEY"),
+    api_secret=os.getenv("API_SECRET")
+)
 
+# Database
 database_url = os.getenv("DATABASE_URL")
 
 if database_url:
     database_url = database_url.replace("postgres://", "postgresql://")
+else:
+    database_url = "sqlite:///local.db"  # fallback
 
 app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
+# Login setup
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
+
+
+
 
 
 # ================= MODELS =================
@@ -1400,7 +1467,7 @@ def dashboard():
     total_notes = db.session.execute(text("SELECT COUNT(*) FROM note")).scalar()
     total_users = db.session.execute(text("SELECT COUNT(*) FROM user")).scalar()
 
-    # 🔥 FIX
+    #  FIX
     classes = Class.query.all()
 
     return render_template("dashboard.html",
