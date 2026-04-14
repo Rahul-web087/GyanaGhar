@@ -1773,11 +1773,15 @@ def edit_note(note_id):
             from werkzeug.utils import secure_filename
             import os
 
-            filename = secure_filename(pdf.filename)
-            filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
-            pdf.save(filepath)
+            pdf = request.files["pdf_file"]
 
-            note.pdf_file = filename
+            if pdf and pdf.filename != "":
+                upload = cloudinary.uploader.upload(
+                    pdf,
+                    resource_type="raw"
+                )
+
+                note.pdf_url = upload['secure_url']
 
         #  SAFE COMMIT
         try:
