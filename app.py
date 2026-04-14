@@ -1362,12 +1362,12 @@ def from_json(value):
 
 
 
-@app.route("/fix_db")
-def fix_db():
-    from sqlalchemy import text
-    db.session.execute(text("ALTER TABLE note ADD COLUMN pdf_url TEXT"))
-    db.session.commit()
-    return "DB FIXED"
+# @app.route("/fix_db")
+# def fix_db():
+#     from sqlalchemy import text
+#     db.session.execute(text("ALTER TABLE note ADD COLUMN pdf_url TEXT"))
+#     db.session.commit()
+#     return "DB FIXED"
 
 # # ======= admin =====
 # @app.route("/create_admin")
