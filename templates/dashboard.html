@@ -1203,45 +1203,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -1250,14 +1211,19 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
 
 /* BODY */
 
 body{
-margin:0;
 font-family:'Poppins', sans-serif;
 background:#0f0f0f;
 color:white;
@@ -1277,16 +1243,15 @@ z-index:9999;
 }
 
 .spinner{
-width:45px;
-height:45px;
-border:4px solid #333;
-border-top:4px solid #ff4d4d;
+width:40px;
+height:40px;
+border:3px solid #333;
+border-top:3px solid #ff4d4d;
 border-radius:50%;
 animation:spin 1s linear infinite;
 }
 
 @keyframes spin{
-0%{transform:rotate(0deg);}
 100%{transform:rotate(360deg);}
 }
 
@@ -1295,31 +1260,48 @@ animation:spin 1s linear infinite;
 .navbar{
 position:sticky;
 top:0;
-z-index:1000;
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:12px;
-background:rgba(255,255,255,0.05);
-backdrop-filter:blur(12px);
+padding:12px 16px;
+background:#111;
+border-bottom:1px solid rgba(255,255,255,0.08);
+z-index:100;
+}
+
+.navbar h3{
+font-size:16px;
+font-weight:500;
 }
 
 /* CONTAINER */
 
 .container{
-width:92%;
+width:94%;
 margin:auto;
-margin-top:20px;
-padding-bottom:90px;
+margin-top:18px;
+padding-bottom:80px;
 }
 
 /* WELCOME */
 
 .welcome-card{
-background:rgba(255,255,255,0.08);
-padding:20px;
-border-radius:12px;
+background:#1a1a1a;
+padding:18px;
+border-radius:10px;
 text-align:center;
+border:1px solid rgba(255,255,255,0.05);
+}
+
+.welcome-card h2{
+font-size:16px;
+font-weight:500;
+}
+
+.welcome-card p{
+font-size:13px;
+color:#aaa;
+margin-top:5px;
 }
 
 /* GRID */
@@ -1327,67 +1309,107 @@ text-align:center;
 .class-grid{
 display:grid;
 grid-template-columns:1fr;
-gap:15px;
-margin-top:20px;
+gap:12px;
+margin-top:18px;
 }
 
 /* CARD */
 
 .class-card{
 background:#1a1a1a;
-padding:18px;
-border-radius:12px;
-transition:0.3s;
+padding:16px;
+border-radius:10px;
+border:1px solid rgba(255,255,255,0.05);
+transition:0.25s;
 }
 
 .class-card:hover{
-transform:translateY(-5px);
+transform:translateY(-3px);
+background:#202020;
+}
+
+.class-card h3{
+font-size:14px;
+font-weight:500;
 }
 
 .class-card a{
-display:inline-block;
+display:block;
 margin-top:10px;
-padding:10px 20px;
+padding:8px;
+text-align:center;
 background:#ff4d4d;
 border-radius:6px;
-color:white;
+font-size:13px;
 text-decoration:none;
+color:white;
+}
+
+.class-card a:active{
+transform:scale(0.97);
+}
+
+/* DELETE BUTTON */
+
+.delete-btn{
+margin-top:8px;
+width:100%;
+background:#2a2a2a;
+color:#ccc;
+border:none;
+padding:6px;
+border-radius:6px;
+font-size:12px;
 }
 
 /* ADMIN PANEL */
 
+.admin-title{
+margin-top:25px;
+font-size:14px;
+font-weight:500;
+color:#ddd;
+}
+
 .admin-grid{
 display:grid;
 grid-template-columns:1fr;
-gap:12px;
-margin-top:15px;
+gap:10px;
+margin-top:10px;
 }
 
 .admin-card{
 background:#1a1a1a;
-padding:15px;
-border-radius:10px;
+padding:12px;
+border-radius:8px;
 text-align:center;
+border:1px solid rgba(255,255,255,0.05);
+transition:0.2s;
+}
+
+.admin-card:hover{
+background:#202020;
 }
 
 .admin-card a{
-color:white;
 text-decoration:none;
+color:#ddd;
+font-size:13px;
 }
 
-/* SKELETON LOADING */
+/* SKELETON */
 
 .skeleton{
-background:linear-gradient(90deg,#1a1a1a,#2a2a2a,#1a1a1a);
-background-size:200% 100%;
-animation:loading 1.5s infinite;
-height:80px;
+height:70px;
 border-radius:10px;
+background:linear-gradient(90deg,#1a1a1a 25%,#2a2a2a 50%,#1a1a1a 75%);
+background-size:200% 100%;
+animation:loading 1.2s infinite;
 }
 
 @keyframes loading{
-0%{background-position:200% 0}
-100%{background-position:-200% 0}
+0%{background-position:200% 0;}
+100%{background-position:-200% 0;}
 }
 
 /* RESPONSIVE */
@@ -1412,24 +1434,21 @@ background:#111;
 display:flex;
 justify-content:space-around;
 padding:10px 0;
-border-top:1px solid #222;
+border-top:1px solid rgba(255,255,255,0.08);
 }
 
 .bottom-nav a{
-color:white;
-font-size:20px;
+color:#aaa;
 text-decoration:none;
+font-size:12px;
+flex:1;
+text-align:center;
 }
- /* Delete bottom */
 
-.delete-btn {
-    margin-top: 10px;
-    background: #ff4d4d;
-    color: white;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 6px;
+.bottom-nav a.active{
+color:#fff;
 }
+
 </style>
 
 </head>
@@ -1441,7 +1460,7 @@ text-decoration:none;
 
 <!-- NAVBAR -->
 <div class="navbar">
-<h3>GyanaGhar </h3>
+<h3>GyanaGhar</h3>
 </div>
 
 <div class="container">
@@ -1449,41 +1468,43 @@ text-decoration:none;
 <!-- WELCOME -->
 <div class="welcome-card">
 <h2>
-Welcome, {{ current_user.name or current_user.email }} 👋
+Welcome, {{ current_user.name or current_user.email }}
 </h2>
-<p>Select your class to start learning.</p>
+<p>Select your class to start learning</p>
 </div>
 
 <!-- CLASSES -->
-<div class="class-grid">
 
-{% if classes %}
+<div id="skeleton-wrapper" class="class-grid">
+<div class="skeleton"></div>
+<div class="skeleton"></div>
+<div class="skeleton"></div>
+</div>
+
+<div id="content" class="class-grid" style="display:none;">
+
 {% for c in classes %}
 <div class="class-card">
-    <h3>{{ c.name }}</h3>
+<h3>{{ c.name }}</h3>
 
-    <a href="/class/{{ c.id }}">Enter</a>
+<a href="/class/{{ c.id }}">Enter</a>
 
-    <!-- ADMIN DELETE BUTTON -->
-    {% if current_user.role == "admin" %}
-        <button onclick="deleteClass({{ c.id }})" class="delete-btn">
-            Delete ❌
-        </button>
-    {% endif %}
+{% if current_user.role == "admin" %}
+<button onclick="deleteClass({{ c.id }})" class="delete-btn">
+Delete
+</button>
+{% endif %}
+
 </div>
 {% endfor %}
-{% else %}
-<div class="skeleton"></div>
-<div class="skeleton"></div>
-<div class="skeleton"></div>
-{% endif %}
 
 </div>
 
 <!-- ADMIN PANEL -->
+
 {% if current_user.role == "admin" %}
 
-<h3 style="margin-top:30px;">⚙ Admin Panel</h3>
+<div class="admin-title">Admin Panel</div>
 
 <div class="admin-grid">
 <div class="admin-card"><a href="/admin/add_class">Add Class</a></div>
@@ -1499,23 +1520,28 @@ Welcome, {{ current_user.name or current_user.email }} 👋
 </div>
 
 <!-- BOTTOM NAV -->
+
 <div class="bottom-nav">
-<a href="/dashboard">🏠</a>
-<a href="/profile">👤</a>
-<a href="/logout">🚪</a>
+<a href="/dashboard" class="active">Home</a>
+<a href="/profile">Profile</a>
+<a href="/logout">Logout</a>
 </div>
 
 <script>
-function deleteClass(id) {
-    if(confirm("Delete this class?")) {
-        window.location.href = "/delete_class/" + id;
-    }
+function deleteClass(id){
+if(confirm("Delete this class?")){
+window.location.href="/delete_class/"+id;
+}
 }
 </script>
 
 <script>
 window.onload = function(){
+setTimeout(()=>{
 document.getElementById("loader").style.display="none";
+document.getElementById("skeleton-wrapper").style.display="none";
+document.getElementById("content").style.display="grid";
+},600);
 }
 </script>
 
