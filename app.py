@@ -1349,10 +1349,10 @@ def from_json(value):
 # ================delete =========== it --=-=-
 
 
-@app.route("/update_db")
-def update_db():
-    db.create_all()
-    return "DB updated"
+# @app.route("/update_db")
+# def update_db():
+#     db.create_all()
+#     return "DB updated"
 
 # @app.route("/init_db")
 # def init_db():
@@ -1361,6 +1361,13 @@ def update_db():
 #     return "Database recreated successfully!"
 
 
+
+@app.route("/fix_db")
+def fix_db():
+    from sqlalchemy import text
+    db.session.execute(text("ALTER TABLE note ADD COLUMN pdf_url TEXT"))
+    db.session.commit()
+    return "DB FIXED"
 
 # # ======= admin =====
 # @app.route("/create_admin")
