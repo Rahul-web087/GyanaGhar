@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>GyanaGhar</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <!-- TOP HEADER -->
+    <header class="top-header">
+        <div class="logo">GyanaGhar</div>
+
+        <div class="header-right">
+            <a href="/search">Search</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </header>
+
+    <!-- PAGE CONTENT -->
+    <div class="main-container">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bottom-nav">
+        <a href="/dashboard" class="nav-item">Home</a>
+        <a href="/subjects" class="nav-item">Courses</a>
+        <a href="/notes" class="nav-item">Notes</a>
+        <a href="/leaderboard" class="nav-item">Leaderboard</a>
+        <a href="/profile" class="nav-item">Profile</a>
+    </nav>
+
+    <!-- ACTIVE NAV SCRIPT -->
+    <script>
+        const navItems = document.querySelectorAll('.nav-item');
+
+        navItems.forEach(item => {
+            if (item.href === window.location.href) {
+                item.classList.add('active');
+            }
+        });
+    </script>
+
+    <!-- PAGE FADE TRANSITION -->
+    <script>
+        document.body.style.opacity = 0;
+
+        window.onload = () => {
+            document.body.style.transition = "opacity 0.4s ease";
+            document.body.style.opacity = 1;
+        };
+    </script>
+
+</body>
+
+</html>

@@ -1,220 +1,72 @@
+{% extends "base.html" %}
 
-<!DOCTYPE html>
-<html>
-<head>
-
-<title>Profile - GyanaGhar</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-
-body{
-margin:0;
-font-family:Arial;
-background:linear-gradient(135deg,#1e3c72,#2a5298);
-color:white;
-}
-
-.navbar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:15px 40px;
-background:#1e3c72;
-}
-
-.navbar a{
-color:white;
-text-decoration:none;
-margin-left:20px;
-}
-
-.container{
-width:90%;
-max-width:700px;
-margin:auto;
-margin-top:40px;
-}
-
-.profile-card{
-background:white;
-color:#333;
-padding:30px;
-border-radius:12px;
-box-shadow:0 5px 20px rgba(0,0,0,0.3);
-text-align:center;
-}
-
-.avatar{
-width:100px;
-height:100px;
-border-radius:50%;
-background:#2a5298;
-color:white;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:45px;
-margin:auto;
-}
-
-.stats{
-display:flex;
-justify-content:space-around;
-margin-top:20px;
-}
-
-.stat-box{
-background:#f5f5f5;
-padding:15px;
-border-radius:10px;
-width:30%;
-}
-
-.progress-bar{
-width:100%;
-background:#ddd;
-border-radius:10px;
-margin-top:15px;
-}
-
-.progress{
-height:15px;
-background:#2a5298;
-border-radius:10px;
-}
-
-input{
-width:90%;
-padding:10px;
-margin:10px 0;
-border-radius:6px;
-border:1px solid #ccc;
-}
-
-button{
-padding:10px 20px;
-background:#2a5298;
-color:white;
-border:none;
-border-radius:6px;
-cursor:pointer;
-}
-
-.delete-btn{
-background:red;
-margin-top:15px;
-}
-
-footer{
-margin-top:60px;
-padding:20px;
-background:#1e3c72;
-text-align:center;
-}
-
-</style>
-
-</head>
-
-<body>
-
-<div class="navbar">
-
-<h2>GyanaGhar</h2>
-
-<div>
-<a href="/dashboard">Dashboard</a>
-<a href="/logout">Logout</a>
-</div>
-
-</div>
+{% block content %}
 
 <div class="container">
 
-<div class="profile-card">
+    <div class="profile-card">
 
-<div class="avatar">
+        <div class="avatar">
+            {{ user.name[0]|upper }}
+        </div>
 
-{{ user.name[0]|upper }}
+        <h2>{{ user.name }}</h2>
+        <p>{{ user.email }}</p>
 
-</div>
+        <hr>
 
-<h2>{{ user.name }}</h2>
+        <h3>Learning Progress</h3>
 
-<p>{{ user.email }}</p>
+        <div class="progress-bar">
+            <div class="progress" style="width: {{ progress }}%"></div>
+        </div>
 
-<hr>
+        <p>{{ progress }}% completed</p>
 
-<h3>Learning Progress</h3>
+        <div class="stats">
 
-<div class="progress-bar">
-<div class="progress" style="width: {{ progress }}%"></div>
-</div>
+            <div class="stat-box">
+                <h3>{{ total_chapters }}</h3>
+                <p>Total Chapters</p>
+            </div>
 
-<p>{{ progress }}% completed</p>
+            <div class="stat-box">
+                <h3>{{ completed_chapters }}</h3>
+                <p>Completed</p>
+            </div>
 
-<div class="stats">
+            <div class="stat-box">
+                <h3>{{ total_chapters - completed_chapters }}</h3>
+                <p>Remaining</p>
+            </div>
 
-<div class="stat-box">
-<h3>{{ total_chapters }}</h3>
-<p>Total Chapters</p>
-</div>
+        </div>
 
-<div class="stat-box">
-<h3>{{ completed_chapters }}</h3>
-<p>Completed</p>
-</div>
+        <hr>
 
-<div class="stat-box">
-<h3>{{ total_chapters - completed_chapters }}</h3>
-<p>Remaining</p>
-</div>
+        <h3>Update Profile</h3>
 
-</div>
+        <form method="POST">
 
-<hr>
+            <input type="text" name="name" value="{{ user.name }}" required>
 
-<h3>Update Profile</h3>
+            <input type="email" name="email" value="{{ user.email }}" required>
 
-<form method="POST">
+            <button type="submit">Update Profile</button>
 
-<input type="text" name="name" value="{{ user.name }}" required>
+        </form>
 
-<input type="email" name="email" value="{{ user.email }}" required>
+        <form action="/delete_account" method="POST"
+              onsubmit="return confirm('Are you sure you want to delete your account?');">
 
-<button type="submit">Update Profile</button>
+            <button type="submit" class="delete-btn">
+                Delete Account
+            </button>
 
-</form>
+        </form>
 
-<form action="/delete_account" method="POST"
-onsubmit="return confirm('Are you sure you want to delete your account?');">
-
-<button type="submit" style="
-background:red;
-color:white;
-padding:10px;
-border:none;
-border-radius:5px;
-cursor:pointer;
-">
-🗑 Delete Account
-</button>
-
-</form>
-
-</a>
+    </div>
 
 </div>
 
-</div>
-
-<footer>
-
-© 2026 GyanaGhar | Built by Rahul Nayak
-
-</footer>
-
-</body>
-</html>
+{% endblock %}

@@ -1,10 +1,22 @@
+/* ========================= */
+/* GLOBAL */
+/* ========================= */
 body {
     font-family: 'Segoe UI', sans-serif;
     background: #f4f6f9;
     margin: 0;
     padding: 0;
+    opacity: 0;
+    transition: all 0.3s ease;
 }
 
+body.fade-in {
+    opacity: 1;
+}
+
+/* ========================= */
+/* NAVBAR (TOP) */
+/* ========================= */
 .navbar {
     background: linear-gradient(90deg, #1e3c72, #2a5298);
     color: white;
@@ -21,15 +33,58 @@ body {
     font-weight: bold;
 }
 
+/* ========================= */
+/* BOTTOM NAVIGATION */
+/* ========================= */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: #1e3c72;
+    display: flex;
+    justify-content: space-around;
+    padding: 12px 0;
+    z-index: 1000;
+}
+
+.nav-item {
+    color: #ddd;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.nav-item.active {
+    color: #ffffff;
+    border-bottom: 2px solid white;
+}
+
+/* ========================= */
+/* MAIN CONTAINER */
+/* ========================= */
 .container {
     width: 85%;
     margin: 30px auto;
+}
+
+.main-container {
+    padding-bottom: 80px;
+}
+
+/* ========================= */
+/* HEADINGS */
+/* ========================= */
+h2 {
+    color: #1e3c72;
 }
 
 h3 {
     color: #1e3c72;
 }
 
+/* ========================= */
+/* CARDS */
+/* ========================= */
 .card-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -47,38 +102,7 @@ h3 {
 }
 
 .card:hover {
-    transform: translateY(-5px);
-}
-
-.card a {
-    text-decoration: none;
-    font-weight: bold;
-    color: #2a5298;
-}
-
-button {
-    background: #2a5298;
-    color: white;
-    border: none;
-    padding: 10px 18px;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-button:hover {
-    background: #1e3c72;
-}
-
-input, textarea {
-    width: 90%;
-    padding: 8px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-}
-
-
-h2 {
-    color: #1e3c72;
+    transform: translateY(-6px) scale(1.01);
 }
 
 .card h4 {
@@ -93,14 +117,221 @@ h2 {
     color: white;
     padding: 8px 15px;
     border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
 }
 
 .card a:hover {
     background: #1e3c72;
 }
 
+/* ========================= */
+/* BUTTONS */
+/* ========================= */
+button {
+    background: #2a5298;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+}
 
+button:hover {
+    background: #1e3c72;
+}
+
+/* ========================= */
+/* INPUTS */
+/* ========================= */
+input, textarea {
+    width: 90%;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+/* ========================= */
+/* FORM CARD */
+/* ========================= */
+.form-card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    max-width: 400px;
+    margin: auto;
+    margin-top: 40px;
+}
+
+.form-card h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-card input,
+.form-card select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.form-card button {
+    width: 100%;
+    padding: 12px;
+    background: #1e3c72;
+}
+
+.form-card button:hover {
+    background: #16325c;
+}
+
+/* ========================= */
+/* PROFILE */
+/* ========================= */
+.profile-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.profile-card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    width: 320px;
+    text-align: center;
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+}
+
+.avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: #2a5298;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    margin: auto;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+}
+
+.stat-box {
+    background: #f5f5f5;
+    padding: 15px;
+    border-radius: 10px;
+    width: 30%;
+    text-align: center;
+}
+
+.progress-bar {
+    width: 100%;
+    background: #ddd;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.progress {
+    height: 15px;
+    background: #2a5298;
+    border-radius: 10px;
+}
+
+.delete-btn {
+    background: red;
+    margin-top: 15px;
+}
+
+/* ========================= */
+/* NOTES */
+/* ========================= */
+.note-card {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.5s ease;
+}
+
+.note-card.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.note-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.note-title {
+    color: #2a5298;
+    font-weight: 600;
+}
+
+.qa-box {
+    background: #f5f5f5;
+    border-left: 3px solid #2a5298;
+    padding: 10px;
+    margin-top: 8px;
+    border-radius: 8px;
+}
+
+.question {
+    font-weight: bold;
+    color: #1e3c72;
+}
+
+.answer {
+    color: #333;
+}
+
+.completed {
+    color: green;
+    margin-top: 8px;
+}
+
+.empty {
+    text-align: center;
+    margin-top: 40px;
+    color: #777;
+}
+
+.pdf-btn {
+    background: #1e88e5;
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* ========================= */
+/* FOOTER */
+/* ========================= */
+.footer {
+    margin-top: 60px;
+    padding: 20px;
+    text-align: center;
+    background: #1e3c72;
+    color: white;
+}
+
+/* ========================= */
+/* MOBILE */
+/* ========================= */
 @media (max-width: 768px) {
+
     .container {
         width: 95%;
     }
@@ -117,71 +348,4 @@ h2 {
     .register-card {
         width: 90%;
     }
-}
-
-.form-card{
-background:white;
-padding:30px;
-border-radius:12px;
-box-shadow:0 4px 12px rgba(0,0,0,0.1);
-max-width:400px;
-margin:auto;
-margin-top:40px;
-}
-
-.form-card h2{
-text-align:center;
-margin-bottom:20px;
-}
-
-.form-card input,
-.form-card select{
-width:100%;
-padding:10px;
-margin:10px 0;
-border:1px solid #ccc;
-border-radius:6px;
-}
-
-.form-card button{
-width:100%;
-padding:12px;
-background:#1e3c72;
-color:white;
-border:none;
-border-radius:8px;
-cursor:pointer;
-}
-
-.form-card button:hover{
-background:#16325c;
-}
-
-.footer{
-margin-top:60px;
-padding:20px;
-text-align:center;
-background:#1e3c72;
-color:white;
-}
-
-
-/* Q&A Design */
-.qa-box {
-    background: #ffffff;
-    border-left: 5px solid #ff4b2b;
-    padding: 15px;
-    margin-top: 10px;
-    border-radius: 8px;
-    line-height: 1.6;
-}
-
-.question {
-    font-weight: bold;
-    color: #1e3c72;
-    margin-bottom: 8px;
-}
-
-.answer {
-    color: #333;
 }
