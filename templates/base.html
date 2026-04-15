@@ -10,54 +10,66 @@
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
-    <!-- Main CSS -->
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
 
-    <!-- TOP HEADER -->
+    <!-- HEADER -->
     <header class="top-header">
         <div class="logo">GyanaGhar</div>
-
-        <div class="header-right">
-            <a href="/search">Search</a>
-            <a href="/logout">Logout</a>
-        </div>
     </header>
 
-    <!-- PAGE CONTENT -->
-    <div class="main-container">
-        {% block content %}
-        {% endblock %}
+    <!-- MAIN -->
+    <div class="main-content">
+        <div class="main-container">
+            {% block content %}
+            {% endblock %}
+        </div>
     </div>
 
-    <!-- BOTTOM NAVIGATION -->
+    <!-- PREMIUM BOTTOM NAV -->
     <nav class="bottom-nav">
-        <a href="/dashboard" class="nav-item">Home</a>
-        <a href="/subjects" class="nav-item">Courses</a>
-        <a href="/notes" class="nav-item">Notes</a>
-        <a href="/leaderboard" class="nav-item">Leaderboard</a>
-        <a href="/profile" class="nav-item">Profile</a>
+
+        <a href="/dashboard" class="nav-item">
+            <span class="material-icons">home</span>
+        </a>
+
+        <a href="/subjects" class="nav-item">
+            <span class="material-icons">menu_book</span>
+        </a>
+
+        <a href="/profile" class="nav-item">
+            <span class="material-icons">person</span>
+        </a>
+
+        <a href="/logout" class="nav-item">
+            <span class="material-icons">logout</span>
+        </a>
+
     </nav>
 
-    <!-- ACTIVE NAV SCRIPT -->
+    <!-- ACTIVE NAV -->
     <script>
-        const navItems = document.querySelectorAll('.nav-item');
+        const links = document.querySelectorAll('.nav-item');
 
-        navItems.forEach(item => {
-            if (item.href === window.location.href) {
-                item.classList.add('active');
+        links.forEach(link => {
+            if (link.href === window.location.href) {
+                link.classList.add('active');
             }
         });
     </script>
 
-    <!-- PAGE FADE TRANSITION -->
+    <!-- SMOOTH FADE -->
     <script>
         document.body.style.opacity = 0;
 
         window.onload = () => {
-            document.body.style.transition = "opacity 0.4s ease";
+            document.body.style.transition = "opacity 0.3s ease";
             document.body.style.opacity = 1;
         };
     </script>

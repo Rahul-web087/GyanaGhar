@@ -1770,7 +1770,7 @@ def edit_note(note_id):
         pdf = request.files.get("pdf_file")
 
         if pdf and pdf.filename:
-            from werkzeug.utils import secure_filename
+
             import os
 
             pdf = request.files["pdf_file"]
@@ -1990,7 +1990,7 @@ def delete_class(class_id):
         if not cls:
             return "Class not found"
 
-        # 🔥 Delete related data step-by-step
+        #  Delete related data step-by-step
 
         subjects = Subject.query.filter_by(class_id=class_id).all()
 
