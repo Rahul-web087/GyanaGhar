@@ -1235,7 +1235,7 @@ def send_otp_email(to_email, otp):
         sg = SendGridAPIClient(os.getenv("SENDGRID_API_KEY"))
         response = sg.send(message)
 
-        print("Email sent successfully ✅")
+        print("Email sent successfully ")
         print("Status Code:", response.status_code)
 
     except Exception as e:
@@ -1260,6 +1260,7 @@ class User(UserMixin, db.Model):
     # NEW SECURITY FIELDS
     is_verified = db.Column(db.Boolean, default=False)
     otp = db.Column(db.String(6))
+    otp_created_at = db.Column(db.DateTime)
 
 
 
@@ -1330,6 +1331,7 @@ def home():
 
 # ================= REGISTER =================
 
+
 @app.route('/register', methods=['GET','POST'])
 def register():
 
@@ -1338,22 +1340,19 @@ def register():
         email = request.form['email']
         password = request.form['password']
 
-        # Email validation
         if not is_valid_email(email):
             return "Invalid email format"
 
-        # Duplicate check
         if User.query.filter_by(email=email).first():
             return "Email already exists"
 
-        # Password strength
         if len(password) < 6:
             return "Password too weak"
 
         otp = generate_otp()
 
-        #  ADMIN CHECK
-        if email == "nayakrahul9028@gmail.com":
+        # ADMIN LOGIC
+        if email == "your_email@gmail.com":
             role = "admin"
             is_verified = True
         else:
@@ -1368,49 +1367,68 @@ def register():
             secret_answer=request.form['secret_answer'].lower(),
             otp=otp,
             role=role,
-            is_verified=is_verified
+            is_verified=is_verified,
+            otp_created_at=datetime.utcnow()
         )
 
         db.session.add(user)
         db.session.commit()
 
-        #  SEND OTP ONLY FOR NORMAL USERS
         if role != "admin":
             send_otp_email(email, otp)
             session['verify_email'] = email
             return redirect("/verify_otp")
 
-        #  ADMIN DIRECT LOGIN / REDIRECT
         return redirect("/login")
 
     return render_template("register.html")
 
+
 #  =========== verify Otp ==========
+
+from datetime import datetime, timedelta
+
 @app.route('/verify_otp', methods=['GET','POST'])
 def verify_otp():
+
+    email = session.get('verify_email')
+
+    if not email:
+        return redirect("/register")
+
+    user = User.query.filter_by(email=email).first()
+
+    if not user:
+        return redirect("/register")
 
     if request.method == "POST":
 
         user_otp = request.form['otp']
-        email = session.get('verify_email')
 
-        user = User.query.filter_by(email=email).first()
+        #  OTP EXPIRY CHECK (5 MIN)
+        if datetime.utcnow() - user.otp_created_at > timedelta(minutes=5):
+            return render_template("verify_otp.html", error="OTP expired")
 
-        if user and user.otp == user_otp:
+        if user.otp == user_otp:
             user.is_verified = True
             user.otp = None
             db.session.commit()
 
+            session.pop('verify_email', None)
             return redirect("/login")
 
         else:
-            return "Invalid OTP"
+            return render_template("verify_otp.html", error="Invalid OTP")
 
     return render_template("verify_otp.html")
 
 
 
+
+
 # ================= LOGIN =================
+
+
 @app.route('/login', methods=['GET','POST'])
 def login():
 
@@ -1448,6 +1466,31 @@ def login():
             return "Invalid password"
 
     return render_template("login.html")
+
+
+# =========== Resend OTP ========
+@app.route('/resend_otp')
+def resend_otp():
+
+    email = session.get('verify_email')
+
+    if not email:
+        return redirect("/register")
+
+    user = User.query.filter_by(email=email).first()
+
+    if not user:
+        return redirect("/register")
+
+    otp = generate_otp()
+    user.otp = otp
+    user.otp_created_at = datetime.utcnow()
+
+    db.session.commit()
+
+    send_otp_email(email, otp)
+
+    return render_template("verify_otp.html", success="OTP sent again!")
 
 
 # =============== Profile =============
