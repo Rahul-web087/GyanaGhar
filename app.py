@@ -1491,11 +1491,11 @@ def from_json(value):
 #     db.create_all()
 #     return "DB updated"
 
-# @app.route("/init_db")
-# def init_db():
-#     db.drop_all()
-#     db.create_all()
-#     return "Database recreated successfully!"
+@app.route("/init_db")
+def init_db():
+    db.drop_all()
+    db.create_all()
+    return "Database recreated successfully!"
 
 
 
@@ -1531,30 +1531,30 @@ def from_json(value):
 # -------- CREATE ADMIN --------
 
 #
-# @app.route('/create_admin')
-# def create_admin():
-#
-#     try:
-#
-#         if User.query.filter_by(email="admin@gyanaghar.com").first():
-#             return "Admin already exists!"
-#
-#         admin = User(
-#             name="Admin",
-#             email="admin@gyanaghar.com",
-#             password=generate_password_hash("Rahul@001"),
-#             role="admin",
-#             secret_question="Your first school name?",
-#             secret_answer="demo"
-#         )
-#
-#         db.session.add(admin)
-#         db.session.commit()
-#
-#         return "Admin Created Successfully!"
-#
-#     except Exception as e:
-#         return f"Error: {str(e)}"
+@app.route('/create_admin')
+def create_admin():
+
+    try:
+
+        if User.query.filter_by(email="nayakrahul9028@gmail.com").first():
+            return "Admin already exists!"
+
+        admin = User(
+            name="Admin",
+            email="nayakrahul9028@gmail.com",
+            password=generate_password_hash("Rahul@001"),
+            role="admin",
+            secret_question="Your first school name?",
+            secret_answer="demo"
+        )
+
+        db.session.add(admin)
+        db.session.commit()
+
+        return "Admin Created Successfully!"
+
+    except Exception as e:
+        return f"Error: {str(e)}"
 #
 #
 
