@@ -1338,19 +1338,27 @@ def register():
         email = request.form['email']
         password = request.form['password']
 
-        #  Email validation
+        # Email validation
         if not is_valid_email(email):
             return "Invalid email format"
 
-        #  Duplicate check
+        # Duplicate check
         if User.query.filter_by(email=email).first():
             return "Email already exists"
 
-        #  Password strength
+        # Password strength
         if len(password) < 6:
             return "Password too weak"
 
         otp = generate_otp()
+
+        #  ADMIN CHECK
+        if email == "nayakrahul9028@gmail.com":
+            role = "admin"
+            is_verified = True
+        else:
+            role = "student"
+            is_verified = False
 
         user = User(
             name=request.form['name'],
@@ -1358,20 +1366,24 @@ def register():
             password=generate_password_hash(password),
             secret_question=request.form['secret_question'],
             secret_answer=request.form['secret_answer'].lower(),
-            otp=otp
+            otp=otp,
+            role=role,
+            is_verified=is_verified
         )
 
         db.session.add(user)
         db.session.commit()
 
-        send_otp_email(email, otp)  # temporary
+        #  SEND OTP ONLY FOR NORMAL USERS
+        if role != "admin":
+            send_otp_email(email, otp)
+            session['verify_email'] = email
+            return redirect("/verify_otp")
 
-        session['verify_email'] = email
-
-        return redirect("/verify_otp")
+        #  ADMIN DIRECT LOGIN / REDIRECT
+        return redirect("/login")
 
     return render_template("register.html")
-
 
 #  =========== verify Otp ==========
 @app.route('/verify_otp', methods=['GET','POST'])
@@ -1399,7 +1411,6 @@ def verify_otp():
 
 
 # ================= LOGIN =================
-
 @app.route('/login', methods=['GET','POST'])
 def login():
 
@@ -1413,9 +1424,15 @@ def login():
         if not user:
             return "User not found"
 
-        if not user.is_verified:
+        #  OTP check (skip for admin)
+        if not user.is_verified and user.role != "admin":
             return "Verify your account first"
 
+        #  ADMIN SPECIAL CHECK (ADD HERE)
+        if user.role == "admin" and not check_password_hash(user.password, password):
+            return "Wrong admin password"
+
+        #  NORMAL LOGIN
         if check_password_hash(user.password, password):
 
             session['attempts'] = 0
@@ -1491,11 +1508,11 @@ def from_json(value):
 #     db.create_all()
 #     return "DB updated"
 
-@app.route("/init_db")
-def init_db():
-    db.drop_all()
-    db.create_all()
-    return "Database recreated successfully!"
+# @app.route("/init_db")
+# def init_db():
+#     db.drop_all()
+#     db.create_all()
+#     return "Database recreated successfully!"
 
 
 
@@ -1530,31 +1547,31 @@ def init_db():
 
 # -------- CREATE ADMIN --------
 
+# #
+# @app.route('/create_admin')
+# def create_admin():
 #
-@app.route('/create_admin')
-def create_admin():
-
-    try:
-
-        if User.query.filter_by(email="nayakrahul9028@gmail.com").first():
-            return "Admin already exists!"
-
-        admin = User(
-            name="Admin",
-            email="nayakrahul9028@gmail.com",
-            password=generate_password_hash("Rahul@001"),
-            role="admin",
-            secret_question="Your first school name?",
-            secret_answer="demo"
-        )
-
-        db.session.add(admin)
-        db.session.commit()
-
-        return "Admin Created Successfully!"
-
-    except Exception as e:
-        return f"Error: {str(e)}"
+#     try:
+#
+#         if User.query.filter_by(email="nayakrahul9028@gmail.com").first():
+#             return "Admin already exists!"
+#
+#         admin = User(
+#             name="Admin",
+#             email="nayakrahul9028@gmail.com",
+#             password=generate_password_hash("Rahul@001"),
+#             role="admin",
+#             secret_question="Your first school name?",
+#             secret_answer="demo"
+#         )
+#
+#         db.session.add(admin)
+#         db.session.commit()
+#
+#         return "Admin Created Successfully!"
+#
+#     except Exception as e:
+#         return f"Error: {str(e)}"
 #
 #
 
