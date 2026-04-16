@@ -6,3 +6,5 @@ gunicorn
 psycopg2-binary
 cloudinary
 python-dotenv
+Flask-Migrate==4.0.7
+sendgrid

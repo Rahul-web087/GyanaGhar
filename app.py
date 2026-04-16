@@ -1124,6 +1124,8 @@
 
 import os
 import json
+import smtplib
+from email.mime.text import MIMEText
 import cloudinary
 import cloudinary.uploader
 from dotenv import load_dotenv
@@ -1132,8 +1134,9 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import text
-
+from dotenv import load_dotenv
 load_dotenv()
+
 
 app = Flask(__name__)
 
@@ -1164,11 +1167,79 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
+
+from flask_migrate import Migrate
+migrate = Migrate(app, db)
+
+
 # Login setup
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
 
+
+# ====== new =======
+
+import re
+import random
+
+def generate_otp():
+    return str(random.randint(100000, 999999))
+
+def is_valid_email(email):
+    return re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$', email)
+
+
+# ================= EMAIL FUNCTION =================
+# def send_otp_email(to_email, otp):
+#
+#     sender = os.getenv("EMAIL")
+#     password = os.getenv("EMAIL_PASS")
+#
+#     print("EMAIL:", os.getenv("EMAIL"))
+#     print("PASS:", os.getenv("EMAIL_PASS"))
+#
+#     msg = MIMEText(f"Your GyanaGhar OTP is: {otp}")
+#     msg['Subject'] = "GyanaGhar OTP Verification"
+#     msg['From'] = sender
+#     msg['To'] = to_email
+#
+#     try:
+#         server = smtplib.SMTP('smtp.gmail.com', 587)
+#         server.starttls()
+#         server.login(sender, password)
+#         server.send_message(msg)
+#         server.quit()
+#         print("Email sent successfully")
+#
+#     except Exception as e:
+#         print("Email Error:", e)
+
+
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+import os
+
+def send_otp_email(to_email, otp):
+
+    print("SENDGRID FUNCTION STARTED")
+
+    try:
+        message = Mail(
+            from_email=os.getenv("EMAIL"),
+            to_emails=to_email,
+            subject="GyanaGhar OTP Verification",
+            html_content=f"<h2>Your OTP is: {otp}</h2>"
+        )
+
+        sg = SendGridAPIClient(os.getenv("SENDGRID_API_KEY"))
+        response = sg.send(message)
+
+        print("Email sent successfully ✅")
+        print("Status Code:", response.status_code)
+
+    except Exception as e:
+        print("Email Error:", e)
 
 
 
@@ -1178,18 +1249,17 @@ login_manager.login_view = "login"
 class User(UserMixin, db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
-
     name = db.Column(db.String(100))
-
     email = db.Column(db.String(100), unique=True)
-
     password = db.Column(db.String(200))
-
     role = db.Column(db.String(20), default="student")
 
     secret_question = db.Column(db.String(200))
-
     secret_answer = db.Column(db.String(200))
+
+    # NEW SECURITY FIELDS
+    is_verified = db.Column(db.Boolean, default=False)
+    otp = db.Column(db.String(6))
 
 
 
@@ -1257,6 +1327,7 @@ def load_user(user_id):
 @app.route('/')
 def home():
     return render_template("home.html")
+
 # ================= REGISTER =================
 
 @app.route('/register', methods=['GET','POST'])
@@ -1264,20 +1335,67 @@ def register():
 
     if request.method == "POST":
 
+        email = request.form['email']
+        password = request.form['password']
+
+        #  Email validation
+        if not is_valid_email(email):
+            return "Invalid email format"
+
+        #  Duplicate check
+        if User.query.filter_by(email=email).first():
+            return "Email already exists"
+
+        #  Password strength
+        if len(password) < 6:
+            return "Password too weak"
+
+        otp = generate_otp()
+
         user = User(
             name=request.form['name'],
-            email=request.form['email'],
-            password=generate_password_hash(request.form['password']),
+            email=email,
+            password=generate_password_hash(password),
             secret_question=request.form['secret_question'],
-            secret_answer=request.form['secret_answer'].lower()
+            secret_answer=request.form['secret_answer'].lower(),
+            otp=otp
         )
 
         db.session.add(user)
         db.session.commit()
 
-        return redirect("/login")
+        send_otp_email(email, otp)  # temporary
+
+        session['verify_email'] = email
+
+        return redirect("/verify_otp")
 
     return render_template("register.html")
+
+
+#  =========== verify Otp ==========
+@app.route('/verify_otp', methods=['GET','POST'])
+def verify_otp():
+
+    if request.method == "POST":
+
+        user_otp = request.form['otp']
+        email = session.get('verify_email')
+
+        user = User.query.filter_by(email=email).first()
+
+        if user and user.otp == user_otp:
+            user.is_verified = True
+            user.otp = None
+            db.session.commit()
+
+            return redirect("/login")
+
+        else:
+            return "Invalid OTP"
+
+    return render_template("verify_otp.html")
+
 
 
 # ================= LOGIN =================
@@ -1287,11 +1405,30 @@ def login():
 
     if request.method == "POST":
 
-        user = User.query.filter_by(email=request.form['email']).first()
+        email = request.form['email']
+        password = request.form['password']
 
-        if user and check_password_hash(user.password, request.form['password']):
+        user = User.query.filter_by(email=email).first()
+
+        if not user:
+            return "User not found"
+
+        if not user.is_verified:
+            return "Verify your account first"
+
+        if check_password_hash(user.password, password):
+
+            session['attempts'] = 0
             login_user(user)
             return redirect("/dashboard")
+
+        else:
+            session['attempts'] = session.get('attempts', 0) + 1
+
+            if session['attempts'] > 5:
+                return "Too many attempts. Try later"
+
+            return "Invalid password"
 
     return render_template("login.html")
 
