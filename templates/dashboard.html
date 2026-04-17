@@ -1202,88 +1202,17 @@
 
 
 
+{% extends "base.html" %}
 
-<!DOCTYPE html>
-<html>
-<head>
-
-<title>Dashboard - GyanaGhar</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+{% block content %}
 
 <style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
-
-/* BODY */
-
-body{
-font-family:'Poppins', sans-serif;
-background:#0f0f0f;
-color:white;
-}
-
-/* LOADER */
-
-#loader{
-position:fixed;
-width:100%;
-height:100%;
-background:#0f0f0f;
-display:flex;
-justify-content:center;
-align-items:center;
-z-index:9999;
-}
-
-.spinner{
-width:40px;
-height:40px;
-border:3px solid #333;
-border-top:3px solid #ff4d4d;
-border-radius:50%;
-animation:spin 1s linear infinite;
-}
-
-@keyframes spin{
-100%{transform:rotate(360deg);}
-}
-
-/* NAVBAR */
-
-.navbar{
-position:sticky;
-top:0;
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:12px 16px;
-background:#111;
-border-bottom:1px solid rgba(255,255,255,0.08);
-z-index:100;
-}
-
-.navbar h3{
-font-size:16px;
-font-weight:500;
-}
-
-/* CONTAINER */
-
 .container{
 width:94%;
 margin:auto;
 margin-top:18px;
-padding-bottom:80px;
+padding-bottom:100px;
 }
-
-/* WELCOME */
 
 .welcome-card{
 background:#1a1a1a;
@@ -1304,16 +1233,12 @@ color:#aaa;
 margin-top:5px;
 }
 
-/* GRID */
-
 .class-grid{
 display:grid;
 grid-template-columns:1fr;
 gap:12px;
 margin-top:18px;
 }
-
-/* CARD */
 
 .class-card{
 background:#1a1a1a;
@@ -1330,7 +1255,6 @@ background:#202020;
 
 .class-card h3{
 font-size:14px;
-font-weight:500;
 }
 
 .class-card a{
@@ -1345,12 +1269,6 @@ text-decoration:none;
 color:white;
 }
 
-.class-card a:active{
-transform:scale(0.97);
-}
-
-/* DELETE BUTTON */
-
 .delete-btn{
 margin-top:8px;
 width:100%;
@@ -1362,12 +1280,9 @@ border-radius:6px;
 font-size:12px;
 }
 
-/* ADMIN PANEL */
-
 .admin-title{
 margin-top:25px;
 font-size:14px;
-font-weight:500;
 color:#ddd;
 }
 
@@ -1383,36 +1298,12 @@ background:#1a1a1a;
 padding:12px;
 border-radius:8px;
 text-align:center;
-border:1px solid rgba(255,255,255,0.05);
-transition:0.2s;
-}
-
-.admin-card:hover{
-background:#202020;
 }
 
 .admin-card a{
 text-decoration:none;
 color:#ddd;
-font-size:13px;
 }
-
-/* SKELETON */
-
-.skeleton{
-height:70px;
-border-radius:10px;
-background:linear-gradient(90deg,#1a1a1a 25%,#2a2a2a 50%,#1a1a1a 75%);
-background-size:200% 100%;
-animation:loading 1.2s infinite;
-}
-
-@keyframes loading{
-0%{background-position:200% 0;}
-100%{background-position:-200% 0;}
-}
-
-/* RESPONSIVE */
 
 @media(min-width:600px){
 .class-grid{grid-template-columns:repeat(2,1fr);}
@@ -1423,65 +1314,16 @@ animation:loading 1.2s infinite;
 .class-grid{grid-template-columns:repeat(3,1fr);}
 .admin-grid{grid-template-columns:repeat(3,1fr);}
 }
-
-/* BOTTOM NAV */
-
-.bottom-nav{
-position:fixed;
-bottom:0;
-width:100%;
-background:#111;
-display:flex;
-justify-content:space-around;
-padding:10px 0;
-border-top:1px solid rgba(255,255,255,0.08);
-}
-
-.bottom-nav a{
-color:#aaa;
-text-decoration:none;
-font-size:12px;
-flex:1;
-text-align:center;
-}
-
-.bottom-nav a.active{
-color:#fff;
-}
-
 </style>
-
-</head>
-
-<body>
-
-<!-- LOADER -->
-<div id="loader"><div class="spinner"></div></div>
-
-<!-- NAVBAR -->
-<div class="navbar">
-<h3>GyanaGhar</h3>
-</div>
 
 <div class="container">
 
-<!-- WELCOME -->
 <div class="welcome-card">
-<h2>
-Welcome, {{ current_user.name or current_user.email }}
-</h2>
+<h2>Welcome, {{ current_user.name or current_user.email }}</h2>
 <p>Select your class to start learning</p>
 </div>
 
-<!-- CLASSES -->
-
-<div id="skeleton-wrapper" class="class-grid">
-<div class="skeleton"></div>
-<div class="skeleton"></div>
-<div class="skeleton"></div>
-</div>
-
-<div id="content" class="class-grid" style="display:none;">
+<div class="class-grid">
 
 {% for c in classes %}
 <div class="class-card">
@@ -1490,17 +1332,13 @@ Welcome, {{ current_user.name or current_user.email }}
 <a href="/class/{{ c.id }}">Enter</a>
 
 {% if current_user.role == "admin" %}
-<button onclick="deleteClass({{ c.id }})" class="delete-btn">
-Delete
-</button>
+<button onclick="deleteClass({{ c.id }})" class="delete-btn">Delete</button>
 {% endif %}
 
 </div>
 {% endfor %}
 
 </div>
-
-<!-- ADMIN PANEL -->
 
 {% if current_user.role == "admin" %}
 
@@ -1519,14 +1357,6 @@ Delete
 
 </div>
 
-<!-- BOTTOM NAV -->
-
-<div class="bottom-nav">
-<a href="/dashboard" class="active">Home</a>
-<a href="/profile">Profile</a>
-<a href="/logout">Logout</a>
-</div>
-
 <script>
 function deleteClass(id){
 if(confirm("Delete this class?")){
@@ -1535,15 +1365,4 @@ window.location.href="/delete_class/"+id;
 }
 </script>
 
-<script>
-window.onload = function(){
-setTimeout(()=>{
-document.getElementById("loader").style.display="none";
-document.getElementById("skeleton-wrapper").style.display="none";
-document.getElementById("content").style.display="grid";
-},600);
-}
-</script>
-
-</body>
-</html>
+{% endblock %}

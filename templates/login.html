@@ -108,6 +108,21 @@
             color: #2a5298;
         }
 
+        /* 🔥 LEGAL TEXT */
+
+        .legal-text {
+            font-size: 12px;
+            margin-top: 10px;
+            text-align: center;
+            color: #555;
+        }
+
+        .legal-text a {
+            color: #2a5298;
+            text-decoration: none;
+            margin: 0 3px;
+        }
+
         /* PREMIUM FOOTER */
 
         .premium-footer {
@@ -136,15 +151,14 @@
             to { transform: translateX(-50%); }
         }
 
-        .social-icons a {
-            margin: 0 10px;
-            font-size: 20px;
+        footer a {
+            color: #ffcc00;
             text-decoration: none;
-            transition: 0.3s;
+            margin: 0 6px;
         }
 
-        .social-icons a:hover {
-            transform: scale(1.3);
+        footer a:hover {
+            text-decoration: underline;
         }
 
         @media (max-width: 768px) {
@@ -184,19 +198,32 @@
             <p>Don't have an account? <a href="/register">Register</a></p>
         </div>
 
+        <!-- 🔥 LEGAL LINE -->
+        <div class="legal-text">
+            By logging in, you agree to
+            <a href="/terms">Terms</a> &
+            <a href="/privacy-policy">Privacy Policy</a>
+        </div>
+
     </div>
 </div>
 
 <footer class="premium-footer">
     <div class="wave"></div>
 
-    <h3>GyanaGhar 🎓</h3>
+    <h3>GyanaGhar </h3>
     <p>Empowering Students with Smart Learning</p>
 
-
+    <!-- 🔥 LEGAL LINKS -->
+    <p>
+        <a href="/privacy-policy">Privacy Policy</a> |
+        <a href="/terms">Terms</a> |
+        <a href="/about">About</a> |
+        <a href="/disclaimer">Disclaimer</a>
+    </p>
 
     <p>Contact: support@gyanaghar.com</p>
-    <p>© 2026 GyanaGhar | Built by Rahul Nayak </p>
+    <p>© 2026 GyanaGhar | Built by Rahul Nayak</p>
 </footer>
 
 <script>
