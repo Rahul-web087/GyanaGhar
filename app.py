@@ -1470,7 +1470,7 @@ def login():
 
 
 # =========== Resend OTP ========
-@app.route('/resend_otp')
+@app.route('/resend_otp', methods=['GET','POST'])
 def resend_otp():
 
     email = session.get('verify_email')
