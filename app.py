@@ -1423,6 +1423,24 @@ def verify_otp():
     return render_template("verify_otp.html")
 
 
+# ================= ALL LEGAL TEARM ==============
+
+@app.route("/privacy-policy")
+def privacy():
+    return render_template("privacy.html")
+
+@app.route("/terms")
+def terms():
+    return render_template("terms.html")
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
+@app.route("/disclaimer")
+def disclaimer():
+    return render_template("disclaimer.html")
+
 
 
 
