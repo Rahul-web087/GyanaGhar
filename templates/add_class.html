@@ -1,45 +1,94 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Add Class - GyanaGhar</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Class - GyanaGhar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .form-card h2 {
+    color: white;
+    font-size: 22px;
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+    color: #ccc;
+}
+
+input {
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
+    border: 1px solid #333;
+    background: #1a1a1a;
+    color: white;
+    font-size: 16px;
+}
+
+input:focus {
+    outline: none;
+    border: 1px solid #ff4d4d;
+    box-shadow: 0 0 5px #ff4d4d;
+}
+
+button {
+    width: 100%;
+    margin-top: 10px;
+    padding: 14px;
+    border-radius: 10px;
+    background: linear-gradient(45deg, #ff4d4d, #ff0000);
+    font-size: 16px;
+    font-weight: bold;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+    </style>
 </head>
 
 <body>
 
+<!-- NAVBAR -->
 <div class="navbar">
-<h1>GyanaGhar 🎓</h1>
+    <h1>GyanaGhar</h1>
 
-<div>
-<a href="/dashboard">Dashboard</a>
-<a href="/logout">Logout</a>
-</div>
+    <div>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/logout">Logout</a>
+    </div>
 </div>
 
+<!-- FORM -->
 <div class="container">
 
-<div class="form-card">
+    <div class="form-card">
+        <h2>➕ Add New Class</h2>
 
-<h2>➕ Add New Class</h2>
+        <form method="POST">
+            <label>Class Name</label>
+            <input type="text" name="name" placeholder="Example: Class 6" required>
 
-<form method="POST">
-
-<label>Class Name</label>
-
-<input type="text" name="name" placeholder="Example: Class 6" required>
-
-<button type="submit">Add Class</button>
-
-</form>
+            <button type="submit">Add Class</button>
+        </form>
+    </div>
 
 </div>
 
-</div>
-
+<!-- FOOTER -->
 <footer class="footer">
-© 2026 GyanaGhar | Built by Rahul Nayak
+    © 2026 GyanaGhar | Built by Rahul Nayak
 </footer>
+
+<!-- FIX BUG + ANIMATION -->
+<script>
+    window.onload = function () {
+        document.body.style.opacity = "1";
+    };
+</script>
 
 </body>
 </html>
