@@ -32,31 +32,30 @@
         </div>
     </div>
 
-    <!-- PREMIUM BOTTOM NAV -->
+    <!-- BOTTOM NAV -->
     <nav class="bottom-nav">
 
-    <a href="/dashboard" class="nav-item">
-        <span class="material-icons">home</span>
-    </a>
+        <a href="/dashboard" class="nav-item">
+            <span class="material-icons">home</span>
+        </a>
 
-    <a href="/class/1" class="nav-item">
-        <span class="material-icons">menu_book</span>
-    </a>
+        <a href="/class/1" class="nav-item">
+            <span class="material-icons">menu_book</span>
+        </a>
 
-    <a href="/profile" class="nav-item">
-        <span class="material-icons">person</span>
-    </a>
+        <a href="/profile" class="nav-item">
+            <span class="material-icons">person</span>
+        </a>
 
-    <a href="/logout" class="nav-item">
-        <span class="material-icons">logout</span>
-    </a>
+        <a href="/logout" class="nav-item">
+            <span class="material-icons">logout</span>
+        </a>
 
-</nav>
+    </nav>
 
     <!-- ACTIVE NAV -->
     <script>
         const links = document.querySelectorAll('.nav-item');
-
         links.forEach(link => {
             if (link.href === window.location.href) {
                 link.classList.add('active');
@@ -64,16 +63,12 @@
         });
     </script>
 
-    <!-- SMOOTH FADE -->
+    <!--  FIXED FADE ANIMATION -->
     <script>
-       <script>
-    window.addEventListener("load", () => {
-        document.body.style.opacity = "1";
-    });
-</script>
-
-
+        window.addEventListener("load", function () {
+            document.body.style.opacity = "1";
+        });
+    </script>
 
 </body>
-
 </html>
