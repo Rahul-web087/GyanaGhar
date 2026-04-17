@@ -1444,7 +1444,8 @@ def login():
 
         #  OTP check (skip for admin)
         if not user.is_verified and user.role != "admin":
-            return "Verify your account first"
+            session['verify_email'] = user.email
+            return redirect("/verify_otp")
 
         #  ADMIN SPECIAL CHECK (ADD HERE)
         if user.role == "admin" and not check_password_hash(user.password, password):
