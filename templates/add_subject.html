@@ -1,58 +1,115 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Add Subject - GyanaGhar</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
+{% extends "base.html" %}
 
-<body>
+{% block content %}
 
-<div class="navbar">
-<h1>GyanaGhar 🎓</h1>
+<style>
+/* Page specific styling */
+.form-card {
+    background: linear-gradient(145deg, #1a1a1a, #121212);
+    padding: 25px;
+    border-radius: 15px;
+    max-width: 400px;
+    margin: auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    animation: fadeUp 0.5s ease;
+}
 
-<div>
-<a href="/dashboard">Dashboard</a>
-<a href="/logout">Logout</a>
-</div>
-</div>
+.form-card h2 {
+    margin-bottom: 20px;
+    color: white;
+}
 
+label {
+    display: block;
+    margin-top: 10px;
+    color: #ccc;
+}
+
+select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #333;
+    background: #1a1a1a;
+    color: white;
+    margin-bottom: 15px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #333;
+    background: #1a1a1a;
+    color: white;
+    margin-bottom: 15px;
+}
+
+input:focus, select:focus {
+    border: 1px solid #ff4d4d;
+    box-shadow: 0 0 5px #ff4d4d;
+    outline: none;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    background: linear-gradient(45deg, #ff4d4d, #ff0000);
+    font-size: 16px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+/* Animation */
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
 
 <div class="container">
 
-<div class="form-card">
+    <div class="form-card">
 
-<h2>📚 Add Subject</h2>
+        <h2>📚 Add Subject</h2>
 
-<form method="POST">
+        <form method="POST">
 
-<label>Select Class</label>
+            <label>Select Class</label>
 
-<select name="class_id">
+            <select name="class_id" required>
+                {% for c in classes %}
+                    <option value="{{ c.id }}">{{ c.name }}</option>
+                {% endfor %}
+            </select>
 
-{% for c in classes %}
+            <label>Subject Name</label>
 
-<option value="{{ c.id }}">{{ c.name }}</option>
+            <input type="text" name="name" placeholder="Example: Mathematics" required>
 
-{% endfor %}
+            <button type="submit">Add Subject</button>
 
-</select>
+        </form>
 
-<label>Subject Name</label>
-
-<input type="text" name="name" placeholder="Example: Mathematics" required>
-
-<button type="submit">Add Subject</button>
-
-</form>
-
-</div>
+    </div>
 
 </div>
 
 <footer class="footer">
-© 2026 GyanaGhar | Built by Rahul Nayak
+    © 2026 GyanaGhar | Built by Rahul Nayak
 </footer>
 
-</body>
-</html>
+{% endblock %}

@@ -1,74 +1,110 @@
-<!DOCTYPE html>
+{% extends "base.html" %}
 
-<html>
-<head>
-<title>Add Note</title>
-
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+{% block content %}
 
 <style>
 .form-box{
-background:white;
-padding:25px;
-border-radius:10px;
-width:400px;
-margin:auto;
-box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    background: linear-gradient(145deg, #1a1a1a, #121212);
+    padding:25px;
+    border-radius:15px;
+    max-width:500px;
+    margin:auto;
+    box-shadow:0 10px 30px rgba(0,0,0,0.6);
+    animation: fadeUp 0.5s ease;
+}
+
+h3{
+    text-align:center;
+    margin-bottom:15px;
+}
+
+label{
+    display:block;
+    margin-top:10px;
+    color:#ccc;
 }
 
 .form-box input,
 .form-box select,
 .form-box textarea{
-width:100%;
-padding:10px;
-margin-top:10px;
-border:1px solid #ccc;
-border-radius:5px;
+    width:100%;
+    padding:12px;
+    margin-top:8px;
+    border:1px solid #333;
+    border-radius:8px;
+    background:#1a1a1a;
+    color:white;
+}
+
+.form-box textarea{
+    resize:vertical;
+    min-height:80px;
+}
+
+.form-box input:focus,
+.form-box select:focus,
+.form-box textarea:focus{
+    outline:none;
+    border:1px solid #ff4d4d;
+    box-shadow:0 0 5px #ff4d4d;
 }
 
 .form-box button{
-margin-top:15px;
-padding:10px;
-width:100%;
-background:#007bff;
-color:white;
-border:none;
-border-radius:5px;
-font-size:16px;
-cursor:pointer;
+    margin-top:12px;
+    padding:12px;
+    width:100%;
+    border-radius:10px;
+    background: linear-gradient(45deg, #ff4d4d, #ff0000);
+    color:white;
+    border:none;
+    cursor:pointer;
+    transition:0.3s;
 }
 
 .form-box button:hover{
-background:#0056b3;
+    transform:scale(1.05);
 }
 
 .qa-item{
-margin-top:10px;
+    margin-top:10px;
+    background:#151515;
+    padding:10px;
+    border-radius:10px;
+}
+
+.remove-btn{
+    background:#444;
+    margin-top:5px;
+}
+
+.remove-btn:hover{
+    background:#ff0000;
+}
+
+/* Animation */
+@keyframes fadeUp {
+    from {
+        opacity:0;
+        transform:translateY(30px);
+    }
+    to {
+        opacity:1;
+        transform:translateY(0);
+    }
 }
 </style>
 
-</head>
-
-<body>
-
-<div class="navbar">
-<h1>Add Note - Admin</h1>
-<a href="/dashboard">Dashboard</a>
-<a href="/logout">Logout</a>
-</div>
-
 <div class="container">
 
-<h3 style="text-align:center;">Add New Note</h3>
+<h3>📝 Add New Note</h3>
 
 <div class="form-box">
 
 <form method="POST" enctype="multipart/form-data">
 
 <!-- Class -->
-
-<label>Select Class</label> <select id="classSelect">
-
+<label>Select Class</label>
+<select id="classSelect">
 <option value="">Select Class</option>
 {% for c in classes %}
 <option value="{{ c.id }}">{{ c.name }}</option>
@@ -76,9 +112,8 @@ margin-top:10px;
 </select>
 
 <!-- Subject -->
-
-<label>Select Subject</label> <select id="subjectSelect">
-
+<label>Select Subject</label>
+<select id="subjectSelect">
 <option value="">Select Subject</option>
 {% for s in subjects %}
 <option value="{{ s.id }}" data-class="{{ s.class_id }}">
@@ -88,9 +123,8 @@ margin-top:10px;
 </select>
 
 <!-- Chapter -->
-
-<label>Select Chapter</label> <select name="chapter_id" id="chapterSelect" required>
-
+<label>Select Chapter</label>
+<select name="chapter_id" id="chapterSelect" required>
 <option value="">Select Chapter</option>
 {% for ch in chapters %}
 <option value="{{ ch.id }}" data-subject="{{ ch.subject_id }}">
@@ -99,10 +133,10 @@ margin-top:10px;
 {% endfor %}
 </select>
 
-<label>Note Title</label> <input type="text" name="title" placeholder="Enter Note Title" required>
+<label>Note Title</label>
+<input type="text" name="title" placeholder="Enter Note Title" required>
 
-<!-- MULTIPLE Q&A -->
-
+<!-- Q&A -->
 <div id="qa-container">
 
 <div class="qa-item">
@@ -114,9 +148,11 @@ margin-top:10px;
 
 <button type="button" onclick="addQA()">➕ Add More Q&A</button>
 
-<label>YouTube Video Link</label> <input type="text" name="video_link" placeholder="Paste embed link (optional)">
+<label>YouTube Video Link</label>
+<input type="text" name="video_link" placeholder="Paste embed link (optional)">
 
-<label>Upload PDF</label> <input type="file" name="pdf_file">
+<label>Upload PDF</label>
+<input type="file" name="pdf_file">
 
 <button type="submit">Add Note</button>
 
@@ -126,8 +162,11 @@ margin-top:10px;
 
 </div>
 
-<!-- JS -->
+<footer class="footer">
+© 2026 GyanaGhar | Built by Rahul Nayak
+</footer>
 
+<!-- JS -->
 <script>
 function addQA() {
     var container = document.getElementById("qa-container");
@@ -138,14 +177,13 @@ function addQA() {
     div.innerHTML =
         '<textarea name="question[]" placeholder="Enter Question" required></textarea>' +
         '<textarea name="answer[]" placeholder="Enter Answer" required></textarea>' +
-        '<button type="button" onclick="this.parentElement.remove()">❌ Remove</button>';
+        '<button type="button" class="remove-btn" onclick="this.parentElement.remove()">❌ Remove</button>';
 
     container.appendChild(div);
 }
 </script>
 
-<!-- Filter Script -->
-
+<!-- FILTER -->
 <script>
 const classSelect = document.getElementById("classSelect");
 const subjectSelect = document.getElementById("subjectSelect");
@@ -181,5 +219,4 @@ subjectSelect.addEventListener("change", function () {
 });
 </script>
 
-</body>
-</html>
+{% endblock %}
