@@ -55,6 +55,7 @@ body {
     font-size: 14px;
     color: #aaa;
     border-top: 1px solid #222;
+    margin-top: auto;
 }
 
 /* ========================= */
@@ -147,10 +148,17 @@ input:focus, select:focus, textarea:focus {
     color: #ff4d4d;
     transform: scale(1.2);
 }
-/* Hide bottom nav in app */
+
+/*  Hide bottom nav in app */
 .app-mode .bottom-nav {
     display: none !important;
 }
+
+/*  Remove extra bottom space in app */
+.app-mode .main-container {
+    padding-bottom: 20px;
+}
+
 /* ========================= */
 /* MOBILE */
 /* ========================= */
