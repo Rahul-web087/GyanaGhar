@@ -67,6 +67,15 @@
             }
         });
     </script>
+  <!-- Hide buutom -->
+
+<script>
+    const isApp = /wv|Android|iPhone/i.test(navigator.userAgent);
+
+    if (isApp) {
+        document.body.classList.add("app-mode");
+    }
+</script>
 
     <!--  FIXED FADE ANIMATION -->
     <script>

@@ -147,7 +147,10 @@ input:focus, select:focus, textarea:focus {
     color: #ff4d4d;
     transform: scale(1.2);
 }
-
+/* Hide bottom nav in app */
+.app-mode .bottom-nav {
+    display: none !important;
+}
 /* ========================= */
 /* MOBILE */
 /* ========================= */
