@@ -1463,20 +1463,20 @@ def login():
         if not user:
             return "User not found"
 
-        #  STEP 3: BLOCK DELETED USERS (ADD THIS HERE)
+        #  ADD HERE
         if user.is_deleted:
             return "This account has been deleted by admin"
 
-        #  OTP check (skip for admin)
+        # OTP check (skip for admin)
         if not user.is_verified and user.role != "admin":
             session['verify_email'] = user.email
             return redirect("/verify_otp")
 
-        #  ADMIN SPECIAL CHECK
+        # ADMIN SPECIAL CHECK
         if user.role == "admin" and not check_password_hash(user.password, password):
             return "Wrong admin password"
 
-        #  NORMAL LOGIN
+        # NORMAL LOGIN
         if check_password_hash(user.password, password):
 
             session['attempts'] = 0
@@ -2419,14 +2419,44 @@ def delete_user(user_id):
     if user.id == current_user.id:
         return "You cannot delete yourself"
 
-    #  delete related data (IMPORTANT)
-    # Example:
-    # Note.query.filter_by(user_id=user.id).delete()
-
-    db.session.delete(user)
+    #  SOFT DELETE
+    user.is_deleted = True
     db.session.commit()
 
     return redirect("/admin/users")
+
+
+# ======= Admin restore USer =======
+
+@app.route('/admin/restore_user/<int:user_id>', methods=['POST'])
+@login_required
+def restore_user(user_id):
+
+    if current_user.role != "admin":
+        return "Access Denied"
+
+    user = User.query.get(user_id)
+
+    if not user:
+        return "User not found"
+
+    # 🔥 RESTORE
+    user.is_deleted = False
+    db.session.commit()
+
+    return redirect("/admin/deleted_users")
+#  ====== Admin deleted user =======
+
+@app.route('/admin/deleted_users')
+@login_required
+def deleted_users():
+
+    if current_user.role != "admin":
+        return "Access Denied"
+
+    users = User.query.filter_by(is_deleted=True).all()
+
+    return render_template("deleted_users.html", users=users)
 
 
 

@@ -6,11 +6,11 @@
 
 <h2>👨‍💻 Manage Users</h2>
 
-<input type="text" id="search" placeholder="Search by email..." onkeyup="searchUser()">
+<input type="text" id="search" placeholder="Search email..." onkeyup="searchUser()">
 
 <br><br>
 
-<table style="width:100%; text-align:left;">
+<table style="width:100%">
 <tr>
     <th>Email</th>
     <th>Role</th>
@@ -26,7 +26,7 @@
         {% if user.role != "admin" %}
         <form method="POST" action="/admin/delete_user/{{ user.id }}">
             <button onclick="return confirm('Delete this user?')">
-                ❌ Delete
+                🗑 Delete
             </button>
         </form>
         {% else %}
@@ -47,8 +47,8 @@ function searchUser() {
     let rows = document.querySelectorAll(".user-row");
 
     rows.forEach(row => {
-        let email = row.innerText.toLowerCase();
-        row.style.display = email.includes(input) ? "" : "none";
+        let text = row.innerText.toLowerCase();
+        row.style.display = text.includes(input) ? "" : "none";
     });
 }
 </script>
