@@ -2376,6 +2376,52 @@ def student_dashboard():
     )
 
 
+# ======== Admin User Find =======
+@app.route('/admin/users')
+@login_required
+def admin_users():
+
+    if current_user.role != "admin":
+        return "Access Denied"
+
+    users = User.query.all()
+
+    return render_template("admin_users.html", users=users)
+
+
+
+# ====== Admin Delete User =========
+
+@app.route('/admin/delete_user/<int:user_id>', methods=['POST'])
+@login_required
+def delete_user(user_id):
+
+    if current_user.role != "admin":
+        return "Access Denied"
+
+    user = User.query.get(user_id)
+
+    if not user:
+        return "User not found"
+
+    #  prevent deleting admin
+    if user.role == "admin":
+        return "Cannot delete admin"
+
+    #  prevent deleting yourself
+    if user.id == current_user.id:
+        return "You cannot delete yourself"
+
+    #  delete related data (IMPORTANT)
+    # Example:
+    # Note.query.filter_by(user_id=user.id).delete()
+
+    db.session.delete(user)
+    db.session.commit()
+
+    return redirect("/admin/users")
+
+
 
 # ======= user delete account ========
 
