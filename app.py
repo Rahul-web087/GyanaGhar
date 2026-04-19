@@ -1133,6 +1133,7 @@ from flask import Flask, render_template, redirect, url_for, request, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
+
 from sqlalchemy import text
 from dotenv import load_dotenv
 load_dotenv()
@@ -1261,6 +1262,9 @@ class User(UserMixin, db.Model):
     is_verified = db.Column(db.Boolean, default=False)
     otp = db.Column(db.String(6))
     otp_created_at = db.Column(db.DateTime)
+
+    # Delete user
+    is_deleted = db.Column(db.Boolean, default=False)
 
 
 
@@ -1446,7 +1450,6 @@ def disclaimer():
 
 # ================= LOGIN =================
 
-
 @app.route('/login', methods=['GET','POST'])
 def login():
 
@@ -1460,12 +1463,16 @@ def login():
         if not user:
             return "User not found"
 
+        #  STEP 3: BLOCK DELETED USERS (ADD THIS HERE)
+        if user.is_deleted:
+            return "This account has been deleted by admin"
+
         #  OTP check (skip for admin)
         if not user.is_verified and user.role != "admin":
             session['verify_email'] = user.email
             return redirect("/verify_otp")
 
-        #  ADMIN SPECIAL CHECK (ADD HERE)
+        #  ADMIN SPECIAL CHECK
         if user.role == "admin" and not check_password_hash(user.password, password):
             return "Wrong admin password"
 
