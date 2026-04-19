@@ -1696,25 +1696,33 @@ def reset_password():
 #         name=current_user.name,
 #         classes=classes
 #     )
-
 @app.route("/dashboard")
 @login_required
 def dashboard():
 
-    total_subjects = db.session.execute(text("SELECT COUNT(*) FROM subject")).scalar()
-    total_chapters = db.session.execute(text("SELECT COUNT(*) FROM chapter")).scalar()
-    total_notes = db.session.execute(text("SELECT COUNT(*) FROM note")).scalar()
-    total_users = db.session.execute(text("SELECT COUNT(*) FROM user")).scalar()
+    #  USE ORM (clean + safe)
+    total_subjects = Subject.query.count()
+    total_chapters = Chapter.query.count()
+    total_notes = Note.query.count()
+    total_users = User.query.count()
 
-    #  FIX
+    #  SOFT DELETE STATS
+    active_users = User.query.filter_by(is_deleted=False).count()
+    deleted_users = User.query.filter_by(is_deleted=True).count()
+
+    # classes
     classes = Class.query.all()
 
-    return render_template("dashboard.html",
-                           subjects=total_subjects,
-                           chapters=total_chapters,
-                           notes=total_notes,
-                           users=total_users,
-                           classes=classes)
+    return render_template(
+        "dashboard.html",
+        subjects=total_subjects,
+        chapters=total_chapters,
+        notes=total_notes,
+        total_users=total_users,
+        active_users=active_users,
+        deleted_users=deleted_users,
+        classes=classes
+    )
 
 
 
