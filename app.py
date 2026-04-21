@@ -1679,7 +1679,38 @@ def reset_password():
 
 
 
+# ========== sitemap =======
 
+from flask import Response
+
+@app.route('/sitemap.xml')
+def sitemap():
+
+    pages = []
+
+    # static pages
+    pages.append("https://gyanaghar.onrender.com/")
+    pages.append("https://gyanaghar.onrender.com/login")
+    pages.append("https://gyanaghar.onrender.com/dashboard")
+
+    # dynamic (classes)
+    classes = Class.query.all()
+    for c in classes:
+        pages.append(f"https://gyanaghar.onrender.com/class/{c.id}")
+
+    sitemap_xml = '<?xml version="1.0" encoding="UTF-8"?>'
+    sitemap_xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+
+    for page in pages:
+        sitemap_xml += f"""
+        <url>
+            <loc>{page}</loc>
+        </url>
+        """
+
+    sitemap_xml += '</urlset>'
+
+    return Response(sitemap_xml, mimetype='application/xml')
 
 
 
@@ -1700,7 +1731,7 @@ def reset_password():
 @login_required
 def dashboard():
 
-    #  USE ORM (clean + safe)
+
     total_subjects = Subject.query.count()
     total_chapters = Chapter.query.count()
     total_notes = Note.query.count()
