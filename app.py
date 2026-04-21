@@ -1680,9 +1680,9 @@ def reset_password():
 # ========= Google html route ========
 from flask import send_from_directory
 
-@app.route('/googlexxxxxxxx.html')
+@app.route('/googlee1fd71ed91d76751 (1).html')
 def google_verify():
-    return send_from_directory('static', 'googlexxxxxxxx.html')
+    return send_from_directory('static', 'googlee1fd71ed91d76751 (1).html')
 
 
 
