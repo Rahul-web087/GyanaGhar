@@ -1677,6 +1677,20 @@ def reset_password():
     return "Session expired"
 
 
+# ========= Google html route ========
+from flask import send_from_directory
+
+@app.route('/googlexxxxxxxx.html')
+def google_verify():
+    return send_from_directory('static', 'googlexxxxxxxx.html')
+
+
+
+
+
+
+
+
 
 
 # ========== sitemap =======
