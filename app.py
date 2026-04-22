@@ -1685,7 +1685,17 @@ def google_verify():
     return send_from_directory('static', 'googlee1fd71ed91d76751.html')
 
 
+# ========= Roboots txt =======
 
+from flask import Response
+
+@app.route('/robots.txt')
+def robots():
+    return Response("""User-agent: *
+Allow: /
+
+Sitemap: https://gyanaghar.onrender.com/sitemap.xml
+""", mimetype="text/plain")
 
 
 
