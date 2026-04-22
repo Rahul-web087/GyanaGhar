@@ -1685,15 +1685,6 @@ def google_verify():
     return send_from_directory('static', 'googlee1fd71ed91d76751.html')
 
 
-# ======= Roboot text =======
-@app.route('/robots.txt')
-def robots():
-    return """User-agent: *
-Allow: /
-
-Sitemap: https://gyanaghar.onrender.com/sitemap.xml
-""", 200, {'Content-Type': 'text/plain'}
-
 
 
 
