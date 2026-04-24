@@ -309,110 +309,124 @@
 
 
 
-
-
 {% extends "base.html" %}
 
 {% block content %}
 
 <div class="container">
 
-<h3>Chapter Notes</h3>
+    <h3 style="text-align:center;">📘 Chapter Notes</h3>
 
-<div class="progress-box">
-    <div class="progress-bar" style="width: {{ progress_percent }}%;">
-        {{ progress_percent }}% Completed
-    </div>
-</div>
-
-{% if notes %}
-
-{% for note in notes %}
-
-{% set show_note = (note.title or (note.qa_data and note.qa_data != '[]')) %}
-
-{% if show_note %}
-
-<div class="note-card">
-
-    <div class="note-header">
-
-        <div class="note-title">
-            {{ note.title if note.title else "No Title" }}
+    <!-- PROGRESS -->
+    <div class="progress-box">
+        <div class="progress-bar" style="width: {{ progress_percent }}%;">
+            {{ progress_percent }}% Completed
         </div>
-
-        {% if current_user.role == "admin" %}
-        <div>
-            <a class="btn" href="{{ url_for('edit_note', note_id=note.id) }}">Edit</a>
-            <a class="btn btn-danger"
-               href="/admin/delete_note/{{ note.id }}"
-               onclick="return confirm('Delete this note?')">
-               Delete
-            </a>
-        </div>
-        {% endif %}
-
     </div>
 
-    <!-- QA -->
-    {% if note.qa_data and note.qa_data != '[]' %}
-    {% set qa_list = note.qa_data | from_json %}
-    {% for qa in qa_list %}
-    <div class="qa-box">
-        <div class="question">{{ qa.question }}</div>
-        <div class="answer">{{ qa.answer }}</div>
-    </div>
-    {% endfor %}
-    {% endif %}
+    {% if notes %}
 
-    <!-- VIDEO -->
-    {% if note.video_link %}
-    <iframe src="{{ note.video_link }}" allowfullscreen></iframe>
-    {% endif %}
+        {% for note in notes %}
 
-    <!-- PDF -->
-    {% if note.pdf_url %}
-    <a class="btn pdf-btn" href="/view_pdf?url={{ note.pdf_url }}">
-        Open PDF
-    </a>
-    {% endif %}
+            {% set show_note = (note.title or (note.qa_data and note.qa_data != '[]')) %}
 
-    <!-- COMPLETE -->
-    {% if note.id in completed_note_ids %}
-    <div class="completed">Completed</div>
+            {% if show_note %}
+
+            <div class="note-card">
+
+                <!-- HEADER -->
+                <div class="note-header">
+
+                    <div class="note-title">
+                        {{ note.title if note.title else "No Title" }}
+                    </div>
+
+                    {% if current_user.role == "admin" %}
+                    <div style="display:flex; gap:6px;">
+                        <a class="btn" href="{{ url_for('edit_note', note_id=note.id) }}">Edit</a>
+
+                        <a class="btn btn-danger"
+                           href="/admin/delete_note/{{ note.id }}"
+                           onclick="return confirm('Delete this note?')">
+                           Delete
+                        </a>
+                    </div>
+                    {% endif %}
+
+                </div>
+
+                <!-- QA -->
+                {% if note.qa_data and note.qa_data != '[]' %}
+                    {% set qa_list = note.qa_data | from_json %}
+
+                    {% for qa in qa_list %}
+                    <div class="qa-box">
+                        <div class="question">
+                            <b>Q:</b> {{ qa.question }}
+                        </div>
+                        <div class="answer">
+                            <b>Ans:</b> {{ qa.answer }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+
+                <!-- VIDEO -->
+                {% if note.video_link %}
+                <iframe src="{{ note.video_link }}" allowfullscreen></iframe>
+                {% endif %}
+
+                <!-- PDF -->
+                {% if note.pdf_url %}
+                <a class="btn pdf-btn" href="/view_pdf?url={{ note.pdf_url }}">
+                    📄 Open PDF
+                </a>
+                {% endif %}
+
+                <!-- COMPLETE -->
+                {% if note.id in completed_note_ids %}
+                    <div class="completed">✅ Completed</div>
+                {% else %}
+                    <a href="/mark_complete/{{ note.id }}" class="btn">
+                        Mark Complete
+                    </a>
+                {% endif %}
+
+            </div>
+
+            {% endif %}
+        {% endfor %}
+
     {% else %}
-    <a href="/mark_complete/{{ note.id }}" class="btn">
-        Mark Complete
-    </a>
+
+        <div class="empty">
+            <p>No notes available</p>
+        </div>
+
     {% endif %}
-
-</div>
-
-{% endif %}
-{% endfor %}
-
-{% else %}
-
-<div class="empty">
-    <p>No notes available</p>
-</div>
-
-{% endif %}
 
 </div>
 
 <!-- ANIMATION SCRIPT -->
 <script>
-const elements = document.querySelectorAll('.note-card');
+document.addEventListener("DOMContentLoaded", function () {
 
-window.addEventListener('scroll', () => {
-    elements.forEach(el => {
-        const position = el.getBoundingClientRect().top;
+    const elements = document.querySelectorAll('.note-card');
 
-        if (position < window.innerHeight - 50) {
-            el.classList.add('show');
-        }
-    });
+    function reveal() {
+        elements.forEach(el => {
+            const position = el.getBoundingClientRect().top;
+
+            if (position < window.innerHeight - 50) {
+                el.classList.add('show');
+            }
+        });
+    }
+
+    window.addEventListener('scroll', reveal);
+
+    // Run once on load
+    reveal();
 });
 </script>
 
