@@ -1484,7 +1484,7 @@ def verify_otp():
             return render_template("verify_otp.html", error="Invalid OTP")
 
         #  SUCCESS
-        user.is_verified = True
+        user.is_email_verified = True
         user.otp = None
         user.otp_attempts = 0   # reset attempts
 
@@ -1538,7 +1538,7 @@ def login():
             return "This account has been deleted by admin"
 
         # OTP check (skip for admin)
-        if not user.is_verified and user.role != "admin":
+        if not user.is_email_verified and user.role != "admin":
             session['verify_email'] = user.email
             return redirect("/verify_otp")
 
