@@ -1247,24 +1247,40 @@ def send_otp_email(to_email, otp):
 
 # ================= MODELS =================
 
+from datetime import datetime
+
 class User(UserMixin, db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
-    email = db.Column(db.String(100), unique=True)
-    password = db.Column(db.String(200))
+
+    # LOGIN OPTIONS
+    email = db.Column(db.String(100), unique=True, nullable=True)
+    mobile = db.Column(db.String(15), unique=True, nullable=True)
+
+    password = db.Column(db.String(200), nullable=True)  # allow OTP-only users
     role = db.Column(db.String(20), default="student")
 
+    # SECURITY
     secret_question = db.Column(db.String(200))
     secret_answer = db.Column(db.String(200))
 
-    # NEW SECURITY FIELDS
-    is_verified = db.Column(db.Boolean, default=False)
+    # VERIFICATION
+    is_email_verified = db.Column(db.Boolean, default=False)
+    is_mobile_verified = db.Column(db.Boolean, default=False)
+
+    # OTP SYSTEM
     otp = db.Column(db.String(6))
     otp_created_at = db.Column(db.DateTime)
+    otp_attempts = db.Column(db.Integer, default=0)
 
-    # Delete user
+    # DELETE
     is_deleted = db.Column(db.Boolean, default=False)
+
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f"<User {self.email or self.mobile}>"
 
 
 
@@ -1387,6 +1403,46 @@ def register():
 
     return render_template("register.html")
 
+# ======= send OTP ======
+
+from flask import request, redirect, session, flash
+
+
+@app.route('/send-otp', methods=['POST'])
+def send_otp():
+
+    email = request.form.get('email')
+
+    if not email:
+        flash("Enter email")
+        return redirect('/login')
+
+    otp = generate_otp()
+
+    # Check user
+    user = User.query.filter_by(email=email, is_deleted=False).first()
+
+    if not user:
+        user = User(email=email)
+        db.session.add(user)
+
+    #  OTP setup
+    user.otp = otp
+    user.otp_created_at = datetime.utcnow()
+    user.otp_attempts = 0
+
+    db.session.commit()
+
+    #  Bind session
+    session['otp_user_id'] = user.id
+
+    #  CALL  FUNCTION HERE
+    send_otp_email(email, otp)
+
+    flash("OTP sent to your email")
+
+    return redirect('/verify-otp')
+
 
 #  =========== verify Otp ==========
 
@@ -1405,24 +1461,38 @@ def verify_otp():
     if not user:
         return redirect("/register")
 
+    #  Fix None issue
+    if user.otp_attempts is None:
+        user.otp_attempts = 0
+
     if request.method == "POST":
 
         user_otp = request.form['otp']
 
+        #  Attempt limit
+        if user.otp_attempts >= 5:
+            return render_template("verify_otp.html", error="Too many attempts. Try again later.")
+
         #  OTP EXPIRY CHECK (5 MIN)
-        if datetime.utcnow() - user.otp_created_at > timedelta(minutes=5):
+        if not user.otp_created_at or datetime.utcnow() - user.otp_created_at > timedelta(minutes=5):
             return render_template("verify_otp.html", error="OTP expired")
 
-        if user.otp == user_otp:
-            user.is_verified = True
-            user.otp = None
+        #  Wrong OTP
+        if user.otp != user_otp:
+            user.otp_attempts += 1
             db.session.commit()
-
-            session.pop('verify_email', None)
-            return redirect("/login")
-
-        else:
             return render_template("verify_otp.html", error="Invalid OTP")
+
+        #  SUCCESS
+        user.is_verified = True
+        user.otp = None
+        user.otp_attempts = 0   # reset attempts
+
+        db.session.commit()
+
+        session.pop('verify_email', None)
+
+        return redirect("/login")
 
     return render_template("verify_otp.html")
 

@@ -1,100 +1,195 @@
 <!DOCTYPE html>
+
 <html>
 <head>
     <title>Verify OTP</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        body {
-            margin: 0;
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #0f172a, #1e293b);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            color: white;
-        }
 
-        .card {
-            background: #1e293b;
-            padding: 30px;
-            border-radius: 20px;
-            width: 350px;
-            text-align: center;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
-        }
+<style>
+    body {
+        margin: 0;
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #0f172a, #1e293b);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        color: white;
+    }
 
-        h2 {
-            margin-bottom: 20px;
-        }
+    .card {
+        background: #1e293b;
+        padding: 30px;
+        border-radius: 20px;
+        width: 350px;
+        text-align: center;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+    }
 
-        input {
-            width: 100%;
-            padding: 14px;
-            border-radius: 10px;
-            border: none;
-            margin-bottom: 15px;
-            font-size: 16px;
-        }
+    h2 {
+        margin-bottom: 10px;
+    }
 
-        button {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 10px;
-            background: #ef4444;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
+    p {
+        font-size: 14px;
+        opacity: 0.7;
+        margin-bottom: 20px;
+    }
 
-        button:hover {
-            background: #dc2626;
-        }
+    .otp-boxes {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
 
-        .success {
-            color: #22c55e;
-            margin-bottom: 10px;
-        }
+    .otp-input {
+        width: 45px;
+        height: 55px;
+        font-size: 22px;
+        text-align: center;
+        border-radius: 10px;
+        border: none;
+        background: #0f172a;
+        color: white;
+    }
 
-        .error {
-            color: #f87171;
-            margin-bottom: 10px;
-        }
+    .otp-input:focus {
+        outline: 2px solid #ef4444;
+    }
 
-        .resend {
-            margin-top: 10px;
-            background: #22c55e;
-        }
-    </style>
+    button {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 10px;
+        background: #ef4444;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    button:hover {
+        background: #dc2626;
+    }
+
+    .success {
+        color: #22c55e;
+        margin-bottom: 10px;
+    }
+
+    .error {
+        color: #f87171;
+        margin-bottom: 10px;
+    }
+
+    .resend {
+        margin-top: 10px;
+        background: #22c55e;
+    }
+
+    .resend:disabled {
+        background: #555;
+        cursor: not-allowed;
+    }
+</style>
+
+
 </head>
 
 <body>
 
 <div class="card">
 
-    <h2>🔐 Verify OTP</h2>
 
-    {% if error %}
-        <div class="error">{{ error }}</div>
-    {% endif %}
+<h2> Verify OTP</h2>
+<p>Enter the 6-digit code sent to your email</p>
 
-    {% if success %}
-        <div class="success">{{ success }}</div>
-    {% endif %}
+{% if error %}
+    <div class="error">{{ error }}</div>
+{% endif %}
 
-    <form method="POST">
-        <input type="text" name="otp" placeholder="Enter OTP" required>
-        <button type="submit">Verify</button>
-    </form>
+{% if success %}
+    <div class="success">{{ success }}</div>
+{% endif %}
 
-    <form action="/resend_otp">
-        <button class="resend">Resend OTP</button>
-    </form>
+<form method="POST" id="otpForm">
+
+    <div class="otp-boxes">
+        <input type="text" maxlength="1" class="otp-input">
+        <input type="text" maxlength="1" class="otp-input">
+        <input type="text" maxlength="1" class="otp-input">
+        <input type="text" maxlength="1" class="otp-input">
+        <input type="text" maxlength="1" class="otp-input">
+        <input type="text" maxlength="1" class="otp-input">
+    </div>
+
+    <input type="hidden" name="otp" id="otpValue">
+
+    <button type="submit">Verify</button>
+</form>
+
+<form action="/resend_otp" method="POST">
+    <button class="resend" id="resendBtn">Resend in 30s</button>
+</form>
+
 
 </div>
+
+<script>
+const inputs = document.querySelectorAll(".otp-input");
+const otpValue = document.getElementById("otpValue");
+const resendBtn = document.getElementById("resendBtn");
+
+// Auto focus first input
+inputs[0].focus();
+
+// Handle typing
+inputs.forEach((input, index) => {
+
+    input.addEventListener("input", () => {
+        if (input.value.length === 1 && index < inputs.length - 1) {
+            inputs[index + 1].focus();
+        }
+        updateOTP();
+    });
+
+    input.addEventListener("keydown", (e) => {
+        if (e.key === "Backspace" && !input.value && index > 0) {
+            inputs[index - 1].focus();
+        }
+    });
+
+});
+
+// Combine OTP
+function updateOTP() {
+    let otp = "";
+    inputs.forEach(input => otp += input.value);
+    otpValue.value = otp;
+
+    // Auto submit when complete
+    if (otp.length === 6) {
+        document.getElementById("otpForm").submit();
+    }
+}
+
+// Timer for resend
+let time = 30;
+resendBtn.disabled = true;
+
+const countdown = setInterval(() => {
+    time--;
+    resendBtn.innerText = "Resend in " + time + "s";
+
+    if (time <= 0) {
+        clearInterval(countdown);
+        resendBtn.disabled = false;
+        resendBtn.innerText = "Resend OTP";
+    }
+}, 1000);
+</script>
 
 </body>
 </html>
