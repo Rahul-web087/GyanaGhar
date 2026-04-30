@@ -254,6 +254,8 @@ input:focus, select:focus, textarea:focus {
 /* ========================= */
 /* BOTTOM NAV */
 /* ========================= */
+/* Bottom Navigation */
+
 .bottom-nav {
     position: fixed;
     bottom: 15px;
@@ -261,30 +263,56 @@ input:focus, select:focus, textarea:focus {
     transform: translateX(-50%);
     width: 85%;
     max-width: 380px;
-    height: 60px;
+    height: 65px;
     background: rgba(20, 20, 20, 0.95);
     border-radius: 30px;
     display: flex;
     justify-content: space-around;
     align-items: center;
-    backdrop-filter: blur(10px); /* NEW: premium look */
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    z-index: 1000;
 }
 
+/* Each nav item */
 .nav-item {
-    color: #aaa;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-decoration: none;
+    color: #aaa;
+    font-size: 11px;
     transition: 0.3s;
 }
 
-.nav-item.active {
-    color: #ff4d4d;
-    transform: scale(1.2);
+/* Icon */
+.nav-item .material-icons {
+    font-size: 22px;
+    margin-bottom: 2px;
 }
 
+/* Label text */
+.nav-item small {
+    font-size: 10px;
+}
+
+/* Hover effect */
 .nav-item:hover {
     color: #ff4d4d;
+    transform: translateY(-2px);
 }
 
+/* Active tab */
+.nav-item.active {
+    color: #ff4d4d;
+    transform: scale(1.15);
+}
+
+/* Logout slightly different */
+.nav-item.logout {
+    color: #ff6b6b;
+}
 /* ========================= */
 /* APP MODE */
 /* ========================= */
