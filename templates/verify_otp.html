@@ -5,7 +5,6 @@
     <title>Verify OTP</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
 <style>
     body {
         margin: 0;
@@ -27,9 +26,7 @@
         box-shadow: 0 15px 40px rgba(0,0,0,0.5);
     }
 
-    h2 {
-        margin-bottom: 10px;
-    }
+    h2 { margin-bottom: 10px; }
 
     p {
         font-size: 14px;
@@ -70,19 +67,10 @@
         transition: 0.3s;
     }
 
-    button:hover {
-        background: #dc2626;
-    }
+    button:hover { background: #dc2626; }
 
-    .success {
-        color: #22c55e;
-        margin-bottom: 10px;
-    }
-
-    .error {
-        color: #f87171;
-        margin-bottom: 10px;
-    }
+    .success { color: #22c55e; margin-bottom: 10px; }
+    .error { color: #f87171; margin-bottom: 10px; }
 
     .resend {
         margin-top: 10px;
@@ -95,45 +83,51 @@
     }
 </style>
 
-
 </head>
 
 <body>
 
 <div class="card">
 
-
-<h2> Verify OTP</h2>
+<h2>Verify OTP</h2>
 <p>Enter the 6-digit code sent to your email</p>
 
-{% if error %}
-    <div class="error">{{ error }}</div>
-{% endif %}
+<!--  FLASH MESSAGE SUPPORT -->
 
-{% if success %}
-    <div class="success">{{ success }}</div>
+{% with messages = get_flashed_messages() %}
+{% if messages %} <div class="success">{{ messages[0] }}</div>
+{% endif %}
+{% endwith %}
+
+{% if error %} <div class="error">{{ error }}</div>
 {% endif %}
 
 <form method="POST" id="otpForm">
 
-    <div class="otp-boxes">
-        <input type="text" maxlength="1" class="otp-input">
-        <input type="text" maxlength="1" class="otp-input">
-        <input type="text" maxlength="1" class="otp-input">
-        <input type="text" maxlength="1" class="otp-input">
-        <input type="text" maxlength="1" class="otp-input">
-        <input type="text" maxlength="1" class="otp-input">
-    </div>
 
-    <input type="hidden" name="otp" id="otpValue">
+<div class="otp-boxes">
+    <input type="text" maxlength="1" class="otp-input">
+    <input type="text" maxlength="1" class="otp-input">
+    <input type="text" maxlength="1" class="otp-input">
+    <input type="text" maxlength="1" class="otp-input">
+    <input type="text" maxlength="1" class="otp-input">
+    <input type="text" maxlength="1" class="otp-input">
 
-    <button type="submit">Verify</button>
+</div>
+
+<input type="hidden" name="otp" id="otpValue">
+
+<button type="submit">Verify</button>
+
+
 </form>
 
 <form action="/resend_otp" method="POST">
     <button class="resend" id="resendBtn">Resend in 30s</button>
+    <p style="font-size:13px; opacity:0.7; margin-top:10px;">
+📩 Didn’t receive OTP? Check your <b>Spam / Promotions</b> folder
+</p>
 </form>
-
 
 </div>
 
@@ -142,7 +136,7 @@ const inputs = document.querySelectorAll(".otp-input");
 const otpValue = document.getElementById("otpValue");
 const resendBtn = document.getElementById("resendBtn");
 
-// Auto focus first input
+// Autofocus first box
 inputs[0].focus();
 
 // Handle typing
@@ -163,19 +157,25 @@ inputs.forEach((input, index) => {
 
 });
 
+//  PASTE SUPPORT (important UX)
+inputs[0].addEventListener("paste", (e) => {
+    const pasteData = e.clipboardData.getData("text").slice(0,6);
+    inputs.forEach((input, i) => input.value = pasteData[i] || "");
+    updateOTP();
+});
+
 // Combine OTP
 function updateOTP() {
     let otp = "";
     inputs.forEach(input => otp += input.value);
     otpValue.value = otp;
 
-    // Auto submit when complete
     if (otp.length === 6) {
         document.getElementById("otpForm").submit();
     }
 }
 
-// Timer for resend
+// Timer
 let time = 30;
 resendBtn.disabled = true;
 
@@ -189,6 +189,10 @@ const countdown = setInterval(() => {
         resendBtn.innerText = "Resend OTP";
     }
 }, 1000);
+
+    window.onload = function() {
+    alert("OTP sent! If not found, please check your Spam or Promotions folder.");
+};
 </script>
 
 </body>

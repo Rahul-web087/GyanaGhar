@@ -1216,6 +1216,45 @@ def is_valid_email(email):
 #     except Exception as e:
 #         print("Email Error:", e)
 
+#
+# from sendgrid import SendGridAPIClient
+# from sendgrid.helpers.mail import Mail
+# import os
+#
+# def send_otp_email(to_email, otp):
+#
+#     print("SENDGRID FUNCTION STARTED")
+#
+#     try:
+#         message = Mail(
+#             from_email=os.getenv("EMAIL"),
+#             to_emails=to_email,
+#             subject="GyanaGhar OTP Verification",
+#             html_content=f"<h2>Your OTP is: {otp}</h2>"
+#         )
+#
+#         html_content = f"""
+#         <div style="font-family: Arial; text-align:center;">
+#             <h2>GyanaGhar Login OTP</h2>
+#             <p>Your OTP is:</p>
+#             <h1 style="color:red;">{otp}</h1>
+#             <p>This OTP is valid for 5 minutes.</p>
+#             <p style="font-size:12px;color:#555;">
+#                 If you did not request this, ignore this email.
+#             </p>
+#         </div>
+#         """
+#
+#
+#         sg = SendGridAPIClient(os.getenv("SENDGRID_API_KEY"))
+#         response = sg.send(message)
+#
+#         print("Email sent successfully ")
+#         print("Status Code:", response.status_code)
+#
+#     except Exception as e:
+#         print("Email Error:", e)
+
 
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
@@ -1230,13 +1269,25 @@ def send_otp_email(to_email, otp):
             from_email=os.getenv("EMAIL"),
             to_emails=to_email,
             subject="GyanaGhar OTP Verification",
-            html_content=f"<h2>Your OTP is: {otp}</h2>"
+
+            #  USE YOUR HTML HERE
+            html_content=f"""
+            <div style="font-family: Arial; text-align:center;">
+                <h2>GyanaGhar Login OTP</h2>
+                <p>Your OTP is:</p>
+                <h1 style="color:red;">{otp}</h1>
+                <p>This OTP is valid for 5 minutes.</p>
+                <p style="font-size:12px;color:#555;">
+                    If you did not request this, ignore this email.
+                </p>
+            </div>
+            """
         )
 
         sg = SendGridAPIClient(os.getenv("SENDGRID_API_KEY"))
         response = sg.send(message)
 
-        print("Email sent successfully ")
+        print("Email sent successfully")
         print("Status Code:", response.status_code)
 
     except Exception as e:
@@ -1439,7 +1490,7 @@ def send_otp():
     #  CALL  FUNCTION HERE
     send_otp_email(email, otp)
 
-    flash("OTP sent to your email")
+    flash("OTP sent! Check Inbox or Spam folder.")
 
     return redirect('/verify-otp')
 
@@ -1566,29 +1617,32 @@ def login():
 
 
 # =========== Resend OTP ========
-@app.route('/resend_otp', methods=['GET','POST'])
+@app.route('/resend_otp', methods=['POST'])
 def resend_otp():
 
-    email = session.get('verify_email')
+    user_id = session.get('otp_user_id')   #  FIXED
 
-    if not email:
-        return redirect("/register")
+    if not user_id:
+        return redirect("/login")
 
-    user = User.query.filter_by(email=email).first()
+    user = User.query.get(user_id)
 
     if not user:
-        return redirect("/register")
+        return redirect("/login")
 
     otp = generate_otp()
+
     user.otp = otp
     user.otp_created_at = datetime.utcnow()
+    user.otp_attempts = 0   # reset attempts
 
     db.session.commit()
 
-    send_otp_email(email, otp)
+    send_otp_email(user.email, otp)
 
-    return render_template("verify_otp.html", success="OTP sent again!")
+    flash("OTP sent again!")   #  better UX
 
+    return redirect("/verify_otp")   #  IMPORTANT
 
 # =============== Profile =============
 
