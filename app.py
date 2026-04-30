@@ -1492,7 +1492,7 @@ def send_otp():
 
     flash("OTP sent! Check Inbox or Spam folder.")
 
-    return redirect('/verify-otp')
+    return redirect('/verify_otp')
 
 
 #  =========== verify Otp ==========
