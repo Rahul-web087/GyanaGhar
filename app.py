@@ -1502,7 +1502,7 @@ from datetime import datetime, timedelta
 @app.route('/verify_otp', methods=['GET','POST'])
 def verify_otp():
 
-    user_id = session.get('otp_user_id')   #  FIXED
+    user_id = session.get('otp_user_id')
 
     if not user_id:
         return redirect("/login")
@@ -1512,39 +1512,35 @@ def verify_otp():
     if not user:
         return redirect("/login")
 
-    # Fix None issue
     if user.otp_attempts is None:
         user.otp_attempts = 0
 
     if request.method == "POST":
 
-        user_otp = request.form['otp']
+        user_otp = request.form.get('otp')
 
-        # Attempt limit
         if user.otp_attempts >= 5:
             return render_template("verify_otp.html", error="Too many attempts. Try again later.")
 
-        # OTP expiry (5 min)
         if not user.otp_created_at or datetime.utcnow() - user.otp_created_at > timedelta(minutes=5):
             return render_template("verify_otp.html", error="OTP expired")
 
-        # Wrong OTP
         if user.otp != user_otp:
             user.otp_attempts += 1
             db.session.commit()
             return render_template("verify_otp.html", error="Invalid OTP")
 
-        #  SUCCESS
+        # SUCCESS
         user.is_email_verified = True
         user.otp = None
         user.otp_attempts = 0
 
         db.session.commit()
 
-        #  Clear session
-        session.pop('otp_user_id', None)
+        # DO NOT clear session here
+        # Keep otp_user_id for reset-password
 
-        return redirect("/reset-password")   #  better flow
+        return redirect("/reset-password")
 
     return render_template("verify_otp.html")
 
@@ -1791,15 +1787,41 @@ def verify_secret():
 
 
 # -------- RESET PASSWORD --------
-@app.route('/reset_password', methods=['POST'])
+from werkzeug.security import generate_password_hash
+
+@app.route('/reset-password', methods=['GET', 'POST'])
 def reset_password():
-    user = User.query.get(session.get('reset_user'))
-    if user:
-        user.password = generate_password_hash(request.form['password'])
+
+    user_id = session.get('otp_user_id')   #  correct key
+
+    if not user_id:
+        return redirect("/login")
+
+    user = User.query.get(user_id)
+
+    if not user:
+        return redirect("/login")
+
+    if request.method == "POST":
+
+        password = request.form.get('password')
+        confirm = request.form.get('confirm_password')
+
+        #  password match check
+        if password != confirm:
+            return render_template("reset_password.html", error="Passwords do not match")
+
+        #  hash password
+        user.password = generate_password_hash(password)
+
         db.session.commit()
-        session.pop('reset_user', None)
-        return redirect(url_for('login'))
-    return "Session expired"
+
+        #  clear session AFTER success
+        session.pop('otp_user_id', None)
+
+        return redirect("/login")
+
+    return render_template("reset_password.html")
 
 
 # ========= Google html route ========
