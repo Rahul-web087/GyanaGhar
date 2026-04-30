@@ -1451,17 +1451,17 @@ from datetime import datetime, timedelta
 @app.route('/verify_otp', methods=['GET','POST'])
 def verify_otp():
 
-    email = session.get('verify_email')
+    user_id = session.get('otp_user_id')   #  FIXED
 
-    if not email:
-        return redirect("/register")
+    if not user_id:
+        return redirect("/login")
 
-    user = User.query.filter_by(email=email).first()
+    user = User.query.get(user_id)
 
     if not user:
-        return redirect("/register")
+        return redirect("/login")
 
-    #  Fix None issue
+    # Fix None issue
     if user.otp_attempts is None:
         user.otp_attempts = 0
 
@@ -1469,15 +1469,15 @@ def verify_otp():
 
         user_otp = request.form['otp']
 
-        #  Attempt limit
+        # Attempt limit
         if user.otp_attempts >= 5:
             return render_template("verify_otp.html", error="Too many attempts. Try again later.")
 
-        #  OTP EXPIRY CHECK (5 MIN)
+        # OTP expiry (5 min)
         if not user.otp_created_at or datetime.utcnow() - user.otp_created_at > timedelta(minutes=5):
             return render_template("verify_otp.html", error="OTP expired")
 
-        #  Wrong OTP
+        # Wrong OTP
         if user.otp != user_otp:
             user.otp_attempts += 1
             db.session.commit()
@@ -1486,13 +1486,14 @@ def verify_otp():
         #  SUCCESS
         user.is_email_verified = True
         user.otp = None
-        user.otp_attempts = 0   # reset attempts
+        user.otp_attempts = 0
 
         db.session.commit()
 
-        session.pop('verify_email', None)
+        #  Clear session
+        session.pop('otp_user_id', None)
 
-        return redirect("/login")
+        return redirect("/reset-password")   #  better flow
 
     return render_template("verify_otp.html")
 
