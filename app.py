@@ -1145,7 +1145,7 @@ app = Flask(__name__)
 
 app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
 
-app.config['SESSION_COOKIE_SECURE'] = False  # change to True in production
+app.config['SESSION_COOKIE_SECURE'] = False  # change  True in production
 app.config['SESSION_COOKIE_SAMESITE'] = "Lax"
 
 # Cloudinary config
@@ -1403,6 +1403,17 @@ def home():
 # ================= REGISTER =================
 
 
+#  Password validation function
+def is_strong_password(password):
+    return (
+        len(password) >= 6 and
+        re.search(r"[A-Z]", password) and
+        re.search(r"[a-z]", password) and
+        re.search(r"[0-9]", password) and
+        re.search(r"[!@#$%^&*(),.?\":{}|<>]", password)
+    )
+
+
 @app.route('/register', methods=['GET','POST'])
 def register():
 
@@ -1410,6 +1421,7 @@ def register():
 
         email = request.form['email']
         password = request.form['password']
+        confirm = request.form['confirm_password']
 
         if not is_valid_email(email):
             return "Invalid email format"
@@ -1417,19 +1429,27 @@ def register():
         if User.query.filter_by(email=email).first():
             return "Email already exists"
 
-        if len(password) < 6:
-            return "Password too weak"
+
+        if password != confirm:
+            return "Passwords do not match"
+
+
+
+        #  Strong password check
+        if not is_strong_password(password):
+            return "Password must be at least 6 characters and include uppercase, lowercase, number, and special character"
 
         otp = generate_otp()
 
-        # ADMIN LOGIC
+        #  Admin logic
         if email == "your_email@gmail.com":
             role = "admin"
-            is_verified = True
+            is_email_verified = True
         else:
             role = "student"
-            is_verified = False
+            is_email_verified = False
 
+        #  Create user
         user = User(
             name=request.form['name'],
             email=email,
@@ -1438,17 +1458,18 @@ def register():
             secret_answer=request.form['secret_answer'].lower(),
             otp=otp,
             role=role,
-            is_verified=is_verified,
+            is_email_verified=is_email_verified,
             otp_created_at=datetime.utcnow()
         )
 
         db.session.add(user)
         db.session.commit()
 
+        #  Send OTP for normal users
         if role != "admin":
             send_otp_email(email, otp)
-            session['verify_email'] = email
-            return redirect("/verify_otp")
+            session['otp_user_id'] = user.id
+            return redirect("/verify-otp")
 
         return redirect("/login")
 
