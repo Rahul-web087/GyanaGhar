@@ -65,7 +65,7 @@ background:#fafafa;
 
 <div class="card">
 
-<h2>✏ Edit Note</h2>
+<h2> Edit Note</h2>
 
 <form method="POST" enctype="multipart/form-data">
 
@@ -87,7 +87,7 @@ background:#fafafa;
     <label>Answer</label>
     <textarea name="answer[]" required>{{ qa.answer }}</textarea>
 
-    <button type="button" onclick="this.parentElement.remove()">❌ Remove</button>
+    <button type="button" onclick="this.parentElement.remove()"> Remove</button>
 </div>
 {% endfor %}
 
@@ -96,7 +96,7 @@ background:#fafafa;
 
 </div>
 
-<button type="button" onclick="addQA()">➕ Add More Question</button>
+<button type="button" onclick="addQA()"> Add More Question</button>
 
 <label>Video Link</label> <input type="text" name="video_link" value="{{ note.video_link }}">
 

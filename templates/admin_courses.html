@@ -102,7 +102,7 @@ opacity:0.85;
 <body>
 
 <div class="navbar">
-<h2>📚 Manage Courses</h2>
+<h2> Manage Courses</h2>
 
 <div>
 <a href="/dashboard">Dashboard</a>
@@ -137,25 +137,25 @@ data-class="{{ course.class_name }}"
 data-subject="{{ course.subject_name }}"
 data-chapter="{{ course.chapter_name }}">
 
-<div class="title">📘 {{ course.chapter_name }}</div>
+<div class="title"> {{ course.chapter_name }}</div>
 
-<p>🏫 {{ course.class_name }}</p>
-<p>📚 {{ course.subject_name }}</p>
+<p> {{ course.class_name }}</p>
+<p> {{ course.subject_name }}</p>
 
 <!-- Actions -->
 
 <a class="btn edit"
 href="/admin/edit_chapter/{{ course.chapter_id }}">
-✏ Edit Chapter </a>
+ Edit Chapter </a>
 
 <br>
 
 {% if course.note_id %} <a class="btn note"
 href="{{ url_for('edit_note', note_id=course.note_id) }}">
-📝 Edit Note </a>
+ Edit Note </a>
 {% else %} <a class="btn note"
 href="/admin/add_note?chapter_id={{ course.chapter_id }}">
-➕ Add Note </a>
+ Add Note </a>
 {% endif %}
 
 <br>
