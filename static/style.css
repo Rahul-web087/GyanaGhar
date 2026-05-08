@@ -324,6 +324,34 @@ input:focus, select:focus, textarea:focus {
     padding-bottom: 20px;
 }
 
+.top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 25px;
+}
+
+.profile-btn {
+    width: 42px;
+    height: 42px;
+    background: #1f2937;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.profile-btn:hover {
+    background: #ff4d4d;
+    transform: scale(1.08);
+}
+
+.profile-btn .material-icons {
+    font-size: 22px;
+}
 /* ========================= */
 /* MOBILE */
 /* ========================= */
