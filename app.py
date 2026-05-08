@@ -69,69 +69,6 @@ def is_valid_email(email):
 
 
 # ================= EMAIL FUNCTION =================
-# def send_otp_email(to_email, otp):
-#
-#     sender = os.getenv("EMAIL")
-#     password = os.getenv("EMAIL_PASS")
-#
-#     print("EMAIL:", os.getenv("EMAIL"))
-#     print("PASS:", os.getenv("EMAIL_PASS"))
-#
-#     msg = MIMEText(f"Your GyanaGhar OTP is: {otp}")
-#     msg['Subject'] = "GyanaGhar OTP Verification"
-#     msg['From'] = sender
-#     msg['To'] = to_email
-#
-#     try:
-#         server = smtplib.SMTP('smtp.gmail.com', 587)
-#         server.starttls()
-#         server.login(sender, password)
-#         server.send_message(msg)
-#         server.quit()
-#         print("Email sent successfully")
-#
-#     except Exception as e:
-#         print("Email Error:", e)
-
-#
-# from sendgrid import SendGridAPIClient
-# from sendgrid.helpers.mail import Mail
-# import os
-#
-# def send_otp_email(to_email, otp):
-#
-#     print("SENDGRID FUNCTION STARTED")
-#
-#     try:
-#         message = Mail(
-#             from_email=os.getenv("EMAIL"),
-#             to_emails=to_email,
-#             subject="GyanaGhar OTP Verification",
-#             html_content=f"<h2>Your OTP is: {otp}</h2>"
-#         )
-#
-#         html_content = f"""
-#         <div style="font-family: Arial; text-align:center;">
-#             <h2>GyanaGhar Login OTP</h2>
-#             <p>Your OTP is:</p>
-#             <h1 style="color:red;">{otp}</h1>
-#             <p>This OTP is valid for 5 minutes.</p>
-#             <p style="font-size:12px;color:#555;">
-#                 If you did not request this, ignore this email.
-#             </p>
-#         </div>
-#         """
-#
-#
-#         sg = SendGridAPIClient(os.getenv("SENDGRID_API_KEY"))
-#         response = sg.send(message)
-#
-#         print("Email sent successfully ")
-#         print("Status Code:", response.status_code)
-#
-#     except Exception as e:
-#         print("Email Error:", e)
-
 
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
@@ -587,81 +524,7 @@ def from_json(value):
         return []
 
 
-#
-# ================delete =========== it --=-=-
 
-
-# @app.route("/update_db")
-# def update_db():
-#     db.create_all()
-#     return "DB updated"
-
-# @app.route("/init_db")
-# def init_db():
-#     db.drop_all()
-#     db.create_all()
-#     return "Database recreated successfully!"
-
-
-
-# @app.route("/fix_db")
-# def fix_db():
-#     from sqlalchemy import text
-#     db.session.execute(text("ALTER TABLE note ADD COLUMN pdf_url TEXT"))
-#     db.session.commit()
-#     return "DB FIXED"
-
-# # ======= admin =====
-# @app.route("/create_admin")
-# def create_admin():
-#
-#     existing = User.query.filter_by(email="admin@gyanaghar.com").first()
-#
-#     if existing:
-#         return "Admin already exists"
-#
-#     admin = User(
-#         name="Admin",
-#         email="admin@gyanaghar.com",
-#         password=generate_password_hash("admin123"),
-#         role="admin"
-#     )
-#
-#     db.session.add(admin)
-#     db.session.commit()
-#
-#     return "Admin created successfully"
-
-
-# -------- CREATE ADMIN --------
-
-# #
-# @app.route('/create_admin')
-# def create_admin():
-#
-#     try:
-#
-#         if User.query.filter_by(email="nayakrahul9028@gmail.com").first():
-#             return "Admin already exists!"
-#
-#         admin = User(
-#             name="Admin",
-#             email="nayakrahul9028@gmail.com",
-#             password=generate_password_hash("Rahul@001"),
-#             role="admin",
-#             secret_question="Your first school name?",
-#             secret_answer="demo"
-#         )
-#
-#         db.session.add(admin)
-#         db.session.commit()
-#
-#         return "Admin Created Successfully!"
-#
-#     except Exception as e:
-#         return f"Error: {str(e)}"
-#
-#
 
 # -------- FORGOT PASSWORD --------
 @app.route('/forgot_password', methods=['GET', 'POST'])
@@ -783,17 +646,7 @@ def sitemap():
 
 # ================= DASHBOARD =================
 
-# @app.route('/dashboard')
-# @login_required
-# def dashboard():
-#
-#     classes = Class.query.all()
-#
-#     return render_template(
-#         "dashboard.html",
-#         name=current_user.name,
-#         classes=classes
-#     )
+
 @app.route("/dashboard")
 @login_required
 def dashboard():
