@@ -3,6 +3,7 @@ import os
 import json
 import smtplib
 from email.mime.text import MIMEText
+from flask_mail import Mail
 import cloudinary
 import cloudinary.uploader
 from dotenv import load_dotenv
@@ -24,6 +25,18 @@ app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
 
 app.config['SESSION_COOKIE_SECURE'] = False  # change  True in production
 app.config['SESSION_COOKIE_SAMESITE'] = "Lax"
+
+
+
+app.config["MAIL_SERVER"] = os.getenv("MAIL_SERVER")
+app.config["MAIL_PORT"] = int(os.getenv("MAIL_PORT"))
+app.config["MAIL_USE_TLS"] = True
+app.config["MAIL_USE_SSL"] = False
+app.config["MAIL_USERNAME"] = os.getenv("MAIL_USERNAME")
+app.config["MAIL_PASSWORD"] = os.getenv("MAIL_PASSWORD")
+app.config["MAIL_DEFAULT_SENDER"] = os.getenv("MAIL_DEFAULT_SENDER")
+
+mail = Mail(app)
 
 # Cloudinary config
 cloudinary.config(
@@ -70,43 +83,65 @@ def is_valid_email(email):
 
 # ================= EMAIL FUNCTION =================
 
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
-import os
+from flask_mail import Message
 
 def send_otp_email(to_email, otp):
 
-    print("SENDGRID FUNCTION STARTED")
+    print("BREVO SMTP STARTED")
 
     try:
-        message = Mail(
-            from_email=os.getenv("EMAIL"),
-            to_emails=to_email,
-            subject="GyanaGhar OTP Verification",
 
-            #  USE YOUR HTML HERE
-            html_content=f"""
-            <div style="font-family: Arial; text-align:center;">
-                <h2>GyanaGhar Login OTP</h2>
-                <p>Your OTP is:</p>
-                <h1 style="color:red;">{otp}</h1>
-                <p>This OTP is valid for 5 minutes.</p>
-                <p style="font-size:12px;color:#555;">
-                    If you did not request this, ignore this email.
-                </p>
-            </div>
-            """
+        msg = Message(
+            subject="GyanaGhar OTP Verification",
+            recipients=[to_email]
         )
 
-        sg = SendGridAPIClient(os.getenv("SENDGRID_API_KEY"))
-        response = sg.send(message)
+        msg.html = f"""
+        <div style="font-family: Arial, sans-serif; text-align:center; padding:20px;">
+            <h2 style="color:#2563eb;">GyanaGhar Login OTP</h2>
+
+            <p>Your One-Time Password (OTP) is:</p>
+
+            <h1 style="
+                color:#dc2626;
+                letter-spacing:8px;
+                background:#f3f4f6;
+                display:inline-block;
+                padding:12px 25px;
+                border-radius:8px;">
+                {otp}
+            </h1>
+
+            <p>This OTP is valid for <b>5 minutes</b>.</p>
+
+            <p style="font-size:14px;color:#555;">
+                If you cannot find this email, please check your
+                <b>Spam</b> or <b>Junk</b> folder.
+            </p>
+
+            <hr>
+
+            <p style="font-size:12px;color:#777;">
+                If you did not request this OTP, you can safely ignore this email.
+            </p>
+
+            <p style="font-size:12px;color:#999;">
+                © 2026 GyanaGhar
+            </p>
+        </div>
+        """
+
+        mail.send(msg)
 
         print("Email sent successfully")
-        print("Status Code:", response.status_code)
+
+        return True
 
     except Exception as e:
-        print("Email Error:", e)
 
+        print("Email Error:", str(e))
+
+        return False
 
 
 
@@ -416,15 +451,38 @@ def login():
         if not user:
             return "User not found"
 
-        #  ADD HERE
+
         if user.is_deleted:
             return "This account has been deleted by admin"
 
         # OTP check (skip for admin)
         if not user.is_email_verified and user.role != "admin":
-            session['verify_email'] = user.email
-            return redirect("/verify_otp")
 
+            print("User is not verified")
+            print("Email:", user.email)
+
+            otp = generate_otp()
+
+            print("Generated OTP:", otp)
+
+            user.otp = otp
+            user.otp_created_at = datetime.utcnow()
+            user.otp_attempts = 0
+
+            db.session.commit()
+
+            print("OTP saved to database")
+
+            if send_otp_email(user.email, otp):
+                print("OTP email sent")
+
+                session["otp_user_id"] = user.id
+                session["verify_email"] = user.email
+
+                return redirect("/verify_otp")
+
+            print("Email sending failed")
+            return "Unable to send OTP. Please try again."
         # ADMIN SPECIAL CHECK
         if user.role == "admin" and not check_password_hash(user.password, password):
             return "Wrong admin password"
@@ -513,7 +571,7 @@ def profile():
 
 # ============ Json ===========
 
-import json
+
 
 @app.template_filter('from_json')
 def from_json(value):
@@ -595,7 +653,7 @@ def google_verify():
 
 # ========= Roboots txt =======
 
-from flask import Response
+
 
 @app.route('/robots.txt')
 def robots():
@@ -737,7 +795,7 @@ def chapter_page(chapter_id):
         Progress.note_id.in_(note_ids)
     ).all()
 
-    #  ADD THIS LINE
+
     completed_note_ids = [p.note_id for p in completed_notes]
 
     total_notes = len(notes)
