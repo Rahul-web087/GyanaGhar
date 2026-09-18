@@ -648,16 +648,26 @@ def reset_password():
     return render_template("reset_password.html")
 
 
-# Temporary Rout
+# temporary
 
-@app.route("/check-admin")
-def check_admin():
-    admins = User.query.filter_by(role="admin", is_deleted=False).all()
+from werkzeug.security import generate_password_hash
 
-    return "<br>".join(
-        f"ID: {u.id} | Name: {u.name} | Email: {u.email} | Mobile: {u.mobile}"
-        for u in admins
-    )
+@app.route("/reset-admin")
+def reset_admin():
+
+    admin = User.query.filter_by(
+        role="admin",
+        is_deleted=False
+    ).first()
+
+    if not admin:
+        return "Admin account not found"
+
+    admin.password = generate_password_hash("Admin@12345")
+
+    db.session.commit()
+
+    return "Admin password reset successfully"
 
 
 # ========= Google html route ========
