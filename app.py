@@ -648,26 +648,56 @@ def reset_password():
     return render_template("reset_password.html")
 
 
-# temporary
+# temporary file
 
-from werkzeug.security import generate_password_hash
+from flask_login import login_required, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
 
-@app.route("/reset-admin")
-def reset_admin():
 
-    admin = User.query.filter_by(
-        role="admin",
-        is_deleted=False
-    ).first()
+@app.route("/change-password", methods=["GET", "POST"])
+@login_required
+def change_password():
 
-    if not admin:
-        return "Admin account not found"
+    if current_user.role != "admin":
+        return "Unauthorized", 403
 
-    admin.password = generate_password_hash("Admin@12345")
+    if request.method == "POST":
 
-    db.session.commit()
+        current_password = request.form.get("current_password")
+        new_password = request.form.get("new_password")
+        confirm_password = request.form.get("confirm_password")
 
-    return "Admin password reset successfully"
+        if not check_password_hash(
+            current_user.password,
+            current_password
+        ):
+            return render_template(
+                "change_password.html",
+                error="Current password is incorrect"
+            )
+
+        if new_password != confirm_password:
+            return render_template(
+                "change_password.html",
+                error="New passwords do not match"
+            )
+
+        if len(new_password) < 8:
+            return render_template(
+                "change_password.html",
+                error="Password must be at least 8 characters"
+            )
+
+        current_user.password = generate_password_hash(new_password)
+
+        db.session.commit()
+
+        return render_template(
+            "change_password.html",
+            success="Password changed successfully"
+        )
+
+    return render_template("change_password.html")
 
 
 # ========= Google html route ========
