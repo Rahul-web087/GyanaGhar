@@ -648,6 +648,18 @@ def reset_password():
     return render_template("reset_password.html")
 
 
+# Temporary Rout
+
+@app.route("/check-admin")
+def check_admin():
+    admins = User.query.filter_by(role="admin", is_deleted=False).all()
+
+    return "<br>".join(
+        f"ID: {u.id} | Name: {u.name} | Email: {u.email} | Mobile: {u.mobile}"
+        for u in admins
+    )
+
+
 # ========= Google html route ========
 from flask import send_from_directory
 
