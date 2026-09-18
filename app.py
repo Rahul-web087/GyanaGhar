@@ -1,4 +1,3 @@
-
 import os
 import json
 import smtplib
@@ -23,7 +22,7 @@ app = Flask(__name__)
 
 app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
 
-app.config['SESSION_COOKIE_SECURE'] = False  # change  True in production
+app.config['SESSION_COOKIE_SECURE'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = "Lax"
 
 
@@ -53,8 +52,14 @@ if database_url:
 else:
     database_url = "sqlite:///local.db"  # fallback
 
-app.config['SQLALCHEMY_DATABASE_URI'] = database_url
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config["SQLALCHEMY_DATABASE_URI"] = database_url
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+# Database connection settings
+app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
+    "pool_pre_ping": True,
+    "pool_recycle": 300,
+}
 
 db = SQLAlchemy(app)
 
@@ -81,7 +86,7 @@ def is_valid_email(email):
     return re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$', email)
 
 
-# ================= EMAIL FUNCTION =================
+#================= EMAIL FUNCTION =================
 
 from flask_mail import Message
 
@@ -407,7 +412,7 @@ def verify_otp():
 
         db.session.commit()
 
-        # DO NOT clear session here
+
         # Keep otp_user_id for reset-password
 
         return redirect("/reset-password")
@@ -1457,7 +1462,7 @@ def restore_user(user_id):
     if not user:
         return "User not found"
 
-    # 🔥 RESTORE
+    #  RESTORE
     user.is_deleted = False
     db.session.commit()
 
