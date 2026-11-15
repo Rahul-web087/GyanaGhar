@@ -1,9 +1,10 @@
+
 Flask
 Flask-SQLAlchemy
 Flask-Login
 Werkzeug
 gunicorn
-psycopg2-binary
+psycopg[binary]
 cloudinary
 python-dotenv
 Flask-Migrate==4.0.7
