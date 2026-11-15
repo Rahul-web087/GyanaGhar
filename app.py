@@ -329,10 +329,11 @@ def register():
 
     return render_template("register.html")
 
-# ======= send OTP ======
+
+# ======= SEND OTP ======
 
 from flask import request, redirect, session, flash
-
+import requests
 
 @app.route('/send-otp', methods=['POST'])
 def send_otp():
@@ -343,31 +344,41 @@ def send_otp():
         flash("Enter email")
         return redirect('/login')
 
-    otp = generate_otp()
-
     # Check user
-    user = User.query.filter_by(email=email, is_deleted=False).first()
+    user = User.query.filter_by(
+        email=email,
+        is_deleted=False
+    ).first()
 
     if not user:
         user = User(email=email)
         db.session.add(user)
 
-    #  OTP setup
+    # Generate OTP
+    otp = generate_otp()
+
+    # OTP setup
     user.otp = otp
     user.otp_created_at = datetime.utcnow()
     user.otp_attempts = 0
 
     db.session.commit()
 
-    #  Bind session
+    # Bind session
     session['otp_user_id'] = user.id
 
-    #  CALL  FUNCTION HERE
-    send_otp_email(email, otp)
+    # Send OTP using Brevo API
+    try:
+        send_otp_email(email, otp)
 
-    flash("OTP sent! Check Inbox or Spam folder.")
+        flash("OTP sent! Check Inbox or Spam folder.")
+        return redirect('/verify_otp')
 
-    return redirect('/verify_otp')
+    except (requests.RequestException, ValueError) as e:
+        app.logger.error("OTP email failed: %s", e)
+
+        flash("Unable to send OTP. Please try again.")
+        return redirect('/login')
 
 
 #  =========== verify Otp ==========

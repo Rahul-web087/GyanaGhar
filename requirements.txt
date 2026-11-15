@@ -9,3 +9,4 @@ python-dotenv
 Flask-Migrate==4.0.7
 sendgrid
 Flask-Mail
+requests
