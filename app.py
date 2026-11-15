@@ -88,21 +88,34 @@ def is_valid_email(email):
 
 #================= EMAIL FUNCTION =================
 
-from flask_mail import Message
 
 def send_otp_email(to_email, otp):
 
-    print("BREVO SMTP STARTED")
+    print("BREVO API STARTED")
 
-    try:
+    url = "https://api.brevo.com/v3/smtp/email"
 
-        msg = Message(
-            subject="GyanaGhar OTP Verification",
-            recipients=[to_email]
-        )
+    headers = {
+        "accept": "application/json",
+        "api-key": os.environ.get("BREVO_API_KEY"),
+        "content-type": "application/json"
+    }
 
-        msg.html = f"""
+    data = {
+        "sender": {
+            "name": "GyanaGhar",
+            "email": os.environ.get("MAIL_DEFAULT_SENDER")
+        },
+
+        "to": [
+            {"email": to_email}
+        ],
+
+        "subject": "GyanaGhar OTP Verification",
+
+        "htmlContent": f"""
         <div style="font-family: Arial, sans-serif; text-align:center; padding:20px;">
+
             <h2 style="color:#2563eb;">GyanaGhar Login OTP</h2>
 
             <p>Your One-Time Password (OTP) is:</p>
@@ -133,21 +146,34 @@ def send_otp_email(to_email, otp):
             <p style="font-size:12px;color:#999;">
                 © 2026 GyanaGhar
             </p>
+
         </div>
         """
+    }
 
-        mail.send(msg)
+    try:
 
-        print("Email sent successfully")
+        if not headers["api-key"] or not data["sender"]["email"]:
+            raise ValueError("Brevo API configuration missing")
+
+        response = requests.post(
+            url,
+            headers=headers,
+            json=data,
+            timeout=15
+        )
+
+        response.raise_for_status()
+
+        print("Brevo API: Email sent successfully")
 
         return True
 
     except Exception as e:
 
-        print("Email Error:", str(e))
+        print("Brevo API Email Error:", str(e))
 
         return False
-
 
 
 # ================= MODELS =================
