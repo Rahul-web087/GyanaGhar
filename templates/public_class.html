@@ -1,10 +1,53 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ cls.name }} Study Materials | GyanaGhar</title>
+
+    <meta name="description"
+          content="Explore subjects and study materials for {{ cls.name }} on GyanaGhar. Access educational resources and chapter previews.">
+
+    <meta name="robots" content="index, follow">
+
+    <link rel="canonical"
+          href="{{ request.url }}">
 </head>
+
 <body>
-$END$
+
+    <header>
+        <h1>{{ cls.name }} Study Materials</h1>
+        <p>
+            Explore subjects, chapters and study resources
+            available on GyanaGhar.
+        </p>
+    </header>
+
+    <main>
+        <h2>Available Subjects</h2>
+
+        {% for subject in subjects %}
+            <article>
+                <h3>{{ subject.name }}</h3>
+
+                <a href="{{ url_for('public_subject',
+                                    subject_id=subject.id) }}">
+                    Explore {{ subject.name }}
+                </a>
+            </article>
+        {% else %}
+            <p>No subjects available yet.</p>
+        {% endfor %}
+    </main>
+
+    <footer>
+        <a href="{{ url_for('home') }}">Home</a>
+        |
+        <a href="{{ url_for('login') }}">Student Login</a>
+    </footer>
+
 </body>
 </html>

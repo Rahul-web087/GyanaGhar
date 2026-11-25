@@ -1,10 +1,63 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ chapter.name }} - {{ subject.name }} | GyanaGhar</title>
+
+    <meta name="description"
+          content="Explore {{ chapter.name }} from {{ subject.name }} for {{ cls.name }} on GyanaGhar. Browse available notes and learning resources.">
+
+    <meta name="robots" content="index, follow">
+
+    <link rel="canonical" href="{{ request.url }}">
 </head>
+
 <body>
-$END$
+
+    <header>
+        <a href="{{ url_for('home') }}">GyanaGhar</a>
+
+        <h1>{{ chapter.name }}</h1>
+
+        <p>
+            Class: {{ cls.name }} |
+            Subject: {{ subject.name }}
+        </p>
+
+        <p>
+            Explore available notes and learning resources for this chapter.
+        </p>
+    </header>
+
+    <main>
+        <h2>Available Notes</h2>
+
+        {% for note in notes %}
+            <article>
+                <h3>{{ note.title }}</h3>
+
+                <a href="{{ url_for('public_note_preview',
+                                    note_id=note.id) }}">
+                    View Note Preview
+                </a>
+            </article>
+        {% else %}
+            <p>No notes available yet.</p>
+        {% endfor %}
+    </main>
+
+    <footer>
+        <a href="{{ url_for('public_subject',
+                            subject_id=subject.id) }}">
+            Back to {{ subject.name }}
+        </a>
+
+        |
+        <a href="{{ url_for('login') }}">Student Login</a>
+    </footer>
+
 </body>
 </html>

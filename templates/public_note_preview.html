@@ -1,10 +1,63 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ note.title }} | GyanaGhar</title>
+
+    <meta name="description"
+          content="Explore the preview of {{ note.title }} for {{ cls.name }} {{ subject.name }} on GyanaGhar.">
+
+    <meta name="robots" content="index, follow">
+
+    <link rel="canonical" href="{{ request.url }}">
 </head>
+
 <body>
-$END$
+
+    <header>
+        <a href="{{ url_for('home') }}">GyanaGhar</a>
+
+        <h1>{{ note.title }}</h1>
+
+        <p>
+            Class: {{ cls.name }} |
+            Subject: {{ subject.name }} |
+            Chapter: {{ chapter.name }}
+        </p>
+    </header>
+
+    <main>
+        <h2>Note Preview</h2>
+
+        {% if preview %}
+            <p>{{ preview }}</p>
+        {% else %}
+            <p>Preview is not available for this note.</p>
+        {% endif %}
+
+        <section>
+            <h2>Want to access the complete study material?</h2>
+
+            <p>
+                Log in to GyanaGhar to access complete notes,
+                answers, PDFs and video resources.
+            </p>
+
+            <a href="{{ url_for('login') }}">
+                Student Login
+            </a>
+        </section>
+    </main>
+
+    <footer>
+        <a href="{{ url_for('public_chapter',
+                            chapter_id=chapter.id) }}">
+            Back to {{ chapter.name }}
+        </a>
+    </footer>
+
 </body>
 </html>

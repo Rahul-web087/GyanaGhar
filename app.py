@@ -2,6 +2,8 @@ import os
 import json
 import smtplib
 from email.mime.text import MIMEText
+import xml.etree.ElementTree as ET
+from flask import Response
 from flask_mail import Mail
 import cloudinary
 import cloudinary.uploader
@@ -274,11 +276,122 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-# ================= HOME =================
+#  PUBLIC SEO HOME
 
 @app.route('/')
 def home():
-    return render_template("home.html")
+
+    classes = Class.query.order_by(Class.id.asc()).all()
+
+    return render_template(
+        "home.html",
+        classes=classes
+    )
+
+
+
+# =====================================================
+#              PUBLIC SEO ROUTES
+# =====================================================
+
+
+# ================= PUBLIC CLASS =================
+
+@app.route('/learn/class/<int:class_id>')
+def public_class(class_id):
+
+    cls = Class.query.get_or_404(class_id)
+
+    subjects = Subject.query.filter_by(
+        class_id=class_id
+    ).order_by(Subject.name.asc()).all()
+
+    return render_template(
+        "public_class.html",
+        cls=cls,
+        subjects=subjects
+    )
+
+
+# ================= PUBLIC SUBJECT =================
+
+@app.route('/learn/subject/<int:subject_id>')
+def public_subject(subject_id):
+
+    subject = Subject.query.get_or_404(subject_id)
+
+    cls = Class.query.get_or_404(subject.class_id)
+
+    chapters = Chapter.query.filter_by(
+        subject_id=subject_id
+    ).order_by(Chapter.id.asc()).all()
+
+    return render_template(
+        "public_subject.html",
+        subject=subject,
+        cls=cls,
+        chapters=chapters
+    )
+
+
+# ================= PUBLIC CHAPTER =================
+
+@app.route('/learn/chapter/<int:chapter_id>')
+def public_chapter(chapter_id):
+
+    chapter = Chapter.query.get_or_404(chapter_id)
+
+    subject = Subject.query.get_or_404(
+        chapter.subject_id
+    )
+
+    cls = Class.query.get_or_404(subject.class_id)
+
+    notes = Note.query.filter_by(
+        chapter_id=chapter_id
+    ).order_by(Note.id.asc()).all()
+
+    return render_template(
+        "public_chapter.html",
+        chapter=chapter,
+        subject=subject,
+        cls=cls,
+        notes=notes
+    )
+
+
+# ================= PUBLIC NOTE PREVIEW =================
+
+@app.route('/learn/note/<int:note_id>')
+def public_note_preview(note_id):
+
+    note = Note.query.get_or_404(note_id)
+
+    chapter = Chapter.query.get_or_404(
+        note.chapter_id
+    )
+
+    subject = Subject.query.get_or_404(
+        chapter.subject_id
+    )
+
+    cls = Class.query.get_or_404(subject.class_id)
+
+    # Short preview only
+    preview = ""
+
+    if note.content:
+        preview = note.content[:180].strip()
+
+    return render_template(
+        "public_note_preview.html",
+        note=note,
+        chapter=chapter,
+        subject=subject,
+        cls=cls,
+        preview=preview
+    )
+
 
 # ================= REGISTER =================
 
@@ -763,36 +876,119 @@ Sitemap: https://gyanaghar.onrender.com/sitemap.xml
 
 # ========== sitemap =======
 
-from flask import Response
 
-@app.route('/sitemap.xml')
+
+
+
+import xml.etree.ElementTree as ET
+
+from flask import Response, url_for
+
+
+@app.route("/sitemap.xml")
 def sitemap():
 
-    pages = []
+    base_url = "https://gyanaghar.onrender.com"
 
-    # static pages
-    pages.append("https://gyanaghar.onrender.com/")
-    pages.append("https://gyanaghar.onrender.com/login")
-    pages.append("https://gyanaghar.onrender.com/dashboard")
+    namespace = "http://www.sitemaps.org/schemas/sitemap/0.9"
 
-    # dynamic (classes)
-    classes = Class.query.all()
-    for c in classes:
-        pages.append(f"https://gyanaghar.onrender.com/class/{c.id}")
+    ET.register_namespace("", namespace)
 
-    sitemap_xml = '<?xml version="1.0" encoding="UTF-8"?>'
-    sitemap_xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+    # Create XML root
+    urlset = ET.Element(f"{{{namespace}}}urlset")
 
-    for page in pages:
-        sitemap_xml += f"""
-        <url>
-            <loc>{page}</loc>
-        </url>
-        """
+    # Prevent duplicate URLs
+    added_urls = set()
 
-    sitemap_xml += '</urlset>'
+    def add_url(url):
+        if url not in added_urls:
+            added_urls.add(url)
 
-    return Response(sitemap_xml, mimetype='application/xml')
+            url_element = ET.SubElement(
+                urlset, f"{{{namespace}}}url"
+            )
+
+            ET.SubElement(
+                url_element, f"{{{namespace}}}loc"
+            ).text = url
+
+    # Homepage
+    add_url(base_url + "/")
+
+    # Public information pages
+    add_url(base_url + "/about")
+    add_url(base_url + "/privacy-policy")
+    add_url(base_url + "/terms")
+    add_url(base_url + "/disclaimer")
+
+    # Dynamic class URLs
+    classes = Class.query.order_by(Class.id.asc()).all()
+
+    for cls in classes:
+
+        add_url(
+            base_url + url_for(
+                "public_class",
+                class_id=cls.id
+            )
+        )
+
+        # Subjects
+        subjects = Subject.query.filter_by(
+            class_id=cls.id
+        ).all()
+
+        for subject in subjects:
+
+            add_url(
+                base_url + url_for(
+                    "public_subject",
+                    subject_id=subject.id
+                )
+            )
+
+            # Chapters
+            chapters = Chapter.query.filter_by(
+                subject_id=subject.id
+            ).all()
+
+            for chapter in chapters:
+
+                add_url(
+                    base_url + url_for(
+                        "public_chapter",
+                        chapter_id=chapter.id
+                    )
+                )
+
+                # Notes
+                notes = Note.query.filter_by(
+                    chapter_id=chapter.id
+                ).all()
+
+                for note in notes:
+
+                    add_url(
+                        base_url + url_for(
+                            "public_note_preview",
+                            note_id=note.id
+                        )
+                    )
+
+    # Generate XML
+    xml_data = ET.tostring(
+        urlset,
+        encoding="utf-8",
+        xml_declaration=True
+    )
+
+    return Response(
+        xml_data,
+        mimetype="application/xml"
+    )
+
+
+
 
 
 
@@ -906,7 +1102,6 @@ def chapter_page(chapter_id):
         progress_percent=progress_percent,
         completed_note_ids=completed_note_ids   #  PASS THIS
     )
-
 
 
 
@@ -1423,6 +1618,9 @@ def edit_chapter(chapter_id):
     classes = Class.query.all()
 
     # find current class
+
+
+
     current_subject = Subject.query.get(chapter.subject_id)
     current_class_id = current_subject.class_id
 
@@ -1468,6 +1666,12 @@ def mark_complete(note_id):
         db.session.commit()
 
     return redirect(url_for("chapter_page", chapter_id=note.chapter_id))
+
+
+
+
+
+
 
 
 # ======== Student Dashboard ======

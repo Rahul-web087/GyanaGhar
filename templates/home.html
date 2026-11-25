@@ -1,333 +1,349 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 
-<title>GyanaGhar - Learn Smart</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GyanaGhar - Free Online Study Materials for Students</title>
 
-<style>
+    <meta name="description"
+          content="Learn smart with GyanaGhar. Explore class-wise subjects, chapters, study notes and learning resources for students.">
 
-body{
-margin:0;
-font-family:Arial, Helvetica, sans-serif;
-background:#f5f7fb;
-}
+    <meta name="robots" content="index, follow">
 
-/* NAVBAR */
+    <link rel="canonical" href="{{ url_for('home', _external=True) }}">
 
-.navbar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:15px 40px;
-background:#1e3c72;
-color:white;
-flex-wrap:wrap;
-}
+    <meta property="og:title" content="GyanaGhar - Learn Smart">
+    <meta property="og:description"
+          content="Explore free class-wise study materials, subjects, chapters and learning resources on GyanaGhar.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url_for('home', _external=True) }}">
 
-.logo{
-font-size:22px;
-font-weight:bold;
-}
+    <style>
 
-.nav-links{
-display:flex;
-}
+    body{
+        margin:0;
+        font-family:Arial, Helvetica, sans-serif;
+        background:#f5f7fb;
+    }
 
-.nav-links a{
-color:white;
-margin-left:20px;
-text-decoration:none;
-font-weight:bold;
-}
+    .navbar{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        padding:15px 40px;
+        background:#1e3c72;
+        color:white;
+        flex-wrap:wrap;
+    }
 
-.nav-links a:hover{
-text-decoration:underline;
-}
+    .logo{
+        font-size:22px;
+        font-weight:bold;
+    }
 
-/* HERO */
+    .nav-links{
+        display:flex;
+    }
 
-.hero{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:80px 10%;
-background:linear-gradient(135deg,#1e3c72,#2a5298);
-color:white;
-flex-wrap:wrap;
-}
+    .nav-links a{
+        color:white;
+        margin-left:20px;
+        text-decoration:none;
+        font-weight:bold;
+    }
 
-.hero-text{
-max-width:500px;
-}
+    .nav-links a:hover{
+        text-decoration:underline;
+    }
 
-.hero-text h1{
-font-size:40px;
-margin-bottom:15px;
-}
+    .hero{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        padding:80px 10%;
+        background:linear-gradient(135deg,#1e3c72,#2a5298);
+        color:white;
+        flex-wrap:wrap;
+    }
 
-.hero-text p{
-font-size:18px;
-margin-bottom:25px;
-}
+    .hero-text{
+        max-width:500px;
+    }
 
-.hero-btn{
-padding:12px 25px;
-background:#ff9800;
-border-radius:6px;
-color:white;
-text-decoration:none;
-font-weight:bold;
-display:inline-block;
-}
+    .hero-text h1{
+        font-size:40px;
+        margin-bottom:15px;
+    }
 
-.hero-btn:hover{
-background:#e68900;
-}
+    .hero-text p{
+        font-size:18px;
+        margin-bottom:25px;
+    }
 
-.hero img{
-width:350px;
-max-width:100%;
-}
+    .hero-btn{
+        padding:12px 25px;
+        background:#ff9800;
+        border-radius:6px;
+        color:white;
+        text-decoration:none;
+        font-weight:bold;
+        display:inline-block;
+    }
 
-/* FEATURES */
+    .hero-btn:hover{
+        background:#e68900;
+    }
 
-.features{
-padding:70px 10%;
-text-align:center;
-}
+    .hero img{
+        width:350px;
+        max-width:100%;
+    }
 
-.features h2{
-margin-bottom:40px;
-}
+    .features{
+        padding:70px 10%;
+        text-align:center;
+    }
 
-.feature-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-gap:30px;
-}
+    .features h2{
+        margin-bottom:40px;
+    }
 
-.feature-card{
-background:white;
-padding:25px;
-border-radius:10px;
-box-shadow:0 5px 15px rgba(0,0,0,0.1);
-}
+    .feature-grid{
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+        gap:30px;
+    }
 
-/* COURSES */
+    .feature-card{
+        background:white;
+        padding:25px;
+        border-radius:10px;
+        box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    }
 
-.courses{
-padding:70px 10%;
-background:#eef2ff;
-text-align:center;
-}
+    .courses{
+        padding:70px 10%;
+        background:#eef2ff;
+        text-align:center;
+    }
 
-.course-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-gap:25px;
-margin-top:30px;
-}
+    .course-grid{
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+        gap:25px;
+        margin-top:30px;
+    }
 
-.course-card{
-background:white;
-padding:20px;
-border-radius:10px;
-box-shadow:0 5px 15px rgba(0,0,0,0.1);
-}
+    .course-card{
+        background:white;
+        padding:20px;
+        border-radius:10px;
+        box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    }
 
-.course-card a{
-display:inline-block;
-margin-top:10px;
-padding:8px 20px;
-background:#2a5298;
-color:white;
-text-decoration:none;
-border-radius:6px;
-}
+    .course-card a{
+        display:inline-block;
+        margin-top:10px;
+        padding:8px 20px;
+        background:#2a5298;
+        color:white;
+        text-decoration:none;
+        border-radius:6px;
+    }
 
-/* FOOTER */
+    footer{
+        background:#1e3c72;
+        color:white;
+        text-align:center;
+        padding:20px;
+        margin-top:50px;
+    }
 
-footer{
-background:#1e3c72;
-color:white;
-text-align:center;
-padding:20px;
-margin-top:50px;
-}
+    footer a{
+        color:#ffcc00;
+        text-decoration:none;
+        margin:0 8px;
+    }
 
-footer a{
-color:#ffcc00;
-text-decoration:none;
-margin:0 8px;
-}
+    footer a:hover{
+        text-decoration:underline;
+    }
 
-footer a:hover{
-text-decoration:underline;
-}
+    @media (max-width:768px){
 
-/* MOBILE */
+        .navbar{
+            flex-direction:column;
+            align-items:flex-start;
+            padding:15px 20px;
+        }
 
-@media (max-width: 768px){
+        .nav-links{
+            margin-top:10px;
+        }
 
-.navbar{
-flex-direction:column;
-align-items:flex-start;
-padding:15px 20px;
-}
+        .nav-links a{
+            margin-left:0;
+            margin-right:15px;
+        }
 
-.nav-links{
-margin-top:10px;
-}
+        .hero{
+            flex-direction:column;
+            text-align:center;
+            padding:40px 20px;
+        }
 
-.nav-links a{
-margin-left:0;
-margin-right:15px;
-}
+        .hero-text h1{
+            font-size:28px;
+        }
 
-.hero{
-flex-direction:column;
-text-align:center;
-padding:40px 20px;
-}
+        .hero-text p{
+            font-size:16px;
+        }
 
-.hero-text h1{
-font-size:28px;
-}
+        .hero img{
+            width:220px;
+            margin-top:20px;
+        }
 
-.hero-text p{
-font-size:16px;
-}
+        .features,
+        .courses{
+            padding:40px 20px;
+        }
 
-.hero img{
-width:220px;
-margin-top:20px;
-}
+    }
 
-.features,
-.courses{
-padding:40px 20px;
-}
-
-}
-
-</style>
+    </style>
 
 </head>
 
 <body>
 
-<!-- NAVBAR -->
+    <!-- NAVBAR -->
 
-<div class="navbar">
-<div class="logo"> GyanaGhar</div>
+    <div class="navbar">
 
-<div class="nav-links">
-<a href="/login">Login</a>
-<a href="/register">Register</a>
-</div>
-</div>
+        <div class="logo">GyanaGhar</div>
 
-<!-- HERO -->
+        <div class="nav-links">
+            <a href="{{ url_for('login') }}">Login</a>
+            <a href="{{ url_for('register') }}">Register</a>
+        </div>
 
-<div class="hero">
+    </div>
 
-<div class="hero-text">
-<h1>Learn Smart with GyanaGhar</h1>
+    <!-- HERO -->
 
-<p>Free learning platform for students. Watch videos, read notes and track progress easily.</p>
+    <div class="hero">
 
-<a class="hero-btn" href="/register">Start Learning</a>
-</div>
+        <div class="hero-text">
 
-<img src="https://cdn-icons-png.flaticon.com/512/3135/3135755.png">
+            <h1>Learn Smart with GyanaGhar</h1>
 
-</div>
+            <p>
+                Free learning platform for students.
+                Explore subjects, read notes and discover
+                educational resources easily.
+            </p>
 
-<!-- FEATURES -->
+            <a class="hero-btn" href="{{ url_for('register') }}">
+                Start Learning
+            </a>
 
-<div class="features">
+        </div>
 
-<h2>Why Choose GyanaGhar?</h2>
+        <img
+            src="https://cdn-icons-png.flaticon.com/512/3135/3135755.png"
+            alt="Student learning illustration">
 
-<div class="feature-grid">
+    </div>
 
-<div class="feature-card">
-<h3> Structured Courses</h3>
-<p>Subjects organized by class and chapter.</p>
-</div>
+    <!-- FEATURES -->
 
-<div class="feature-card">
-<h3> Video Learning</h3>
-<p>Watch video lectures with each topic.</p>
-</div>
+    <div class="features">
 
-<div class="feature-card">
-<h3> PDF Notes</h3>
-<p>Download notes for revision anytime.</p>
-</div>
+        <h2>Why Choose GyanaGhar?</h2>
 
-<div class="feature-card">
-<h3> Progress Tracking</h3>
-<p>Track completed chapters and achievements.</p>
-</div>
+        <div class="feature-grid">
 
-</div>
+            <div class="feature-card">
+                <h3>Structured Courses</h3>
+                <p>Subjects organized by class and chapter.</p>
+            </div>
 
-</div>
+            <div class="feature-card">
+                <h3>Video Learning</h3>
+                <p>Access video lectures with learning topics.</p>
+            </div>
 
-<!-- COURSES -->
+            <div class="feature-card">
+                <h3>PDF Notes</h3>
+                <p>Access study notes for revision.</p>
+            </div>
 
-<div class="courses">
+            <div class="feature-card">
+                <h3>Progress Tracking</h3>
+                <p>Track completed chapters and achievements.</p>
+            </div>
 
-<h2>Available Classes</h2>
+        </div>
 
-<div class="course-grid">
+    </div>
 
-<div class="course-card">
-<h3>Class 6</h3>
-<a href="/login">Explore</a>
-</div>
+    <!-- COURSES -->
 
-<div class="course-card">
-<h3>Class 7</h3>
-<a href="/login">Explore</a>
-</div>
+    <div class="courses">
 
-<div class="course-card">
-<h3>Class 8</h3>
-<a href="/login">Explore</a>
-</div>
+        <h2>Available Classes</h2>
 
-<div class="course-card">
-<h3>Class 9</h3>
-<a href="/login">Explore</a>
-</div>
+        <p>
+            Select your class to explore subjects,
+            chapters and available study materials.
+        </p>
 
-<div class="course-card">
-<h3>Class 10</h3>
-<a href="/login">Explore</a>
-</div>
+        <div class="course-grid">
 
-</div>
+            {% for cls in classes %}
 
-</div>
+            <div class="course-card">
 
-<!--  UPDATED FOOTER WITH LEGAL LINKS -->
+                <h3>{{ cls.name }}</h3>
 
-<footer>
+                <p>Explore subjects and learning resources.</p>
 
-<div>
-<a href="/privacy-policy">Privacy Policy</a> |
-<a href="/terms">Terms &amp; Conditions</a> |
-<a href="/about">About Us</a> |
-<a href="/disclaimer">Disclaimer</a>
-</div>
+                <a href="{{ url_for('public_class',
+                                    class_id=cls.id) }}">
+                    Explore
+                </a>
 
-<p>© 2026 GyanaGhar | Built by Rahul Nayak</p>
+            </div>
 
-</footer>
+            {% else %}
+
+            <p>No classes available yet.</p>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <div>
+            <a href="/privacy-policy">Privacy Policy</a> |
+            <a href="/terms">Terms &amp; Conditions</a> |
+            <a href="/about">About Us</a> |
+            <a href="/disclaimer">Disclaimer</a>
+        </div>
+
+        <p>© 2026 GyanaGhar | Built by Rahul Nayak</p>
+
+    </footer>
 
 </body>
 </html>
