@@ -1886,30 +1886,40 @@ def mark_complete(note_id):
 
 
 # ======== Student Dashboard ======
+
 @app.route("/student/dashboard")
 @login_required
 def student_dashboard():
 
-    if current_user.role == "admin":
+    if current_user.role != "student":
         return redirect(url_for("dashboard"))
 
     total_notes = Note.query.count()
 
     completed_notes = Progress.query.filter_by(
-        user_id=current_user.id
+        user_id=current_user.id,
+        completed=True
     ).count()
 
     if total_notes == 0:
         progress = 0
     else:
-        progress = int((completed_notes / total_notes) * 100)
+        progress = min(
+            100,
+            int((completed_notes / total_notes) * 100)
+        )
+
+    # Get all available classes
+    classes = Class.query.order_by(Class.id.asc()).all()
 
     return render_template(
         "student_dashboard.html",
         total_notes=total_notes,
         completed_notes=completed_notes,
-        progress=progress
+        progress=progress,
+        classes=classes
     )
+
 
 
 # ======== Admin User Find =======
