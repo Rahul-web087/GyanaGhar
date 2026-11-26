@@ -306,10 +306,19 @@ def public_class(class_id):
         class_id=class_id
     ).order_by(Subject.name.asc()).all()
 
+    seo_title = f"Class {cls.name} Study Materials | GyanaGhar"
+
+    seo_description = (
+        f"Explore free Class {cls.name} study materials, "
+        f"subjects, chapters and educational notes on GyanaGhar."
+    )
+
     return render_template(
         "public_class.html",
         cls=cls,
-        subjects=subjects
+        subjects=subjects,
+        seo_title=seo_title,
+        seo_description=seo_description
     )
 
 
@@ -326,11 +335,23 @@ def public_subject(subject_id):
         subject_id=subject_id
     ).order_by(Chapter.id.asc()).all()
 
+    seo_title = (
+        f"{subject.name} Class {cls.name} Notes "
+        f"and Chapters | GyanaGhar"
+    )
+
+    seo_description = (
+        f"Study {subject.name} for Class {cls.name}. "
+        f"Explore free chapters, notes and learning materials on GyanaGhar."
+    )
+
     return render_template(
         "public_subject.html",
         subject=subject,
         cls=cls,
-        chapters=chapters
+        chapters=chapters,
+        seo_title=seo_title,
+        seo_description=seo_description
     )
 
 
@@ -351,12 +372,24 @@ def public_chapter(chapter_id):
         chapter_id=chapter_id
     ).order_by(Note.id.asc()).all()
 
+    seo_title = (
+        f"{chapter.name} - {subject.name} "
+        f"Class {cls.name} | GyanaGhar"
+    )
+
+    seo_description = (
+        f"Learn {chapter.name} from {subject.name}, "
+        f"Class {cls.name}. Find free study notes and learning resources on GyanaGhar."
+    )
+
     return render_template(
         "public_chapter.html",
         chapter=chapter,
         subject=subject,
         cls=cls,
-        notes=notes
+        notes=notes,
+        seo_title=seo_title,
+        seo_description=seo_description
     )
 
 
@@ -377,11 +410,21 @@ def public_note_preview(note_id):
 
     cls = Class.query.get_or_404(subject.class_id)
 
-    # Short preview only
     preview = ""
 
     if note.content:
         preview = note.content[:180].strip()
+
+    seo_title = (
+        f"{chapter.name} {subject.name} "
+        f"Class {cls.name} Notes | GyanaGhar"
+    )
+
+    seo_description = (
+        f"Read study notes for {chapter.name}, "
+        f"{subject.name}, Class {cls.name} on GyanaGhar. "
+        f"Explore free educational resources."
+    )
 
     return render_template(
         "public_note_preview.html",
@@ -389,9 +432,10 @@ def public_note_preview(note_id):
         chapter=chapter,
         subject=subject,
         cls=cls,
-        preview=preview
+        preview=preview,
+        seo_title=seo_title,
+        seo_description=seo_description
     )
-
 
 # ================= REGISTER =================
 

@@ -1,129 +1,221 @@
-<!DOCTYPE html>
 
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="google-site-verification" content="CzSUTRwhoYeuHDC84eJcgH4fY9yzS0dB7OBuwwvreh0" />
-    <title>GyanaGhar - Free Learning Platform</title>
 
-<meta name="description" content="Learn Class 6 to 10 subjects free. Notes, chapters, and courses in GyanaGhar.">
-<meta name="keywords" content="GyanaGhar, education, notes, class 6, odia learning">
-<meta name="author" content="Rahul Nayak">
+    <!-- Google Site Verification -->
+    <meta name="google-site-verification"
+          content="CzSUTRwhoYeuHDC84eJcgH4fY9yzS0dB7OBuwwvreh0">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Google Font -->
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Dynamic SEO Title -->
+<title>
+    {% block title %}
+        {{ seo_title|default('GyanaGhar - Free Learning Platform') }}
+    {% endblock %}
+</title>
 
-<!-- Material Icons -->
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<!-- Dynamic SEO Description -->
+<meta name="description"
+      content="{% block meta_description %}{{ seo_description|default('Learn Class 6 to 10 subjects for free with GyanaGhar. Explore notes, chapters and study materials.') }}{% endblock %}">
 
-<!-- CSS -->
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<!-- Dynamic Open Graph Title -->
+<meta property="og:title"
+       content="{{ seo_title|default('GyanaGhar - Free Learning Platform') }}">
 
+<!-- Dynamic Open Graph Description -->
+<meta property="og:description"
+       content="{{ seo_description|default('Free educational notes, chapters and learning resources on GyanaGhar.') }}">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="{{ request.base_url }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:site_name" content="GyanaGhar">
+    <meta property="og:type" content="website">
+
+    <meta property="og:title"
+          content="{% block og_title %}GyanaGhar - Free Learning Platform{% endblock %}">
+
+    <meta property="og:description"
+          content="{% block og_description %}Learn Class 6 to 10 subjects for free. Explore notes, chapters and educational resources on GyanaGhar.{% endblock %}">
+
+    <meta property="og:url" content="{{ request.base_url }}">
+
+    <meta property="og:image"
+          content="{{ url_for('static', filename='images/logo/logo.png', _external=True) }}">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+
+    <meta name="twitter:title"
+          content="{% block twitter_title %}GyanaGhar - Free Learning Platform{% endblock %}">
+
+    <meta name="twitter:description"
+          content="{% block twitter_description %}Free educational notes, chapters and study materials for students on GyanaGhar.{% endblock %}">
+
+    <meta name="twitter:image"
+          content="{{ url_for('static', filename='images/logo/logo.png', _external=True) }}">
+
+    <!-- Browser Theme Color -->
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
+          rel="stylesheet">
+
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <!-- Extra CSS / SEO Metadata -->
+    {% block extra_head %}{% endblock %}
 
 </head>
 
 <body>
 
-<!-- Terms -->
+    <!-- TERMS NOTICE -->
+    <p style="text-align:center; font-size:12px; color:#aaa; margin-top:10px;">
 
-<p style="text-align:center; font-size:12px; color:#aaa; margin-top:10px;">
-    By using this app, you agree to
-    <a href="/terms">Terms</a> &
-    <a href="/privacy-policy">Privacy Policy</a>
-</p>
+        By using this app, you agree to
 
-<!-- HEADER -->
+        <a href="/terms">Terms</a> &
 
-<header class="top-header">
+        <a href="/privacy-policy">Privacy Policy</a>
 
-    <div class="logo">
-        GyanaGhar
+    </p>
+
+
+    <!-- HEADER -->
+    <header class="top-header">
+
+        <div class="logo">
+            GyanaGhar
+        </div>
+
+        <a href="/profile" class="profile-btn">
+            <span class="material-icons">person</span>
+        </a>
+
+    </header>
+
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+
+        <div class="main-container">
+
+            {% block content %}
+            {% endblock %}
+
+        </div>
+
     </div>
 
-    <a href="/profile" class="profile-btn">
-        <span class="material-icons">person</span>
-    </a>
 
-</header>
+    <!-- BOTTOM NAVIGATION -->
+    <!--
+    <nav class="bottom-nav">
 
-<!-- MAIN -->
+        <a href="/dashboard" class="nav-item">
+            <span class="material-icons">home</span>
+            <small>Home</small>
+        </a>
 
-<div class="main-content">
-    <div class="main-container">
-        {% block content %}
-        {% endblock %}
-    </div>
-</div>
+        <a href="/class/1" class="nav-item">
+            <span class="material-icons">menu_book</span>
+            <small>Courses</small>
+        </a>
 
-<!-- BOTTOM NAV -->
+        <a href="/profile" class="nav-item">
+            <span class="material-icons">person</span>
+            <small>Profile</small>
+        </a>
 
-<!--<nav class="bottom-nav">-->
+        <a href="/logout" class="nav-item logout">
+            <span class="material-icons">logout</span>
+            <small>Logout</small>
+        </a>
 
-
-<!--<a href="/dashboard" class="nav-item">-->
-<!--    <span class="material-icons">home</span>-->
-<!--    <small>Home</small>-->
-<!--</a>-->
-
-<!--<a href="/class/1" class="nav-item">-->
-<!--    <span class="material-icons">menu_book</span>-->
-<!--    <small>Courses</small>-->
-<!--</a>-->
-
-<!--<a href="/profile" class="nav-item">-->
-<!--    <span class="material-icons">person</span>-->
-<!--    <small>Profile</small>-->
-<!--</a>-->
-
-<!--<a href="/logout" class="nav-item logout">-->
-<!--    <span class="material-icons">logout</span>-->
-<!--    <small>Logout</small>-->
-<!--</a>-->
+    </nav>
+    -->
 
 
-<!--</nav>-->
+    <!-- FOOTER -->
+    <footer class="footer">
 
-<!-- FOOTER -->
+        <a href="/privacy-policy">Privacy Policy</a> |
 
-<footer class="footer">
-    <a href="/privacy-policy">Privacy Policy</a> |
-    <a href="/terms">Terms & Conditions</a> |
-    <a href="/about">About Us</a> |
-    <a href="/disclaimer">Disclaimer</a>
-    <br><br>
-    © 2026 GyanaGhar | Built by Rahul Nayak
-</footer>
+        <a href="/terms">Terms & Conditions</a> |
 
-<!-- ACTIVE NAV SCRIPT -->
+        <a href="/about">About Us</a> |
 
-<script>
-    const links = document.querySelectorAll('.nav-item');
-    links.forEach(link => {
-        if (window.location.pathname === new URL(link.href).pathname) {
-            link.classList.add('active');
+        <a href="/disclaimer">Disclaimer</a>
+
+        <br><br>
+
+        © 2026 GyanaGhar | Built by Rahul Nayak
+
+    </footer>
+
+
+    <!-- ACTIVE NAV SCRIPT -->
+    <script>
+
+        const links = document.querySelectorAll('.nav-item');
+
+        links.forEach(link => {
+
+            if (window.location.pathname === new URL(link.href).pathname) {
+
+                link.classList.add('active');
+
+            }
+
+        });
+
+    </script>
+
+
+    <!-- APP MODE DETECTION -->
+    <script>
+
+        const isApp = /wv|Android|iPhone/i.test(navigator.userAgent);
+
+        if (isApp) {
+
+            document.body.classList.add("app-mode");
+
         }
-    });
-</script>
 
-<!-- APP MODE DETECTION -->
+    </script>
 
-<script>
-    const isApp = /wv|Android|iPhone/i.test(navigator.userAgent);
-    if (isApp) {
-        document.body.classList.add("app-mode");
-    }
-</script>
 
-<!-- FADE ANIMATION -->
+    <!-- FADE ANIMATION -->
+    <script>
 
-<script>
-    window.addEventListener("load", function () {
-        document.body.style.opacity = "1";
-    });
-</script>
+        window.addEventListener("load", function () {
+
+            document.body.style.opacity = "1";
+
+        });
+
+    </script>
+
+
+    <!-- Extra JavaScript -->
+    {% block extra_scripts %}{% endblock %}
 
 </body>
+
 </html>
