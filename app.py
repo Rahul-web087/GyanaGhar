@@ -519,7 +519,9 @@ def register():
         if role == "student":
 
             try:
-                send_otp_email(email, otp)
+                email_sent = send_otp_email(email, otp)
+                if not email_sent:
+                    raise RuntimeError("Brevo did not confirm email delivery")
 
             except Exception:
                 app.logger.exception("Registration OTP email failed")
@@ -580,7 +582,8 @@ def send_otp():
     # Send OTP through Brevo
     try:
 
-        send_otp_email(email, otp)
+        if not send_otp_email(email, otp):
+            raise RuntimeError("Brevo did not confirm email delivery")
 
         flash("OTP sent! Check Inbox or Spam folder.")
 
@@ -691,6 +694,14 @@ def verify_otp():
 
             return redirect('/reset-password')
 
+        # Login email verification
+        elif purpose == 'login_verification':
+
+            session.pop('otp_user_id', None)
+            session.pop('otp_purpose', None)
+            flash("Email verified successfully. Please login.")
+            return redirect('/login')
+
         # Invalid purpose
         session.pop('otp_user_id', None)
         session.pop('otp_purpose', None)
@@ -749,7 +760,7 @@ def login():
             )
 
         # Password check FIRST
-        if not check_password_hash(user.password, password):
+        if not user.password or not check_password_hash(user.password, password):
             session['attempts'] = session.get('attempts', 0) + 1
 
             if session['attempts'] >= 5:
@@ -778,7 +789,8 @@ def login():
             db.session.commit()
 
             try:
-                send_otp_email(user.email, otp)
+                if not send_otp_email(user.email, otp):
+                    raise RuntimeError("Brevo did not confirm email delivery")
 
             except Exception:
                 app.logger.exception("Login OTP email failed")
@@ -793,7 +805,7 @@ def login():
                 )
 
             session['otp_user_id'] = user.id
-            session['otp_purpose'] = 'register'
+            session['otp_purpose'] = 'login_verification'
 
             return redirect('/verify_otp')
 
@@ -807,9 +819,9 @@ def login():
 
         # Role-based redirect
         if user.role == "admin":
-            return redirect('/admin/dashboard')
+            return redirect(url_for('dashboard'))
 
-        return redirect('/dashboard')
+        return redirect(url_for('student_dashboard'))
 
     return render_template("login.html")
 
@@ -837,11 +849,16 @@ def resend_otp():
 
     db.session.commit()
 
-    send_otp_email(user.email, otp)
+    if not send_otp_email(user.email, otp):
+        user.otp = None
+        user.otp_created_at = None
+        db.session.commit()
+        flash("Unable to send OTP. Please try again.")
+        return redirect("/login")
 
-    flash("OTP sent again!")   #  better UX
+    flash("OTP sent again!")   # better UX
 
-    return redirect("/verify_otp")   #  IMPORTANT
+    return redirect("/verify_otp")
 
 # =============== Profile =============
 
@@ -910,9 +927,16 @@ def forgot_password():
 @app.route('/verify_secret', methods=['POST'])
 def verify_secret():
     user = User.query.get(session.get('reset_user'))
-    if user and request.form['answer'].lower() == user.secret_answer:
-        return render_template('reset_password.html')
-    return "Wrong Answer"
+    answer = request.form.get('answer', '').strip().lower()
+
+    if user and answer == (user.secret_answer or '').strip().lower():
+        # Allow the existing reset-password route to process this verified flow.
+        session['otp_user_id'] = user.id
+        session['reset_verified'] = True
+        session.pop('reset_user', None)
+        return redirect('/reset-password')
+
+    return "Wrong Answer", 400
 
 
 # -------- RESET PASSWORD --------
@@ -1174,9 +1198,12 @@ def sitemap():
 
 
 @app.route("/dashboard")
+@app.route("/admin/dashboard")  # Backward-compatible URL used by older links
 @login_required
 def dashboard():
 
+    if current_user.role != "admin":
+        return redirect(url_for("student_dashboard"))
 
     total_subjects = Subject.query.count()
     total_chapters = Chapter.query.count()
@@ -1510,6 +1537,9 @@ def edit_note(note_id):
 @login_required
 def add_chapter():
 
+    if current_user.role != "admin":
+        return "Access Denied", 403
+
     classes = Class.query.all()
     subjects = Subject.query.all()
 
@@ -1543,6 +1573,9 @@ import json
 @app.route("/admin/add_note", methods=["GET", "POST"])
 @login_required
 def add_note():
+
+    if current_user.role != "admin":
+        return "Access Denied", 403
 
     classes = Class.query.all()
     subjects = Subject.query.all()
@@ -1857,6 +1890,9 @@ def mark_complete(note_id):
 @login_required
 def student_dashboard():
 
+    if current_user.role == "admin":
+        return redirect(url_for("dashboard"))
+
     total_notes = Note.query.count()
 
     completed_notes = Progress.query.filter_by(
@@ -1991,4 +2027,8 @@ with app.app_context():
 # ================= RUN =================
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 5000)),
+        debug=os.environ.get("FLASK_DEBUG", "0") == "1"
+    )
