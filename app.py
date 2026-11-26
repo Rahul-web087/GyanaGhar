@@ -12,6 +12,10 @@ from flask import Flask, render_template, redirect, url_for, request, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask import request, redirect, session, flash, render_template
+from datetime import datetime, timedelta
+
+import requests
 
 from sqlalchemy import text
 from dotenv import load_dotenv
@@ -451,34 +455,42 @@ def is_strong_password(password):
     )
 
 
-@app.route('/register', methods=['GET','POST'])
+
+# STUDENT / ADMIN REGISTRATION
+
+@app.route('/register', methods=['GET', 'POST'])
 def register():
 
     if request.method == "POST":
 
-        email = request.form['email']
-        password = request.form['password']
-        confirm = request.form['confirm_password']
+        email = request.form.get('email', '').strip().lower()
+        password = request.form.get('password', '')
+        confirm = request.form.get('confirm_password', '')
 
+        # Email validation
         if not is_valid_email(email):
             return "Invalid email format"
 
+        # Check existing user
         if User.query.filter_by(email=email).first():
             return "Email already exists"
 
-
+        # Password confirmation
         if password != confirm:
             return "Passwords do not match"
 
-
-
-        #  Strong password check
+        # Strong password validation
         if not is_strong_password(password):
-            return "Password must be at least 6 characters and include uppercase, lowercase, number, and special character"
+            return (
+                "Password must be at least 6 characters and include "
+                "uppercase, lowercase, number, and special character"
+            )
 
+        # Generate OTP
         otp = generate_otp()
 
-        #  Admin logic
+        # Admin logic
+        # IMPORTANT: Replace this with secure server-side admin configuration.
         if email == "your_email@gmail.com":
             role = "admin"
             is_email_verified = True
@@ -486,132 +498,207 @@ def register():
             role = "student"
             is_email_verified = False
 
-        #  Create user
+        # Create user
         user = User(
-            name=request.form['name'],
+            name=request.form.get('name', '').strip(),
             email=email,
             password=generate_password_hash(password),
-            secret_question=request.form['secret_question'],
-            secret_answer=request.form['secret_answer'].lower(),
-            otp=otp,
+            secret_question=request.form.get('secret_question'),
+            secret_answer=request.form.get('secret_answer', '').lower(),
+            otp=otp if role != "admin" else None,
             role=role,
             is_email_verified=is_email_verified,
-            otp_created_at=datetime.utcnow()
+            otp_created_at=datetime.utcnow() if role != "admin" else None,
+            otp_attempts=0
         )
 
         db.session.add(user)
         db.session.commit()
 
-        #  Send OTP for normal users
-        if role != "admin":
-            send_otp_email(email, otp)
-            session['otp_user_id'] = user.id
-            return redirect("/verify-otp")
+        # Send OTP to student
+        if role == "student":
 
-        return redirect("/login")
+            try:
+                send_otp_email(email, otp)
+
+            except Exception:
+                app.logger.exception("Registration OTP email failed")
+
+                db.session.delete(user)
+                db.session.commit()
+
+                return "Unable to send OTP. Please try again."
+
+            session['otp_user_id'] = user.id
+            session['otp_purpose'] = 'register'
+
+            return redirect('/verify_otp')
+
+        return redirect('/login')
 
     return render_template("register.html")
 
 
-# ======= SEND OTP ======
-
-from flask import request, redirect, session, flash
-import requests
+# ==========================================
+# SEND OTP - FORGOT PASSWORD
+# ==========================================
 
 @app.route('/send-otp', methods=['POST'])
 def send_otp():
 
-    email = request.form.get('email')
+    email = request.form.get('email', '').strip().lower()
 
     if not email:
         flash("Enter email")
-        return redirect('/login')
+        return redirect('/forgot_password')
 
-    # Check user
+    # Find existing user
     user = User.query.filter_by(
         email=email,
         is_deleted=False
     ).first()
 
-    if not user:
-        user = User(email=email)
-        db.session.add(user)
+    # Do not create incomplete users
+    if not user or not user.is_email_verified:
+        flash("If the account is eligible, an OTP will be sent.")
+        return redirect('/forgot_password')
 
     # Generate OTP
     otp = generate_otp()
 
-    # OTP setup
+    # Save OTP
     user.otp = otp
     user.otp_created_at = datetime.utcnow()
     user.otp_attempts = 0
 
     db.session.commit()
 
-    # Bind session
+    # Session
     session['otp_user_id'] = user.id
+    session['otp_purpose'] = 'reset_password'
 
-    # Send OTP using Brevo API
+    # Send OTP through Brevo
     try:
+
         send_otp_email(email, otp)
 
         flash("OTP sent! Check Inbox or Spam folder.")
+
         return redirect('/verify_otp')
 
-    except (requests.RequestException, ValueError) as e:
-        app.logger.error("OTP email failed: %s", e)
+    except Exception:
+
+        app.logger.exception("Password reset OTP email failed")
+
+        user.otp = None
+        user.otp_created_at = None
+
+        db.session.commit()
+
+        session.pop('otp_user_id', None)
+        session.pop('otp_purpose', None)
 
         flash("Unable to send OTP. Please try again.")
-        return redirect('/login')
+
+        return redirect('/forgot_password')
 
 
-#  =========== verify Otp ==========
+# ==========================================
+# VERIFY OTP
+# ==========================================
 
-from datetime import datetime, timedelta
-
-@app.route('/verify_otp', methods=['GET','POST'])
+@app.route('/verify_otp', methods=['GET', 'POST'])
+@app.route('/verify-otp', methods=['GET', 'POST'])
 def verify_otp():
 
     user_id = session.get('otp_user_id')
+    purpose = session.get('otp_purpose')
 
-    if not user_id:
-        return redirect("/login")
+    # Check session
+    if not user_id or not purpose:
+        return redirect('/login')
 
-    user = User.query.get(user_id)
+    user = db.session.get(User, user_id)
 
     if not user:
-        return redirect("/login")
+        session.pop('otp_user_id', None)
+        session.pop('otp_purpose', None)
+        return redirect('/login')
 
     if user.otp_attempts is None:
         user.otp_attempts = 0
 
     if request.method == "POST":
 
-        user_otp = request.form.get('otp')
+        user_otp = request.form.get('otp', '').strip()
 
+        # Maximum attempts
         if user.otp_attempts >= 5:
-            return render_template("verify_otp.html", error="Too many attempts. Try again later.")
 
-        if not user.otp_created_at or datetime.utcnow() - user.otp_created_at > timedelta(minutes=5):
-            return render_template("verify_otp.html", error="OTP expired")
+            return render_template(
+                "verify_otp.html",
+                error="Too many attempts. Try again later."
+            )
 
-        if user.otp != user_otp:
+        # OTP expiry check
+        if (
+            not user.otp_created_at or
+            datetime.utcnow() - user.otp_created_at > timedelta(minutes=5)
+        ):
+
+            return render_template(
+                "verify_otp.html",
+                error="OTP expired. Please request a new OTP."
+            )
+
+        # OTP verification
+        if not user.otp or user.otp != user_otp:
+
             user.otp_attempts += 1
             db.session.commit()
-            return render_template("verify_otp.html", error="Invalid OTP")
 
-        # SUCCESS
+            return render_template(
+                "verify_otp.html",
+                error="Invalid OTP"
+            )
+
+        # ==================================
+        # OTP SUCCESS
+        # ==================================
+
         user.is_email_verified = True
         user.otp = None
+        user.otp_created_at = None
         user.otp_attempts = 0
 
         db.session.commit()
 
+        # Registration verification
+        if purpose == 'register':
 
-        # Keep otp_user_id for reset-password
+            session.pop('otp_user_id', None)
+            session.pop('otp_purpose', None)
 
-        return redirect("/reset-password")
+            flash("Email verified successfully. Please login.")
+
+            return redirect('/login')
+
+        # Password reset verification
+        elif purpose == 'reset_password':
+
+            session['reset_verified'] = True
+            session.pop('otp_purpose', None)
+
+            return redirect('/reset-password')
+
+        # Invalid purpose
+        session.pop('otp_user_id', None)
+        session.pop('otp_purpose', None)
+
+        return redirect('/login')
 
     return render_template("verify_otp.html")
+
 
 
 # ================= ALL LEGAL TEARM ==============
@@ -637,32 +724,52 @@ def disclaimer():
 
 # ================= LOGIN =================
 
-@app.route('/login', methods=['GET','POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
 
     if request.method == "POST":
 
-        email = request.form['email']
-        password = request.form['password']
+        email = request.form.get('email', '').strip().lower()
+        password = request.form.get('password', '')
 
+        # Find user
         user = User.query.filter_by(email=email).first()
 
         if not user:
-            return "User not found"
+            return render_template(
+                "login.html",
+                error="Invalid email or password"
+            )
 
-
+        # Deleted account check
         if user.is_deleted:
-            return "This account has been deleted by admin"
+            return render_template(
+                "login.html",
+                error="This account has been deleted by admin"
+            )
 
-        # OTP check (skip for admin)
+        # Password check FIRST
+        if not check_password_hash(user.password, password):
+            session['attempts'] = session.get('attempts', 0) + 1
+
+            if session['attempts'] >= 5:
+                return render_template(
+                    "login.html",
+                    error="Too many attempts. Try later."
+                )
+
+            return render_template(
+                "login.html",
+                error="Invalid email or password"
+            )
+
+        # Successful password check
+        session['attempts'] = 0
+
+        # Student email verification
         if not user.is_email_verified and user.role != "admin":
 
-            print("User is not verified")
-            print("Email:", user.email)
-
             otp = generate_otp()
-
-            print("Generated OTP:", otp)
 
             user.otp = otp
             user.otp_created_at = datetime.utcnow()
@@ -670,38 +777,42 @@ def login():
 
             db.session.commit()
 
-            print("OTP saved to database")
+            try:
+                send_otp_email(user.email, otp)
 
-            if send_otp_email(user.email, otp):
-                print("OTP email sent")
+            except Exception:
+                app.logger.exception("Login OTP email failed")
 
-                session["otp_user_id"] = user.id
-                session["verify_email"] = user.email
+                user.otp = None
+                user.otp_created_at = None
+                db.session.commit()
 
-                return redirect("/verify_otp")
+                return render_template(
+                    "login.html",
+                    error="Unable to send OTP. Please try again."
+                )
 
-            print("Email sending failed")
-            return "Unable to send OTP. Please try again."
-        # ADMIN SPECIAL CHECK
-        if user.role == "admin" and not check_password_hash(user.password, password):
-            return "Wrong admin password"
+            session['otp_user_id'] = user.id
+            session['otp_purpose'] = 'register'
 
-        # NORMAL LOGIN
-        if check_password_hash(user.password, password):
+            return redirect('/verify_otp')
 
-            session['attempts'] = 0
-            login_user(user)
-            return redirect("/dashboard")
+        # Login successful
+        login_user(user)
 
-        else:
-            session['attempts'] = session.get('attempts', 0) + 1
+        # Clear previous OTP session data
+        session.pop('otp_user_id', None)
+        session.pop('otp_purpose', None)
+        session.pop('reset_verified', None)
 
-            if session['attempts'] > 5:
-                return "Too many attempts. Try later"
+        # Role-based redirect
+        if user.role == "admin":
+            return redirect('/admin/dashboard')
 
-            return "Invalid password"
+        return redirect('/dashboard')
 
     return render_template("login.html")
+
 
 
 # =========== Resend OTP ========
@@ -805,41 +916,64 @@ def verify_secret():
 
 
 # -------- RESET PASSWORD --------
-from werkzeug.security import generate_password_hash
+
 
 @app.route('/reset-password', methods=['GET', 'POST'])
 def reset_password():
 
-    user_id = session.get('otp_user_id')   #  correct key
+    # Check OTP verification session
+    user_id = session.get('otp_user_id')
 
-    if not user_id:
-        return redirect("/login")
+    if not user_id or session.get('reset_verified') is not True:
+        return redirect('/login')
 
-    user = User.query.get(user_id)
+    user = db.session.get(User, user_id)
 
     if not user:
-        return redirect("/login")
+        session.pop('otp_user_id', None)
+        session.pop('reset_verified', None)
+        return redirect('/login')
 
     if request.method == "POST":
 
-        password = request.form.get('password')
-        confirm = request.form.get('confirm_password')
+        password = request.form.get('password', '')
+        confirm = request.form.get('confirm_password', '')
 
-        #  password match check
+        # Password match check
         if password != confirm:
-            return render_template("reset_password.html", error="Passwords do not match")
+            return render_template(
+                "reset_password.html",
+                error="Passwords do not match"
+            )
 
-        #  hash password
+        # Strong password check
+        if not is_strong_password(password):
+            return render_template(
+                "reset_password.html",
+                error="Password must include uppercase, lowercase, number and special character, and be at least 6 characters."
+            )
+
+        # Hash new password
         user.password = generate_password_hash(password)
+
+        # Clear OTP fields
+        user.otp = None
+        user.otp_created_at = None
+        user.otp_attempts = 0
 
         db.session.commit()
 
-        #  clear session AFTER success
+        # Clear reset session
         session.pop('otp_user_id', None)
+        session.pop('reset_verified', None)
+        session.pop('otp_purpose', None)
 
-        return redirect("/login")
+        flash("Password changed successfully. Please login.")
+
+        return redirect('/login')
 
     return render_template("reset_password.html")
+
 
 
 # temporary file
