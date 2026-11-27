@@ -1449,7 +1449,6 @@ def leaderboard():
 
 # ================= ADMIN ADD CLASS =================
 
-# ================= ADMIN ADD CLASS =================
 
 @app.route('/admin/add_class', methods=['GET', 'POST'])
 @login_required

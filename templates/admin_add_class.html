@@ -7,8 +7,7 @@
 
     <title>Add Class | GyanaGhar</title>
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
+
 
     <style>
         * {
@@ -169,6 +168,42 @@
                 padding: 22px 18px;
             }
         }
+
+        /* FORCE PAGE CONTENT TO REMAIN VISIBLE */
+html, body {
+    background: #f5f7fb !important;
+    color: #1e293b !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.navbar,
+.page-container,
+.form-card,
+.footer {
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.navbar {
+    display: flex !important;
+    background: #ffffff !important;
+}
+
+.page-container {
+    display: block !important;
+}
+
+.form-card {
+    display: block !important;
+    background: #ffffff !important;
+}
+
+.form-card h2,
+.form-card label,
+.navbar h1 {
+    color: #173b70 !important;
+}
     </style>
 </head>
 
