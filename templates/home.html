@@ -1,324 +1,324 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
+{% extends "base.html" %}
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block title %}
+GyanaGhar - Free Online Study Materials for Students
+{% endblock %}
 
-    <title>GyanaGhar - Free Online Study Materials for Students</title>
+{% block meta_description %}
+Learn smart with GyanaGhar. Explore free class-wise subjects, chapters, study notes, PDF resources and video learning materials for students.
+{% endblock %}
 
-    <meta name="description"
-          content="Learn smart with GyanaGhar. Explore class-wise subjects, chapters, study notes and learning resources for students.">
+{% block extra_head %}
+<style>
+    /* HOMEPAGE LIGHT THEME */
 
-    <meta name="robots" content="index, follow">
-
-    <link rel="canonical" href="{{ url_for('home', _external=True) }}">
-
-    <meta property="og:title" content="GyanaGhar - Learn Smart">
-    <meta property="og:description"
-          content="Explore free class-wise study materials, subjects, chapters and learning resources on GyanaGhar.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="{{ url_for('home', _external=True) }}">
-
-    <style>
-
-    body{
-        margin:0;
-        font-family:Arial, Helvetica, sans-serif;
-        background:#f5f7fb;
+    body {
+        background: #f5f7fb !important;
+        color: #1f2937;
     }
 
-    .navbar{
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        padding:15px 40px;
-        background:#1e3c72;
-        color:white;
-        flex-wrap:wrap;
+    .home-hero {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 40px;
+        max-width: 1250px;
+        margin: 35px auto;
+        padding: 65px 8%;
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        color: white;
+        border-radius: 18px;
+        box-shadow: 0 8px 25px rgba(30, 60, 114, 0.15);
     }
 
-    .logo{
-        font-size:22px;
-        font-weight:bold;
+    .hero-text {
+        max-width: 620px;
     }
 
-    .nav-links{
-        display:flex;
+    .hero-text h1 {
+        font-size: 40px;
+        font-weight: 750;
+        line-height: 1.3;
+        margin-bottom: 18px;
     }
 
-    .nav-links a{
-        color:white;
-        margin-left:20px;
-        text-decoration:none;
-        font-weight:bold;
+    .hero-text p {
+        font-size: 17px;
+        line-height: 1.8;
+        margin-bottom: 28px;
+        color: #eef4ff;
     }
 
-    .nav-links a:hover{
-        text-decoration:underline;
+    .hero-btn {
+        display: inline-block;
+        padding: 14px 28px;
+        background: #ff9800;
+        color: white !important;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 700;
+        transition: 0.25s;
     }
 
-    .hero{
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        padding:80px 10%;
-        background:linear-gradient(135deg,#1e3c72,#2a5298);
-        color:white;
-        flex-wrap:wrap;
+    .hero-btn:hover {
+        background: #e68900;
+        transform: translateY(-2px);
     }
 
-    .hero-text{
-        max-width:500px;
+    .hero-image {
+        width: 300px;
+        max-width: 100%;
     }
 
-    .hero-text h1{
-        font-size:40px;
-        margin-bottom:15px;
+    /* COMMON SECTIONS */
+
+    .home-section {
+        max-width: 1250px;
+        margin: auto;
+        padding: 65px 25px;
+        text-align: center;
     }
 
-    .hero-text p{
-        font-size:18px;
-        margin-bottom:25px;
+    .home-section h2 {
+        font-size: 30px;
+        font-weight: 750;
+        color: #1e3c72;
+        margin-bottom: 15px;
     }
 
-    .hero-btn{
-        padding:12px 25px;
-        background:#ff9800;
-        border-radius:6px;
-        color:white;
-        text-decoration:none;
-        font-weight:bold;
-        display:inline-block;
+    .section-description {
+        color: #64748b;
+        font-size: 16px;
+        margin-bottom: 35px;
     }
 
-    .hero-btn:hover{
-        background:#e68900;
+    /* FEATURE CARDS */
+
+    .feature-grid,
+    .course-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 24px;
+        margin-top: 35px;
     }
 
-    .hero img{
-        width:350px;
-        max-width:100%;
+    .feature-card,
+    .course-card {
+        background: #ffffff;
+        padding: 30px 24px;
+        border-radius: 14px;
+        border: 1px solid #e5eaf2;
+        box-shadow: 0 5px 18px rgba(15, 23, 42, 0.05);
+        transition: 0.25s;
     }
 
-    .features{
-        padding:70px 10%;
-        text-align:center;
+    .feature-card:hover,
+    .course-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(30, 60, 114, 0.10);
     }
 
-    .features h2{
-        margin-bottom:40px;
+    .feature-card h3,
+    .course-card h3 {
+        color: #1e3c72;
+        font-size: 20px;
+        margin-bottom: 12px;
     }
 
-    .feature-grid{
-        display:grid;
-        grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-        gap:30px;
+    .feature-card p,
+    .course-card p {
+        color: #64748b;
+        line-height: 1.7;
+        margin-bottom: 0;
     }
 
-    .feature-card{
-        background:white;
-        padding:25px;
-        border-radius:10px;
-        box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    /* AVAILABLE CLASSES */
+
+    .courses-section {
+        background: #eef3ff;
+        padding: 20px 0;
     }
 
-    .courses{
-        padding:70px 10%;
-        background:#eef2ff;
-        text-align:center;
+    .course-card {
+        border-top: 4px solid #2a5298;
     }
 
-    .course-grid{
-        display:grid;
-        grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-        gap:25px;
-        margin-top:30px;
+    .course-btn {
+        display: inline-block;
+        margin-top: 18px;
+        padding: 10px 23px;
+        background: #2a5298;
+        color: white !important;
+        text-decoration: none;
+        border-radius: 7px;
+        font-weight: 600;
+        transition: 0.2s;
     }
 
-    .course-card{
-        background:white;
-        padding:20px;
-        border-radius:10px;
-        box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    .course-btn:hover {
+        background: #1e3c72;
     }
 
-    .course-card a{
-        display:inline-block;
-        margin-top:10px;
-        padding:8px 20px;
-        background:#2a5298;
-        color:white;
-        text-decoration:none;
-        border-radius:6px;
-    }
+    /* MOBILE RESPONSIVE */
 
-    footer{
-        background:#1e3c72;
-        color:white;
-        text-align:center;
-        padding:20px;
-        margin-top:50px;
-    }
-
-    footer a{
-        color:#ffcc00;
-        text-decoration:none;
-        margin:0 8px;
-    }
-
-    footer a:hover{
-        text-decoration:underline;
-    }
-
-    @media (max-width:768px){
-
-        .navbar{
-            flex-direction:column;
-            align-items:flex-start;
-            padding:15px 20px;
+    @media (max-width: 768px) {
+        .home-hero {
+            flex-direction: column;
+            text-align: center;
+            padding: 40px 22px;
+            margin: 18px 12px;
+            gap: 25px;
         }
 
-        .nav-links{
-            margin-top:10px;
+        .hero-text h1 {
+            font-size: 29px;
         }
 
-        .nav-links a{
-            margin-left:0;
-            margin-right:15px;
+        .hero-text p {
+            font-size: 15px;
         }
 
-        .hero{
-            flex-direction:column;
-            text-align:center;
-            padding:40px 20px;
+        .hero-image {
+            width: 210px;
         }
 
-        .hero-text h1{
-            font-size:28px;
+        .home-section {
+            padding: 45px 18px;
         }
 
-        .hero-text p{
-            font-size:16px;
+        .home-section h2 {
+            font-size: 25px;
         }
 
-        .hero img{
-            width:220px;
-            margin-top:20px;
+        .feature-grid,
+        .course-grid {
+            grid-template-columns: 1fr;
+            gap: 18px;
         }
-
-        .features,
-        .courses{
-            padding:40px 20px;
-        }
-
     }
+</style>
+{% endblock %}
 
-    </style>
 
-</head>
+{% block content %}
 
-<body>
+<!-- HERO SECTION -->
 
-    <!-- NAVBAR -->
+<section class="home-hero">
 
-    <div class="navbar">
+    <div class="hero-text">
 
-        <div class="logo">GyanaGhar</div>
-
-        <div class="nav-links">
-            <a href="{{ url_for('login') }}">Login</a>
-            <a href="{{ url_for('register') }}">Register</a>
-        </div>
-
-    </div>
-
-    <!-- HERO -->
-
-    <div class="hero">
-
-        <div class="hero-text">
-
-            <h1>Learn Smart with GyanaGhar</h1>
-
-            <p>
-                Free learning platform for students.
-                Explore subjects, read notes and discover
-                educational resources easily.
-            </p>
-
-            <a class="hero-btn" href="{{ url_for('register') }}">
-                Start Learning
-            </a>
-
-        </div>
-
-        <img
-            src="https://cdn-icons-png.flaticon.com/512/3135/3135755.png"
-            alt="Student learning illustration">
-
-    </div>
-
-    <!-- FEATURES -->
-
-    <div class="features">
-
-        <h2>Why Choose GyanaGhar?</h2>
-
-        <div class="feature-grid">
-
-            <div class="feature-card">
-                <h3>Structured Courses</h3>
-                <p>Subjects organized by class and chapter.</p>
-            </div>
-
-            <div class="feature-card">
-                <h3>Video Learning</h3>
-                <p>Access video lectures with learning topics.</p>
-            </div>
-
-            <div class="feature-card">
-                <h3>PDF Notes</h3>
-                <p>Access study notes for revision.</p>
-            </div>
-
-            <div class="feature-card">
-                <h3>Progress Tracking</h3>
-                <p>Track completed chapters and achievements.</p>
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- COURSES -->
-
-    <div class="courses">
-
-        <h2>Available Classes</h2>
+        <h1>Learn Smart with GyanaGhar</h1>
 
         <p>
-            Select your class to explore subjects,
-            chapters and available study materials.
+            Welcome to GyanaGhar, your free online learning
+            platform. Explore class-wise subjects, chapters,
+            study notes, PDF resources and video learning
+            materials in one place.
+        </p>
+
+        <a class="hero-btn" href="{{ url_for('register') }}">
+            Start Learning
+        </a>
+
+    </div>
+
+    <img
+        class="hero-image"
+        src="https://cdn-icons-png.flaticon.com/512/3135/3135755.png"
+        alt="Student learning online"
+        loading="lazy"
+    >
+
+</section>
+
+
+<!-- FEATURES SECTION -->
+
+<section class="home-section">
+
+    <h2>Why Choose GyanaGhar?</h2>
+
+    <p class="section-description">
+        Everything students need to make learning easier
+        and more organized.
+    </p>
+
+    <div class="feature-grid">
+
+        <article class="feature-card">
+            <h3>Structured Learning</h3>
+            <p>
+                Explore subjects organized by class
+                and chapter for easy learning.
+            </p>
+        </article>
+
+        <article class="feature-card">
+            <h3>Video Learning</h3>
+            <p>
+                Learn important topics through
+                available educational video lectures.
+            </p>
+        </article>
+
+        <article class="feature-card">
+            <h3>PDF Study Notes</h3>
+            <p>
+                Access study notes and PDF resources
+                to support your revision.
+            </p>
+        </article>
+
+        <article class="feature-card">
+            <h3>Progress Tracking</h3>
+            <p>
+                Keep track of your learning progress
+                and completed study materials.
+            </p>
+        </article>
+
+    </div>
+
+</section>
+
+
+<!-- AVAILABLE CLASSES -->
+
+<section class="courses-section">
+
+    <div class="home-section">
+
+        <h2>Explore Available Classes</h2>
+
+        <p class="section-description">
+            Choose your class to explore subjects,
+            chapters and study materials.
         </p>
 
         <div class="course-grid">
 
             {% for cls in classes %}
 
-            <div class="course-card">
+            <article class="course-card">
 
                 <h3>{{ cls.name }}</h3>
 
-                <p>Explore subjects and learning resources.</p>
+                <p>
+                    Explore subjects, chapters and
+                    educational resources for {{ cls.name }}.
+                </p>
 
-                <a href="{{ url_for('public_class',
-                                    class_id=cls.id) }}">
-                    Explore
+                <a
+                    class="course-btn"
+                    href="{{ url_for('public_class', class_id=cls.id) }}"
+                    aria-label="Explore study materials for {{ cls.name }}"
+                >
+                    Explore Class
                 </a>
 
-            </div>
+            </article>
 
             {% else %}
 
@@ -330,20 +330,6 @@
 
     </div>
 
-    <!-- FOOTER -->
+</section>
 
-    <footer>
-
-        <div>
-            <a href="/privacy-policy">Privacy Policy</a> |
-            <a href="/terms">Terms &amp; Conditions</a> |
-            <a href="/about">About Us</a> |
-            <a href="/disclaimer">Disclaimer</a>
-        </div>
-
-        <p>© 2026 GyanaGhar | Built by Rahul Nayak</p>
-
-    </footer>
-
-</body>
-</html>
+{% endblock %}

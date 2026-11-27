@@ -1,17 +1,273 @@
+
 {% extends "base.html" %}
+
+{% block title %}Chapter Notes | GyanaGhar{% endblock %}
+
+{% block extra_head %}
+<style>
+
+/* NOTES PAGE */
+
+.notes-page {
+    width: 100%;
+    max-width: 1050px;
+    margin: 25px auto;
+    padding: 10px;
+    color: #1f2937;
+}
+
+.notes-heading {
+    text-align: center;
+    color: #1e3c72;
+    font-size: 27px;
+    font-weight: 700;
+    margin-bottom: 25px;
+}
+
+/* PROGRESS */
+
+.progress-box {
+    width: 100%;
+    height: 25px;
+    background: #e5eaf2;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+
+.progress-bar {
+    color: #ffffff;
+    background: #2563eb;
+    font-weight: 600;
+    text-align: center;
+    border-radius: 20px;
+    min-height: 28px;
+    line-height: 28px;
+}
+
+/* NOTE CARD */
+
+.note-card {
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid #e5eaf2;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 5px 18px rgba(30, 60, 114, 0.06);
+    opacity: 0;
+    transform: translateY(15px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.note-card.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* NOTE HEADER */
+
+.note-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-bottom: 15px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid #e5eaf2;
+}
+
+.note-title {
+    font-size: 21px;
+    font-weight: 700;
+    color: #1e3c72;
+}
+
+/* BUTTONS */
+
+.btn {
+    display: inline-block;
+    padding: 9px 17px;
+    border-radius: 7px;
+    background: #2a5298;
+    color: #ffffff !important;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn:hover {
+    background: #1e3c72;
+    transform: translateY(-2px);
+}
+
+.btn-danger {
+    background: #dc2626;
+}
+
+.btn-danger:hover {
+    background: #b91c1c;
+}
+
+.pdf-btn {
+    background: #eef3ff;
+    color: #1e3c72 !important;
+    border: 1px solid #d7e2f5;
+}
+
+.pdf-btn:hover {
+    background: #dce8ff;
+}
+
+/* QUESTIONS AND ANSWERS */
+
+.qa-box {
+    background: #f8faff;
+    border: 1px solid #e5eaf2;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 13px;
+    line-height: 1.85;
+    overflow-wrap: anywhere;
+}
+
+.question {
+    color: #1e3c72;
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 7px;
+}
+
+.answer {
+    color: #374151;
+    font-size: 15px;
+    line-height: 1.9;
+}
+
+/* VIDEO */
+
+.video-section {
+    margin: 22px 0;
+    padding: 16px;
+    background: #f8faff;
+    border: 1px solid #e5eaf2;
+    border-radius: 12px;
+}
+
+.video-section h4 {
+    color: #1e3c72;
+    font-size: 17px;
+    margin: 0 0 14px;
+}
+
+.video-section iframe,
+.video-section video {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    aspect-ratio: 16 / 9;
+    height: auto;
+    border-radius: 10px;
+    background: #000000;
+    border: none;
+}
+
+/* COMPLETION */
+
+.completed {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 9px 15px;
+    background: #dcfce7;
+    color: #166534;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* EMPTY STATE */
+
+.empty {
+    background: #ffffff;
+    border: 1px solid #e5eaf2;
+    border-radius: 12px;
+    padding: 35px 20px;
+    text-align: center;
+    color: #64748b;
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    .notes-page {
+        margin: 15px auto;
+        padding: 5px;
+    }
+
+    .notes-heading {
+        font-size: 23px;
+    }
+
+    .note-card {
+        padding: 16px;
+        border-radius: 12px;
+    }
+
+    .note-header {
+        align-items: flex-start;
+    }
+
+    .note-title {
+        font-size: 18px;
+    }
+
+    .question,
+    .answer {
+        font-size: 14px;
+    }
+
+    .qa-box {
+        padding: 12px;
+    }
+
+    .video-section {
+        padding: 10px;
+    }
+
+    .btn {
+        padding: 9px 12px;
+        font-size: 12px;
+    }
+
+}
+
+</style>
+{% endblock %}
+
 
 {% block content %}
 
-<div class="container">
+<div class="notes-page">
 
-    <h3 style="text-align:center;"> Chapter Notes</h3>
+    <h2 class="notes-heading">Chapter Notes</h2>
 
     <!-- PROGRESS -->
     <div class="progress-box">
-        <div class="progress-bar" style="width: {{ progress_percent }}%;">
+
+        <div class="progress-bar"
+             style="width: {{ progress_percent }}%;">
+
             {{ progress_percent }}% Completed
+
         </div>
+
     </div>
+
 
     {% if notes %}
 
@@ -21,9 +277,10 @@
 
             {% if show_note %}
 
-            <div class="note-card">
+            <article class="note-card">
 
-                <!-- HEADER -->
+                <!-- NOTE HEADER -->
+
                 <div class="note-header">
 
                     <div class="note-title">
@@ -31,144 +288,178 @@
                     </div>
 
                     {% if current_user.role == "admin" %}
-                    <div style="display:flex; gap:6px;">
-                        <a class="btn" href="{{ url_for('edit_note', note_id=note.id) }}">Edit</a>
+
+                    <div style="display:flex; gap:6px; flex-wrap:wrap;">
+
+                        <a class="btn"
+                           href="{{ url_for('edit_note', note_id=note.id) }}">
+                            Edit
+                        </a>
 
                         <a class="btn btn-danger"
                            href="/admin/delete_note/{{ note.id }}"
                            onclick="return confirm('Delete this note?')">
-                           Delete
+                            Delete
                         </a>
+
                     </div>
+
                     {% endif %}
 
                 </div>
 
-                <!-- QA -->
+
+                <!-- QUESTIONS AND ANSWERS -->
+
                 {% if note.qa_data and note.qa_data != '[]' %}
+
                     {% set qa_list = note.qa_data | from_json %}
 
                     {% for qa in qa_list %}
+
                     <div class="qa-box">
+
                         <div class="question">
                             <b>Q:</b> {{ qa.question }}
                         </div>
+
                         <div class="answer">
                             <b>Ans:</b> {{ qa.answer }}
                         </div>
+
                     </div>
+
                     {% endfor %}
+
                 {% endif %}
 
-                <!-- VIDEO -->
+
                 <!-- VIDEO LECTURE -->
-{% if note.video_link %}
-<div class="video-section">
 
-    <h4>🎥 Video Lecture</h4>
+                {% if note.video_link %}
 
-    {% if 'youtube.com/embed/' in note.video_link or 'youtu.be/' in note.video_link %}
+                <div class="video-section">
 
-        <iframe
-            src="{{ note.video_link }}"
-            width="100%"
-            height="350"
-            title="Video Lecture"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen>
-        </iframe>
+                    <h4>🎥 Video Lecture</h4>
 
-    {% else %}
+                    {% if 'youtube.com/embed/' in note.video_link or 'youtu.be/' in note.video_link %}
 
-        <video
-            width="100%"
-            controls
-            playsinline
-            preload="metadata"
-            style="border-radius: 12px; background: #000;">
+                        <iframe
+                            src="{{ note.video_link }}"
+                            title="Video Lecture"
+                            loading="lazy"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen>
+                        </iframe>
 
-            <source src="{{ note.video_link }}">
+                    {% else %}
 
-            Your browser does not support video playback.
+                        <video
+                            controls
+                            playsinline
+                            preload="metadata">
 
-        </video>
+                            <source src="{{ note.video_link }}">
 
-    {% endif %}
+                            Your browser does not support video playback.
 
-</div>
-{% endif %}
+                        </video>
+
+                    {% endif %}
+
+                </div>
+
+                {% endif %}
+
 
                 <!-- PDF -->
+
                 {% if note.pdf_url %}
-                <a class="btn pdf-btn" href="/view_pdf?url={{ note.pdf_url }}">
+
+                <a class="btn pdf-btn"
+                   href="/view_pdf?url={{ note.pdf_url | urlencode }}"
+                   target="_blank"
+                   rel="noopener noreferrer">
+
                     📄 Open PDF
+
                 </a>
+
                 {% endif %}
 
-                <!-- COMPLETE -->
-                {% if note.id in completed_note_ids %}
-                    <div class="completed">✅ Completed</div>
-                {% else %}
-                    <a href="/mark_complete/{{ note.id }}" class="btn">
-                        Mark Complete
-                    </a>
-                {% endif %}
 
-            </div>
+                <!-- COMPLETION -->
+
+                <div style="margin-top: 18px;">
+
+                    {% if note.id in completed_note_ids %}
+
+                        <div class="completed">
+                            ✅ Completed
+                        </div>
+
+                    {% else %}
+
+                        <a href="/mark_complete/{{ note.id }}"
+                           class="btn">
+
+                            ✓ Mark Complete
+
+                        </a>
+
+                    {% endif %}
+
+                </div>
+
+            </article>
 
             {% endif %}
+
         {% endfor %}
 
     {% else %}
 
         <div class="empty">
-            <p>No notes available</p>
+
+            <h3>No Notes Available</h3>
+
+            <p>Study materials for this chapter have not been added yet.</p>
+
         </div>
 
     {% endif %}
 
 </div>
-.<style>
-.video-section {
-    margin: 20px 0;
-}
 
-.video-section h4 {
-    margin-bottom: 12px;
-    font-weight: 600;
-}
-
-.video-section iframe,
-.video-section video {
-    width: 100%;
-    max-width: 100%;
-    border-radius: 12px;
-    background: #000;
-}
-</style>
 
 <!-- ANIMATION SCRIPT -->
+
 <script>
+
 document.addEventListener("DOMContentLoaded", function () {
 
     const elements = document.querySelectorAll('.note-card');
 
     function reveal() {
+
         elements.forEach(el => {
+
             const position = el.getBoundingClientRect().top;
 
             if (position < window.innerHeight - 50) {
                 el.classList.add('show');
             }
+
         });
+
     }
 
     window.addEventListener('scroll', reveal);
 
-    // Run once on load
     reveal();
+
 });
+
 </script>
 
 {% endblock %}

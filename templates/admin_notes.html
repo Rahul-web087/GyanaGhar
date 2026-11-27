@@ -1,39 +1,227 @@
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Manage Courses</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Manage Courses | GyanaGhar</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        body {
+            background: #f5f7fb;
+            color: #1e293b;
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+
+        .page-container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 10px 17px;
+            background: #eff6ff;
+            color: #1d4ed8;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .back-btn:hover {
+            background: #dbeafe;
+        }
+
+        .page-header {
+            margin-bottom: 25px;
+        }
+
+        .page-header h2 {
+            color: #173b70;
+            font-size: 27px;
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            color: #64748b;
+            margin: 0;
+        }
+
+        .table-card {
+            background: #ffffff;
+            padding: 22px;
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 5px 18px rgba(15,23,42,0.05);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        th {
+            background: #eff6ff;
+            color: #173b70;
+            padding: 15px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #334155;
+            font-size: 14px;
+        }
+
+        tr:hover td {
+            background: #f8fafc;
+        }
+
+        .action-links {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .action-links a {
+            display: inline-block;
+            padding: 8px 11px;
+            border-radius: 7px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .delete-chapter {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .delete-subject {
+            background: #ffedd5;
+            color: #c2410c;
+        }
+
+        .delete-class {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .action-links a:hover {
+            opacity: 0.75;
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+        }
+
+        @media(max-width: 600px) {
+            .page-container {
+                padding: 0 12px;
+            }
+
+            .page-header h2 {
+                font-size: 23px;
+            }
+
+            .table-card {
+                padding: 12px;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-<h2>Manage Courses</h2>
+<main class="page-container">
 
-<table border="1" cellpadding="10">
-<tr>
-<th>Class</th>
-<th>Subject</th>
-<th>Chapter</th>
-<th>Action</th>
-</tr>
+    <!-- BACK BUTTON -->
+    <a href="javascript:history.back()" class="back-btn">
+        ← Back
+    </a>
 
-{% for note in notes %}
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+        <h2>Manage Courses</h2>
+        <p>Manage classes, subjects and chapters in GyanaGhar.</p>
+    </div>
 
-<tr>
-<td>{{ note.class_num }}</td>
-<td>{{ note.subject }}</td>
-<td>{{ note.chapter }}</td>
+    <!-- COURSES TABLE -->
+    <div class="table-card">
 
-<td>
-<a href="/admin/delete_note/{{ note.id }}">Delete Chapter</a>
-<a href="/admin/delete_subject/{{ note.subject }}">Delete Subject</a>
-<a href="/admin/delete_class/{{ note.class_num }}">Delete Class</a>
-</td>
+        <table>
+            <thead>
+                <tr>
+                    <th>Class</th>
+                    <th>Subject</th>
+                    <th>Chapter</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
 
-</tr>
+            <tbody>
 
-{% endfor %}
+                {% for note in notes %}
 
-</table>
+                <tr>
+                    <td>{{ note.class_num }}</td>
+                    <td>{{ note.subject }}</td>
+                    <td>{{ note.chapter }}</td>
+
+                    <td>
+                        <div class="action-links">
+
+                            <a href="/admin/delete_note/{{ note.id }}"
+                               class="delete-chapter"
+                               onclick="return confirm('Are you sure you want to delete this chapter?')">
+                                Delete Chapter
+                            </a>
+
+                            <a href="/admin/delete_subject/{{ note.subject }}"
+                               class="delete-subject"
+                               onclick="return confirm('Are you sure you want to delete this subject?')">
+                                Delete Subject
+                            </a>
+
+                            <a href="/admin/delete_class/{{ note.class_num }}"
+                               class="delete-class"
+                               onclick="return confirm('Are you sure you want to delete this class?')">
+                                Delete Class
+                            </a>
+
+                        </div>
+                    </td>
+                </tr>
+
+                {% else %}
+
+                <tr>
+                    <td colspan="4" class="empty-message">
+                        No courses available.
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+        </table>
+
+    </div>
+
+</main>
 
 </body>
 </html>

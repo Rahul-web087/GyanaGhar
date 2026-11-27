@@ -1,63 +1,254 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends "base.html" %}
 
-    <title>{{ chapter.name }} - {{ subject.name }} | GyanaGhar</title>
+{% block title %}
+{{ chapter.name }} - {{ subject.name }} Notes for {{ cls.name }} | GyanaGhar
+{% endblock %}
 
-    <meta name="description"
-          content="Explore {{ chapter.name }} from {{ subject.name }} for {{ cls.name }} on GyanaGhar. Browse available notes and learning resources.">
+{% block meta_description %}
+Explore free {{ chapter.name }} study notes from {{ subject.name }} for {{ cls.name }} on GyanaGhar. Access chapter-wise learning materials, questions and answers.
+{% endblock %}
 
-    <meta name="robots" content="index, follow">
+{% block og_title %}
+{{ chapter.name }} - {{ subject.name }} | GyanaGhar
+{% endblock %}
 
-    <link rel="canonical" href="{{ request.url }}">
-</head>
+{% block og_description %}
+Explore {{ chapter.name }} notes and educational resources for {{ cls.name }} students.
+{% endblock %}
 
-<body>
+{% block content %}
 
-    <header>
-        <a href="{{ url_for('home') }}">GyanaGhar</a>
+<style>
+.public-page {
+    max-width: 1100px;
+    margin: 25px auto;
+    padding: 15px;
+}
+
+.chapter-hero {
+    background: linear-gradient(135deg, #172554, #2563eb);
+    color: white;
+    padding: 35px 25px;
+    border-radius: 18px;
+    margin-bottom: 30px;
+}
+
+.chapter-hero h1 {
+    font-size: 30px;
+    margin: 0 0 12px;
+}
+
+.chapter-hero p {
+    font-size: 15px;
+    line-height: 1.7;
+    margin: 8px 0 0;
+}
+
+.breadcrumb {
+    margin-bottom: 18px;
+    font-size: 14px;
+}
+
+.breadcrumb a {
+    color: #2563eb;
+    text-decoration: none;
+}
+
+.breadcrumb span {
+    color: #888;
+}
+
+.section-heading {
+    font-size: 23px;
+    margin-bottom: 20px;
+}
+
+.note-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+}
+
+.note-card {
+    background: white;
+    padding: 22px;
+    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    transition: 0.3s;
+}
+
+.note-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+.note-card h3 {
+    color: #172554;
+    margin-top: 0;
+    margin-bottom: 12px;
+}
+
+.note-card p {
+    color: #666;
+    font-size: 14px;
+}
+
+.explore-btn {
+    display: inline-block;
+    padding: 10px 16px;
+    background: #2563eb;
+    color: white !important;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.explore-btn:hover {
+    background: #1d4ed8;
+}
+
+.empty-state {
+    background: #f8fafc;
+    padding: 25px;
+    border-radius: 12px;
+    text-align: center;
+    color: #64748b;
+}
+
+@media(max-width: 600px) {
+    .chapter-hero {
+        padding: 25px 18px;
+    }
+
+    .chapter-hero h1 {
+        font-size: 24px;
+    }
+
+    .note-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+<div class="public-page">
+
+    <!-- BREADCRUMB -->
+
+    <div class="breadcrumb">
+
+        <a href="{{ url_for('home') }}">Home</a>
+
+        <span> / </span>
+
+        <a href="{{ url_for('public_class', class_id=cls.id) }}">
+            {{ cls.name }}
+        </a>
+
+        <span> / </span>
+
+        <a href="{{ url_for('public_subject', subject_id=subject.id) }}">
+            {{ subject.name }}
+        </a>
+
+        <span> / </span>
+
+        <strong>{{ chapter.name }}</strong>
+
+    </div>
+
+
+    <!-- CHAPTER HEADER -->
+
+    <section class="chapter-hero">
 
         <h1>{{ chapter.name }}</h1>
 
         <p>
-            Class: {{ cls.name }} |
+            Class: {{ cls.name }}
+            |
             Subject: {{ subject.name }}
         </p>
 
         <p>
-            Explore available notes and learning resources for this chapter.
+            Explore free chapter-wise notes,
+            questions, answers and educational
+            resources available on GyanaGhar.
         </p>
-    </header>
 
-    <main>
-        <h2>Available Notes</h2>
+    </section>
 
-        {% for note in notes %}
-            <article>
-                <h3>{{ note.title }}</h3>
 
-                <a href="{{ url_for('public_note_preview',
+    <!-- AVAILABLE NOTES -->
+
+    <section>
+
+        <h2 class="section-heading">
+            Available Study Notes
+        </h2>
+
+        {% if notes %}
+
+        <div class="note-grid">
+
+            {% for note in notes %}
+
+            <article class="note-card">
+
+                <h3>{{ note.title or "Study Note" }}</h3>
+
+                <p>
+                    Study {{ note.title or chapter.name }}
+                    and explore its learning resources.
+                </p>
+
+                <a class="explore-btn"
+                   href="{{ url_for('public_note_preview',
                                     note_id=note.id) }}">
-                    View Note Preview
-                </a>
-            </article>
-        {% else %}
-            <p>No notes available yet.</p>
-        {% endfor %}
-    </main>
 
-    <footer>
+                    View Note Preview
+
+                </a>
+
+            </article>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <div class="empty-state">
+
+            <h3>No Notes Available</h3>
+
+            <p>
+                Study notes for this chapter will be available soon.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- BACK TO SUBJECT -->
+
+    <p style="margin-top:30px;">
+
         <a href="{{ url_for('public_subject',
-                            subject_id=subject.id) }}">
-            Back to {{ subject.name }}
+                            subject_id=subject.id) }}"
+           style="color:#2563eb; text-decoration:none;">
+
+            ← Back to {{ subject.name }}
+
         </a>
 
-        |
-        <a href="{{ url_for('login') }}">Student Login</a>
-    </footer>
+    </p>
 
-</body>
-</html>
+</div>
+
+{% endblock %}

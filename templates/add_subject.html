@@ -1,115 +1,166 @@
+
 {% extends "base.html" %}
+
+{% block title %}Add Subject | GyanaGhar{% endblock %}
+
+{% block extra_head %}
+<style>
+    .subject-page {
+        max-width: 650px;
+        width: 92%;
+        margin: 30px auto;
+    }
+
+    .back-btn {
+        display: inline-block;
+        padding: 10px 17px;
+        background: #eff6ff;
+        color: #1d4ed8;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 22px;
+    }
+
+    .back-btn:hover {
+        background: #dbeafe;
+    }
+
+    .form-card {
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 16px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 8px 25px rgba(15,23,42,0.06);
+        animation: fadeUp 0.5s ease;
+    }
+
+    .form-card h2 {
+        margin: 0 0 25px;
+        color: #173b70;
+        font-size: 24px;
+        text-align: center;
+    }
+
+    .form-card label {
+        display: block;
+        margin: 15px 0 8px;
+        color: #334155;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .form-card input,
+    .form-card select {
+        width: 100%;
+        padding: 13px 14px;
+        border-radius: 9px;
+        border: 1px solid #dbe3ef;
+        background: #f8fafc;
+        color: #1e293b;
+        font-size: 15px;
+        box-sizing: border-box;
+    }
+
+    .form-card input:focus,
+    .form-card select:focus {
+        border-color: #2563eb;
+        background: #ffffff;
+        box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+        outline: none;
+    }
+
+    .form-card button {
+        width: 100%;
+        margin-top: 24px;
+        padding: 14px;
+        border-radius: 9px;
+        background: #2563eb;
+        color: white;
+        font-size: 16px;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .form-card button:hover {
+        background: #1d4ed8;
+        transform: translateY(-2px);
+    }
+
+    @keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(25px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media(max-width: 600px) {
+        .form-card {
+            padding: 22px 18px;
+        }
+
+        .form-card h2 {
+            font-size: 21px;
+        }
+    }
+</style>
+{% endblock %}
+
 
 {% block content %}
 
-<style>
-/* Page specific styling */
-.form-card {
-    background: linear-gradient(145deg, #1a1a1a, #121212);
-    padding: 25px;
-    border-radius: 15px;
-    max-width: 400px;
-    margin: auto;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-    animation: fadeUp 0.5s ease;
-}
+<div class="subject-page">
 
-.form-card h2 {
-    margin-bottom: 20px;
-    color: white;
-}
+    <!-- BACK BUTTON -->
+    <a href="/dashboard" class="back-btn">
+        ← Back to Dashboard
+    </a>
 
-label {
-    display: block;
-    margin-top: 10px;
-    color: #ccc;
-}
-
-select {
-    width: 100%;
-    padding: 12px;
-    border-radius: 10px;
-    border: 1px solid #333;
-    background: #1a1a1a;
-    color: white;
-    margin-bottom: 15px;
-}
-
-input {
-    width: 100%;
-    padding: 12px;
-    border-radius: 10px;
-    border: 1px solid #333;
-    background: #1a1a1a;
-    color: white;
-    margin-bottom: 15px;
-}
-
-input:focus, select:focus {
-    border: 1px solid #ff4d4d;
-    box-shadow: 0 0 5px #ff4d4d;
-    outline: none;
-}
-
-button {
-    width: 100%;
-    padding: 12px;
-    border-radius: 10px;
-    background: linear-gradient(45deg, #ff4d4d, #ff0000);
-    font-size: 16px;
-    color: white;
-    border: none;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-button:hover {
-    transform: scale(1.05);
-}
-
-/* Animation */
-@keyframes fadeUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-</style>
-
-<div class="container">
-
+    <!-- FORM -->
     <div class="form-card">
 
-        <h2> Add Subject</h2>
+        <h2>📚 Add New Subject</h2>
 
         <form method="POST">
 
-            <label>Select Class</label>
+            <label for="class_id">Select Class</label>
 
-            <select name="class_id" required>
+            <select name="class_id" id="class_id" required>
+
+                <option value="">Choose a Class</option>
+
                 {% for c in classes %}
                     <option value="{{ c.id }}">{{ c.name }}</option>
                 {% endfor %}
+
             </select>
 
-            <label>Subject Name</label>
+            <label for="subject_name">Subject Name</label>
 
-            <input type="text" name="name" placeholder="Example: Mathematics" required>
+            <input
+                type="text"
+                name="name"
+                id="subject_name"
+                placeholder="Example: Mathematics"
+                required
+            >
 
-            <button type="submit">Add Subject</button>
+            <button type="submit">
+                <i class="fas fa-plus-circle"></i>
+                Add Subject
+            </button>
 
         </form>
 
     </div>
 
 </div>
-
-<footer class="footer">
-    © 2026 GyanaGhar | Built by Rahul Nayak
-</footer>
 
 {% endblock %}

@@ -1,159 +1,312 @@
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-<title>Subjects - GyanaGhar</title>
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Subjects - GyanaGhar</title>
 
-<style>
+    <meta name="description"
+          content="Explore class-wise subjects and educational study materials on GyanaGhar.">
 
-body{
-margin:0;
-font-family:'Poppins', sans-serif;
-background:linear-gradient(135deg,#0f0f0f,#1c1c1c);
-color:white;
-}
+    <meta name="robots" content="noindex, nofollow">
 
-/* NAVBAR */
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
 
-.navbar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:15px 40px;
-background:rgba(255,255,255,0.05);
-backdrop-filter:blur(10px);
-box-shadow:0 4px 15px rgba(0,0,0,0.4);
-}
+    <style>
 
-.navbar h1{
-margin:0;
-}
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-.navbar a{
-color:white;
-text-decoration:none;
-margin-left:20px;
-transition:0.3s;
-}
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f5f7fb;
+            color: #1f2937;
+            min-height: 100vh;
+        }
 
-.navbar a:hover{
-color:#ff4d4d;
-}
+        /* NAVBAR */
 
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 5%;
+            background: #ffffff;
+            border-bottom: 1px solid #e5eaf2;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+        }
 
-/* MAIN */
+        .navbar h1 {
+            color: #1e3c72;
+            font-size: 24px;
+            font-weight: 700;
+        }
 
-.container{
-width:90%;
-margin:auto;
-margin-top:40px;
-text-align:center;
-}
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
 
-h2{
-font-size:28px;
-}
+        .navbar a {
+            color: #475569;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
 
+        .navbar a:hover {
+            color: #2a5298;
+        }
 
-/* GRID */
+        /* MAIN CONTAINER */
 
-.card-container{
-margin-top:30px;
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:25px;
-}
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 45px auto;
+            text-align: center;
+            min-height: 65vh;
+        }
 
+        .page-heading {
+            color: #1e3c72;
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
 
-/* CARD */
+        .page-description {
+            color: #64748b;
+            font-size: 15px;
+            margin-bottom: 35px;
+        }
 
-.card{
-background:rgba(255,255,255,0.08);
-padding:30px;
-border-radius:15px;
-backdrop-filter:blur(10px);
-transition:0.3s;
-box-shadow:0 5px 20px rgba(0,0,0,0.4);
-}
+        /* SUBJECT GRID */
 
-.card:hover{
-transform:translateY(-10px) scale(1.03);
-background:rgba(255,0,0,0.2);
-}
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 22px;
+            margin-top: 30px;
+        }
 
-.card a{
-text-decoration:none;
-color:white;
-font-size:18px;
-font-weight:600;
-display:block;
-}
+        /* SUBJECT CARD */
 
+        .card {
+            background: #ffffff;
+            padding: 30px 22px;
+            border-radius: 14px;
+            border: 1px solid #e5eaf2;
+            box-shadow: 0 5px 18px rgba(30,60,114,0.05);
+            transition: 0.25s;
+        }
 
-/* BACK BUTTON */
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #2a5298;
+            box-shadow: 0 10px 25px rgba(30,60,114,0.12);
+        }
 
-.back-btn{
-display:inline-block;
-margin-top:30px;
-padding:10px 25px;
-background:#ff4d4d;
-color:white;
-border-radius:8px;
-text-decoration:none;
-transition:0.3s;
-}
+        .card a {
+            text-decoration: none;
+            color: #1e3c72;
+            font-size: 19px;
+            font-weight: 600;
+            display: block;
+        }
 
-.back-btn:hover{
-background:#e60000;
-}
+        .card a:hover {
+            color: #ff9800;
+        }
 
-</style>
+        /* EMPTY STATE */
+
+        .empty-message {
+            grid-column: 1 / -1;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #e5eaf2;
+            color: #64748b;
+        }
+
+        /* BACK BUTTON */
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 12px 25px;
+            background: #2a5298;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .back-btn:hover {
+            background: #1e3c72;
+            transform: translateY(-2px);
+        }
+
+        /* FOOTER */
+
+        .footer {
+            background: #ffffff;
+            border-top: 1px solid #e5eaf2;
+            padding: 22px 15px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            margin-top: 40px;
+        }
+
+        .footer a {
+            color: #1e3c72;
+            text-decoration: none;
+            margin: 0 6px;
+        }
+
+        .footer a:hover {
+            color: #ff9800;
+        }
+
+        /* MOBILE */
+
+        @media(max-width: 600px) {
+
+            .navbar {
+                padding: 15px 18px;
+            }
+
+            .navbar h1 {
+                font-size: 20px;
+            }
+
+            .nav-links {
+                gap: 14px;
+            }
+
+            .navbar a {
+                font-size: 12px;
+            }
+
+            .container {
+                width: 92%;
+                margin: 35px auto;
+            }
+
+            .page-heading {
+                font-size: 25px;
+            }
+
+            .card-container {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .card {
+                padding: 25px 18px;
+            }
+
+        }
+
+    </style>
 
 </head>
 
 <body>
 
-<!-- NAVBAR -->
+    <!-- NAVBAR -->
 
-<div class="navbar">
-<h1>GyanaGhar </h1>
+    <header class="navbar">
 
-<div>
-<a href="/dashboard">Home</a>
-<a href="/logout">Logout</a>
-</div>
-</div>
+        <h1>GyanaGhar</h1>
+
+        <div class="nav-links">
+
+            <a href="/dashboard">Home</a>
+
+            <a href="/logout">Logout</a>
+
+        </div>
+
+    </header>
 
 
-<div class="container">
+    <!-- MAIN CONTENT -->
 
-<h2> Subjects</h2>
+    <main class="container">
 
-<!-- SUBJECT GRID -->
+        <h2 class="page-heading">Explore Subjects</h2>
 
-<div class="card-container">
+        <p class="page-description">
+            Select a subject to explore chapters and study materials.
+        </p>
 
-{% for subject in subjects %}
 
-<div class="card">
-<a href="/subject/{{ subject.id }}">
- {{ subject.name }}
-</a>
-</div>
+        <!-- SUBJECT GRID -->
 
-{% endfor %}
+        <div class="card-container">
 
-</div>
+            {% for subject in subjects %}
 
-<!-- BACK BUTTON -->
+            <article class="card">
 
-<a href="/dashboard" class="back-btn">⬅ Back to Dashboard</a>
+                <a href="/subject/{{ subject.id }}">
+                    {{ subject.name }}
+                </a>
 
-</div>
+            </article>
+
+            {% else %}
+
+            <div class="empty-message">
+                <h3>No Subjects Available</h3>
+                <p>Please check again later.</p>
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- BACK BUTTON -->
+
+        <a href="/dashboard" class="back-btn">
+            &#8592; Back to Dashboard
+        </a>
+
+    </main>
+
+
+    <!-- FOOTER -->
+
+    <footer class="footer">
+
+        <div>
+            <a href="/privacy-policy">Privacy Policy</a> |
+            <a href="/terms">Terms & Conditions</a> |
+            <a href="/about">About Us</a> |
+            <a href="/disclaimer">Disclaimer</a>
+        </div>
+
+        <p style="margin-top: 12px;">
+            © 2026 GyanaGhar | Built by Rahul Nayak
+        </p>
+
+    </footer>
 
 </body>
 </html>

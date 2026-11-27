@@ -1,94 +1,228 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Add Class - GyanaGhar</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Add Class | GyanaGhar</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f5f7fb;
+            color: #1e293b;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 17px 5%;
+            background: #ffffff;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+
+        .navbar h1 {
+            margin: 0;
+            color: #173b70;
+            font-size: 25px;
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: #1d4ed8;
+            font-weight: 600;
+            margin-left: 18px;
+        }
+
+        .navbar a:hover {
+            color: #173b70;
+        }
+
+        .page-container {
+            width: 92%;
+            max-width: 650px;
+            margin: 35px auto;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 10px 17px;
+            background: #eff6ff;
+            color: #1d4ed8;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 22px;
+        }
+
+        .back-btn:hover {
+            background: #dbeafe;
+        }
+
+        .form-card {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 8px 25px rgba(15,23,42,0.06);
+            animation: fadeUp 0.4s ease;
+        }
+
         .form-card h2 {
-    color: white;
-    font-size: 22px;
-}
+            color: #173b70;
+            font-size: 24px;
+            text-align: center;
+            margin: 0 0 25px;
+        }
 
-label {
-    display: block;
-    margin-top: 10px;
-    color: #ccc;
-}
+        .form-card label {
+            display: block;
+            margin-bottom: 9px;
+            color: #334155;
+            font-weight: 600;
+            font-size: 14px;
+        }
 
-input {
-    width: 100%;
-    padding: 14px;
-    border-radius: 10px;
-    border: 1px solid #333;
-    background: #1a1a1a;
-    color: white;
-    font-size: 16px;
-}
+        .form-card input {
+            width: 100%;
+            padding: 13px 14px;
+            border-radius: 9px;
+            border: 1px solid #dbe3ef;
+            background: #f8fafc;
+            color: #1e293b;
+            font-size: 15px;
+        }
 
-input:focus {
-    outline: none;
-    border: 1px solid #ff4d4d;
-    box-shadow: 0 0 5px #ff4d4d;
-}
+        .form-card input:focus {
+            outline: none;
+            border-color: #2563eb;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+        }
 
-button {
-    width: 100%;
-    margin-top: 10px;
-    padding: 14px;
-    border-radius: 10px;
-    background: linear-gradient(45deg, #ff4d4d, #ff0000);
-    font-size: 16px;
-    font-weight: bold;
-}
+        .form-card button {
+            width: 100%;
+            margin-top: 22px;
+            padding: 14px;
+            border-radius: 9px;
+            background: #2563eb;
+            color: #ffffff;
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
 
-button:hover {
-    transform: scale(1.05);
-}
+        .form-card button:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 55px;
+            padding: 22px;
+            color: #64748b;
+            background: #ffffff;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media(max-width: 600px) {
+            .navbar {
+                padding: 15px;
+            }
+
+            .navbar h1 {
+                font-size: 20px;
+            }
+
+            .navbar a {
+                margin-left: 10px;
+                font-size: 13px;
+            }
+
+            .form-card {
+                padding: 22px 18px;
+            }
+        }
     </style>
 </head>
 
 <body>
 
-<!-- NAVBAR -->
-<div class="navbar">
-    <h1>GyanaGhar</h1>
+    <!-- NAVBAR -->
+    <div class="navbar">
 
-    <div>
-        <a href="/dashboard">Dashboard</a>
-        <a href="/logout">Logout</a>
-    </div>
-</div>
+        <h1>GyanaGhar</h1>
 
-<!-- FORM -->
-<div class="container">
+        <div>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/logout">Logout</a>
+        </div>
 
-    <div class="form-card">
-        <h2> Add New Class</h2>
-
-        <form method="POST">
-            <label>Class Name</label>
-            <input type="text" name="name" placeholder="Example: Class 6" required>
-
-            <button type="submit">Add Class</button>
-        </form>
     </div>
 
-</div>
+    <!-- FORM -->
+    <main class="page-container">
 
-<!-- FOOTER -->
-<footer class="footer">
-    © 2026 GyanaGhar | Built by Rahul Nayak
-</footer>
+        <a href="/dashboard" class="back-btn">
+            ← Back to Dashboard
+        </a>
 
-<!-- FIX BUG + ANIMATION -->
-<script>
-    window.onload = function () {
-        document.body.style.opacity = "1";
-    };
-</script>
+        <div class="form-card">
+
+            <h2>➕ Add New Class</h2>
+
+            <form method="POST">
+
+                <label for="className">Class Name</label>
+
+                <input
+                    type="text"
+                    id="className"
+                    name="name"
+                    placeholder="Example: Class 6"
+                    required
+                >
+
+                <button type="submit">
+                    Add Class
+                </button>
+
+            </form>
+
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        © 2026 GyanaGhar | Built by Rahul Nayak
+    </footer>
 
 </body>
 </html>

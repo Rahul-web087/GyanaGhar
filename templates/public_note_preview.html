@@ -1,63 +1,234 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends "base.html" %}
 
-    <title>{{ note.title }} | GyanaGhar</title>
+{% block title %}
+{{ note.title }} | {{ subject.name }} Notes | GyanaGhar
+{% endblock %}
 
-    <meta name="description"
-          content="Explore the preview of {{ note.title }} for {{ cls.name }} {{ subject.name }} on GyanaGhar.">
+{% block meta_description %}
+Explore {{ note.title }} for {{ cls.name }} {{ subject.name }} on GyanaGhar. Read the free study preview and discover chapter-wise educational resources.
+{% endblock %}
 
-    <meta name="robots" content="index, follow">
+{% block og_title %}
+{{ note.title }} | GyanaGhar
+{% endblock %}
 
-    <link rel="canonical" href="{{ request.url }}">
-</head>
+{% block og_description %}
+Read the study preview of {{ note.title }} for {{ cls.name }} students on GyanaGhar.
+{% endblock %}
 
-<body>
+{% block content %}
 
-    <header>
-        <a href="{{ url_for('home') }}">GyanaGhar</a>
+<style>
+.preview-container {
+    max-width: 900px;
+    margin: 25px auto;
+    padding: 15px;
+}
+
+.preview-hero {
+    background: linear-gradient(135deg, #172554, #2563eb);
+    color: white;
+    padding: 30px 25px;
+    border-radius: 18px;
+    margin-bottom: 25px;
+}
+
+.preview-hero h1 {
+    font-size: 27px;
+    margin: 0 0 15px;
+}
+
+.preview-hero p {
+    font-size: 14px;
+    line-height: 1.7;
+    margin: 5px 0;
+}
+
+.breadcrumb {
+    margin-bottom: 18px;
+    font-size: 14px;
+}
+
+.breadcrumb a {
+    color: #2563eb;
+    text-decoration: none;
+}
+
+.preview-card {
+    background: white;
+    padding: 25px;
+    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    margin-bottom: 25px;
+}
+
+.preview-card h2 {
+    color: #172554;
+    margin-top: 0;
+}
+
+.preview-content {
+    color: #444;
+    line-height: 1.8;
+    font-size: 15px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.login-card {
+    background: #eff6ff;
+    padding: 25px;
+    border-radius: 14px;
+    text-align: center;
+    border: 1px solid #bfdbfe;
+}
+
+.login-card h2 {
+    color: #172554;
+}
+
+.login-card p {
+    color: #475569;
+    line-height: 1.7;
+}
+
+.login-btn {
+    display: inline-block;
+    padding: 12px 24px;
+    background: #2563eb;
+    color: white !important;
+    text-decoration: none;
+    border-radius: 9px;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.login-btn:hover {
+    background: #1d4ed8;
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 20px;
+    color: #2563eb;
+    text-decoration: none;
+}
+
+@media(max-width: 600px) {
+    .preview-hero {
+        padding: 23px 18px;
+    }
+
+    .preview-hero h1 {
+        font-size: 22px;
+    }
+
+    .preview-card {
+        padding: 18px;
+    }
+}
+</style>
+
+<div class="preview-container">
+
+    <!-- BREADCRUMB -->
+
+    <div class="breadcrumb">
+
+        <a href="{{ url_for('home') }}">Home</a>
+
+        /
+
+        <a href="{{ url_for('public_class', class_id=cls.id) }}">
+            {{ cls.name }}
+        </a>
+
+        /
+
+        <a href="{{ url_for('public_subject', subject_id=subject.id) }}">
+            {{ subject.name }}
+        </a>
+
+        /
+
+        <a href="{{ url_for('public_chapter', chapter_id=chapter.id) }}">
+            {{ chapter.name }}
+        </a>
+
+    </div>
+
+
+    <!-- NOTE HEADER -->
+
+    <section class="preview-hero">
 
         <h1>{{ note.title }}</h1>
 
         <p>
-            Class: {{ cls.name }} |
-            Subject: {{ subject.name }} |
+            Class: {{ cls.name }}
+        </p>
+
+        <p>
+            Subject: {{ subject.name }}
+        </p>
+
+        <p>
             Chapter: {{ chapter.name }}
         </p>
-    </header>
 
-    <main>
-        <h2>Note Preview</h2>
+    </section>
+
+
+    <!-- NOTE PREVIEW -->
+
+    <section class="preview-card">
+
+        <h2>📚 Note Preview</h2>
 
         {% if preview %}
-            <p>{{ preview }}</p>
-        {% else %}
-            <p>Preview is not available for this note.</p>
-        {% endif %}
 
-        <section>
-            <h2>Want to access the complete study material?</h2>
+            <div class="preview-content">{{ preview }}</div>
+
+        {% else %}
 
             <p>
-                Log in to GyanaGhar to access complete notes,
-                answers, PDFs and video resources.
+                Preview is not available for this note.
             </p>
 
-            <a href="{{ url_for('login') }}">
-                Student Login
-            </a>
-        </section>
-    </main>
+        {% endif %}
 
-    <footer>
-        <a href="{{ url_for('public_chapter',
-                            chapter_id=chapter.id) }}">
-            Back to {{ chapter.name }}
+    </section>
+
+
+    <!-- STUDENT LOGIN -->
+
+    <section class="login-card">
+
+        <h2>Want Complete Study Materials?</h2>
+
+        <p>
+            Log in to GyanaGhar to access complete notes,
+            questions and answers, PDFs and video resources.
+        </p>
+
+        <a href="{{ url_for('login') }}" class="login-btn">
+            Student Login
         </a>
-    </footer>
 
-</body>
-</html>
+    </section>
+
+
+    <!-- BACK TO CHAPTER -->
+
+    <a class="back-link"
+       href="{{ url_for('public_chapter', chapter_id=chapter.id) }}">
+
+        ← Back to {{ chapter.name }}
+
+    </a>
+
+</div>
+
+{% endblock %}

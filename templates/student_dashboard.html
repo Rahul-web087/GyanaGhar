@@ -18,8 +18,8 @@
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
-            color: white;
+            background: #f5f7fb;
+            color: #1e293b;
             min-height: 100vh;
         }
 
@@ -28,80 +28,122 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 30px;
-            background: rgba(0,0,0,0.2);
+            padding: 17px 5%;
+            background: #ffffff;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            gap: 15px;
         }
 
         .navbar h2 {
             margin: 0;
+            color: #173b70;
+            font-size: 25px;
+        }
+
+        .navbar-links {
+            display: flex;
+            gap: 20px;
         }
 
         .navbar a {
-            color: white;
+            color: #1d4ed8;
             text-decoration: none;
-            margin-left: 18px;
+            font-weight: 600;
+            font-size: 14px;
         }
 
         .navbar a:hover {
-            color: #ffd166;
+            color: #173b70;
         }
 
-        /* Container */
+        .logout-link {
+            color: #dc2626 !important;
+        }
+
+        /* Main container */
         .container {
             width: 90%;
-            max-width: 1100px;
-            margin: 30px auto;
+            max-width: 1150px;
+            margin: 28px auto;
         }
 
-        h1 {
+        /* Back button */
+        .back-btn {
+            display: inline-block;
+            padding: 10px 17px;
+            background: #eff6ff;
+            color: #1d4ed8;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .back-btn:hover {
+            background: #dbeafe;
+        }
+
+        /* Page heading */
+        .page-title {
             text-align: center;
-            margin-bottom: 30px;
+            color: #173b70;
+            margin: 10px 0 30px;
+            font-size: 30px;
         }
 
         /* Statistics */
         .cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 20px;
         }
 
         .card {
-            background: white;
-            color: #333;
-            padding: 25px;
-            border-radius: 12px;
+            background: #ffffff;
+            color: #334155;
+            padding: 28px 20px;
+            border-radius: 14px;
             text-align: center;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 5px 18px rgba(15,23,42,0.05);
             transition: 0.3s;
         }
 
         .card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-4px);
         }
 
         .card i {
             font-size: 30px;
-            margin-bottom: 10px;
-            color: #2a5298;
+            margin-bottom: 12px;
+            color: #2563eb;
         }
 
         .card h3 {
             margin: 10px 0;
+            color: #173b70;
+        }
+
+        .card p {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 8px 0 0;
+            color: #2563eb;
         }
 
         /* Progress */
         .progress-box {
-            background: #ddd;
+            background: #e2e8f0;
             border-radius: 20px;
             overflow: hidden;
-            margin-top: 30px;
-            height: 45px;
+            margin-top: 28px;
+            height: 38px;
         }
 
         .progress-bar {
-            background: #28a745;
+            background: #16a34a;
             height: 100%;
-            min-width: 0;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -109,6 +151,7 @@
             font-weight: bold;
             white-space: nowrap;
             transition: width 0.4s;
+            min-width: 0;
         }
 
         /* Learning section */
@@ -121,51 +164,65 @@
             margin-bottom: 25px;
         }
 
+        .section-heading h2 {
+            color: #173b70;
+            font-size: 27px;
+        }
+
+        .section-heading h2 i {
+            color: #2563eb;
+        }
+
         .section-heading p {
-            color: #e0eaff;
+            color: #64748b;
+            font-size: 15px;
         }
 
         /* Class cards */
         .class-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
             gap: 20px;
         }
 
         .class-card {
-            background: white;
-            color: #333;
-            padding: 25px;
+            background: #ffffff;
+            color: #334155;
+            padding: 27px 22px;
             border-radius: 14px;
             text-align: center;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 5px 18px rgba(15,23,42,0.05);
             transition: 0.3s;
         }
 
         .class-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(15,23,42,0.09);
         }
 
         .class-card i {
-            font-size: 35px;
-            color: #2a5298;
+            font-size: 36px;
+            color: #2563eb;
             margin-bottom: 12px;
         }
 
         .class-card h3 {
             margin: 10px 0;
+            color: #173b70;
         }
 
         .class-card p {
-            color: #666;
+            color: #64748b;
             font-size: 14px;
+            line-height: 1.6;
         }
 
         .explore-btn {
             display: inline-block;
             margin-top: 12px;
-            padding: 11px 22px;
-            background: #2a5298;
+            padding: 12px 22px;
+            background: #2563eb;
             color: white;
             text-decoration: none;
             border-radius: 8px;
@@ -174,21 +231,23 @@
         }
 
         .explore-btn:hover {
-            background: #1e3c72;
+            background: #1d4ed8;
         }
 
         /* Empty state */
         .empty-state {
-            background: white;
-            color: #555;
+            background: #ffffff;
+            color: #64748b;
             text-align: center;
             padding: 35px 20px;
             border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            grid-column: 1 / -1;
         }
 
         .empty-state i {
             font-size: 40px;
-            color: #2a5298;
+            color: #2563eb;
             margin-bottom: 15px;
         }
 
@@ -196,30 +255,50 @@
         .footer {
             text-align: center;
             margin-top: 45px;
-            padding: 20px;
-            opacity: 0.85;
+            padding: 22px;
+            color: #64748b;
+            background: #ffffff;
+            border-top: 1px solid #e2e8f0;
         }
 
-        @media(max-width: 600px) {
+        /* Responsive */
+        @media(max-width: 700px) {
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
             .navbar {
-                padding: 15px;
+                padding: 15px 4%;
             }
 
             .navbar h2 {
                 font-size: 20px;
             }
 
-            .navbar a {
-                margin-left: 10px;
-                font-size: 14px;
+            .navbar-links {
+                gap: 12px;
             }
 
             .container {
                 width: 92%;
             }
 
-            h1 {
+            .page-title {
                 font-size: 25px;
+            }
+        }
+
+        @media(max-width: 450px) {
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar a {
+                font-size: 12px;
+            }
+
+            .class-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -229,22 +308,33 @@
 
 <!-- Navbar -->
 <div class="navbar">
+
     <h2>GyanaGhar</h2>
 
-    <div>
+    <div class="navbar-links">
+
         <a href="{{ url_for('student_dashboard') }}">
             <i class="fa fa-home"></i> Home
         </a>
 
-        <a href="{{ url_for('logout') }}">
+        <a href="{{ url_for('logout') }}" class="logout-link">
             <i class="fa fa-sign-out-alt"></i> Logout
         </a>
+
     </div>
+
 </div>
+
 
 <div class="container">
 
-    <h1>Your Learning Dashboard</h1>
+    <!-- Back Button -->
+    <a href="javascript:history.back()" class="back-btn">
+        <i class="fa fa-arrow-left"></i> Back
+    </a>
+
+    <h1 class="page-title">Your Learning Dashboard</h1>
+
 
     <!-- Statistics -->
     <div class="cards">
@@ -269,21 +359,36 @@
 
     </div>
 
+
     <!-- Progress Bar -->
     <div class="progress-box">
+
         <div class="progress-bar"
              style="width: {{ progress }}%;">
+
             {{ progress }}% Completed
+
         </div>
+
     </div>
+
 
     <!-- Start Learning -->
     <div class="learning-section">
 
         <div class="section-heading">
-            <h1><i class="fa fa-graduation-cap"></i> Start Learning</h1>
-            <p>Select your class to explore subjects, chapters and notes.</p>
+
+            <h2>
+                <i class="fa fa-graduation-cap"></i>
+                Start Learning
+            </h2>
+
+            <p>
+                Select your class to explore subjects, chapters and notes.
+            </p>
+
         </div>
+
 
         <div class="class-grid">
 
@@ -295,12 +400,16 @@
 
                 <h3>Class {{ cls.name }}</h3>
 
-                <p>Explore subjects, chapters and study materials.</p>
+                <p>
+                    Explore subjects, chapters and study materials.
+                </p>
 
                 <a href="{{ url_for('class_page', class_id=cls.id) }}"
                    class="explore-btn">
+
                     Explore Class
                     <i class="fa fa-arrow-right"></i>
+
                 </a>
 
             </div>
@@ -308,9 +417,15 @@
             {% else %}
 
             <div class="empty-state">
+
                 <i class="fa fa-book"></i>
+
                 <h3>No Classes Available</h3>
-                <p>Study materials will appear here when the admin adds classes.</p>
+
+                <p>
+                    Study materials will appear here when the admin adds classes.
+                </p>
+
             </div>
 
             {% endfor %}
@@ -320,6 +435,7 @@
     </div>
 
 </div>
+
 
 <!-- Footer -->
 <div class="footer">

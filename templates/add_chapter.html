@@ -1,181 +1,379 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Add Chapter - GyanaGhar</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Chapter | GyanaGhar</title>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-<style>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-body{
-margin:0;
-font-family:Arial;
-display:flex;
-}
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #1e293b;
+        }
 
-/* Sidebar */
-.sidebar{
-width:220px;
-height:100vh;
-background:#1e3c72;
-color:white;
-position:fixed;
-}
+        /* Sidebar */
+        .sidebar {
+            width: 240px;
+            height: 100vh;
+            background: #ffffff;
+            color: #334155;
+            position: fixed;
+            top: 0;
+            left: 0;
+            border-right: 1px solid #e2e8f0;
+            box-shadow: 2px 0 12px rgba(15,23,42,0.04);
+            z-index: 10;
+        }
 
-.sidebar h2{
-text-align:center;
-padding:20px;
-}
+        .sidebar h2 {
+            text-align: center;
+            padding: 22px 10px;
+            margin: 0;
+            color: #173b70;
+            border-bottom: 1px solid #e2e8f0;
+        }
 
-.sidebar a{
-display:block;
-color:white;
-padding:12px 20px;
-text-decoration:none;
-}
+        .sidebar a {
+            display: block;
+            color: #475569;
+            padding: 14px 20px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
 
-.sidebar a:hover{
-background:#2a5298;
-}
+        .sidebar a i {
+            width: 25px;
+            color: #2563eb;
+        }
 
-/* Main */
-.main{
-margin-left:220px;
-padding:30px;
-width:100%;
-background:#f5f5f5;
-min-height:100vh;
-}
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #eff6ff;
+            color: #1d4ed8;
+        }
 
-/* Form */
-.form-card{
-background:white;
-padding:30px;
-border-radius:12px;
-max-width:450px;
-margin:auto;
-box-shadow:0 5px 20px rgba(0,0,0,0.2);
-}
+        /* Main */
+        .main {
+            margin-left: 240px;
+            padding: 30px;
+            min-height: 100vh;
+        }
 
-.form-card h2{
-text-align:center;
-margin-bottom:20px;
-}
+        .page-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
 
-.form-card input,
-.form-card select{
-width:100%;
-padding:12px;
-margin-top:10px;
-border-radius:6px;
-border:1px solid #ccc;
-}
+        /* Back Button */
+        .back-btn {
+            display: inline-block;
+            padding: 10px 17px;
+            background: #eff6ff;
+            color: #1d4ed8;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 22px;
+        }
 
-.form-card button{
-margin-top:20px;
-width:100%;
-padding:12px;
-background:#2a5298;
-color:white;
-border:none;
-border-radius:6px;
-font-size:16px;
-cursor:pointer;
-}
+        .back-btn:hover {
+            background: #dbeafe;
+        }
 
-.form-card button:hover{
-background:#1e3c72;
-}
+        /* Form */
+        .form-card {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 520px;
+            margin: 0 auto;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 8px 25px rgba(15,23,42,0.06);
+            animation: fadeUp 0.5s ease;
+        }
 
-</style>
+        .form-card h2 {
+            text-align: center;
+            color: #173b70;
+            margin: 0 0 25px;
+            font-size: 24px;
+        }
 
+        .form-card label {
+            display: block;
+            margin: 17px 0 8px;
+            color: #334155;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .form-card input,
+        .form-card select {
+            width: 100%;
+            padding: 13px 14px;
+            margin-top: 4px;
+            border-radius: 9px;
+            border: 1px solid #dbe3ef;
+            background: #f8fafc;
+            color: #1e293b;
+            font-size: 15px;
+        }
+
+        .form-card input:focus,
+        .form-card select:focus {
+            outline: none;
+            border-color: #2563eb;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+        }
+
+        .form-card button {
+            margin-top: 25px;
+            width: 100%;
+            padding: 14px;
+            background: #2563eb;
+            color: #ffffff;
+            border: none;
+            border-radius: 9px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .form-card button:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            color: #64748b;
+            margin-top: 35px;
+            padding: 20px;
+            font-size: 13px;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile */
+        @media(max-width: 700px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                padding: 8px;
+            }
+
+            .sidebar h2 {
+                width: 100%;
+                padding: 12px;
+                text-align: left;
+            }
+
+            .sidebar a {
+                padding: 10px;
+                font-size: 12px;
+            }
+
+            .sidebar a i {
+                width: auto;
+                margin-right: 4px;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 20px 12px;
+            }
+
+            .form-card {
+                padding: 22px 18px;
+            }
+
+            .form-card h2 {
+                font-size: 21px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<!-- Sidebar -->
-<div class="sidebar">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
 
-<h2> GyanaGhar</h2>
+        <h2>GyanaGhar</h2>
 
-<a href="/dashboard"><i class="fa fa-home"></i> Dashboard</a>
-<a href="/admin/courses"><i class="fa fa-book"></i> Courses</a>
-<a href="/admin/add_subject"><i class="fa fa-layer-group"></i> Subjects</a>
-<a href="/admin/add_chapter"><i class="fa fa-list"></i> Chapters</a>
-<a href="/admin/add_note"><i class="fa fa-file"></i> Notes</a>
-<a href="/admin/analytics"><i class="fa fa-chart-line"></i> Analytics</a>
-<a href="/logout"><i class="fa fa-sign-out-alt"></i> Logout</a>
+        <a href="/dashboard">
+            <i class="fa fa-home"></i> Dashboard
+        </a>
 
-</div>
+        <a href="/admin/courses">
+            <i class="fa fa-book"></i> Courses
+        </a>
 
-<!-- Main Content -->
-<div class="main">
+        <a href="/admin/add_subject">
+            <i class="fa fa-layer-group"></i> Subjects
+        </a>
 
-<div class="form-card">
+        <a href="/admin/add_chapter" class="active">
+            <i class="fa fa-list"></i> Chapters
+        </a>
 
-<h2> Add Chapter</h2>
+        <a href="/admin/add_note">
+            <i class="fa fa-file"></i> Notes
+        </a>
 
-<form method="POST">
+        <a href="/admin/analytics">
+            <i class="fa fa-chart-line"></i> Analytics
+        </a>
 
-<!-- Class -->
-<label>Select Class</label>
-<select id="classSelect" required>
+        <a href="/logout">
+            <i class="fa fa-sign-out-alt"></i> Logout
+        </a>
 
-<option value="">Select Class</option>
+    </div>
 
-{% for c in classes %}
-<option value="{{ c.id }}">{{ c.name }}</option>
-{% endfor %}
 
-</select>
+    <!-- MAIN CONTENT -->
+    <main class="main">
 
-<!-- Subject -->
-<label>Select Subject</label>
-<select name="subject_id" id="subjectSelect" required>
+        <div class="page-container">
 
-<option value="">Select Subject</option>
+            <!-- BACK BUTTON -->
+            <a href="/dashboard" class="back-btn">
+                <i class="fa fa-arrow-left"></i>
+                Back to Dashboard
+            </a>
 
-{% for s in subjects %}
-<option value="{{ s.id }}" data-class="{{ s.class_id }}">
-{{ s.name }}
-</option>
-{% endfor %}
+            <!-- FORM -->
+            <div class="form-card">
 
-</select>
+                <h2>
+                    <i class="fa fa-list"></i>
+                    Add New Chapter
+                </h2>
 
-<!-- Chapter Name -->
-<label>Chapter Name</label>
-<input type="text" name="name" placeholder="Enter Chapter Name" required>
+                <form method="POST">
 
-<button type="submit">Add Chapter</button>
+                    <!-- CLASS -->
+                    <label for="classSelect">Select Class</label>
 
-</form>
+                    <select id="classSelect" required>
 
-</div>
+                        <option value="">Select Class</option>
 
-</div>
+                        {% for c in classes %}
+                        <option value="{{ c.id }}">
+                            {{ c.name }}
+                        </option>
+                        {% endfor %}
 
-<!-- JS for filtering -->
-<script>
-const classSelect = document.getElementById("classSelect");
-const subjectSelect = document.getElementById("subjectSelect");
+                    </select>
 
-classSelect.addEventListener("change", function () {
-    let classId = this.value;
 
-    for (let option of subjectSelect.options) {
-        if (option.dataset.class == classId || option.value == "") {
-            option.style.display = "block";
-        } else {
-            option.style.display = "none";
+                    <!-- SUBJECT -->
+                    <label for="subjectSelect">Select Subject</label>
+
+                    <select name="subject_id"
+                            id="subjectSelect"
+                            required>
+
+                        <option value="">Select Subject</option>
+
+                        {% for s in subjects %}
+                        <option value="{{ s.id }}"
+                                data-class="{{ s.class_id }}">
+                            {{ s.name }}
+                        </option>
+                        {% endfor %}
+
+                    </select>
+
+
+                    <!-- CHAPTER NAME -->
+                    <label for="chapterName">Chapter Name</label>
+
+                    <input
+                        type="text"
+                        name="name"
+                        id="chapterName"
+                        placeholder="Enter Chapter Name"
+                        required
+                    >
+
+                    <!-- SUBMIT -->
+                    <button type="submit">
+                        <i class="fa fa-plus-circle"></i>
+                        Add Chapter
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+        <footer class="footer">
+            © 2026 GyanaGhar | Built by Rahul Nayak
+        </footer>
+
+    </main>
+
+
+    <!-- CLASS / SUBJECT FILTER -->
+    <script>
+        const classSelect = document.getElementById("classSelect");
+        const subjectSelect = document.getElementById("subjectSelect");
+
+        function filterSubjects() {
+            const classId = classSelect.value;
+
+            for (const option of subjectSelect.options) {
+
+                if (option.value === "") {
+                    option.hidden = false;
+                    continue;
+                }
+
+                option.hidden = option.dataset.class !== classId;
+            }
+
+            subjectSelect.value = "";
         }
-    }
 
-    subjectSelect.value = "";
-});
-</script>
+        // Initially hide subjects until a class is selected
+        filterSubjects();
+
+        classSelect.addEventListener("change", filterSubjects);
+    </script>
 
 </body>
 </html>

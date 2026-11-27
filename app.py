@@ -277,7 +277,7 @@ class Progress(db.Model):
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(int(user_id))
+    return db.session.get(User, int(user_id))
 
 
 #  PUBLIC SEO HOME
@@ -1063,15 +1063,25 @@ def google_verify():
 # ========= Roboots txt =======
 
 
-
-@app.route('/robots.txt')
+@app.route("/robots.txt")
 def robots():
-    return Response("""User-agent: *
+
+    content = """
+User-agent: *
 Allow: /
 
-Sitemap: https://gyanaghar.onrender.com/sitemap.xml
-""", mimetype="text/plain")
+Disallow: /admin/
+Disallow: /dashboard
+Disallow: /student/
+Disallow: /profile
+Disallow: /login
+Disallow: /register
+Disallow: /logout
 
+Sitemap: https://gyanaghar.onrender.com/sitemap.xml
+"""
+
+    return Response(content.strip(), mimetype="text/plain")
 
 
 
@@ -1096,88 +1106,112 @@ def sitemap():
 
     ET.register_namespace("", namespace)
 
-    # Create XML root
+    # XML root
     urlset = ET.Element(f"{{{namespace}}}urlset")
 
     # Prevent duplicate URLs
     added_urls = set()
 
-    def add_url(url):
-        if url not in added_urls:
-            added_urls.add(url)
+    def add_url(path):
 
-            url_element = ET.SubElement(
-                urlset, f"{{{namespace}}}url"
-            )
+        url = base_url + path
 
-            ET.SubElement(
-                url_element, f"{{{namespace}}}loc"
-            ).text = url
+        if url in added_urls:
+            return
 
-    # Homepage
-    add_url(base_url + "/")
+        added_urls.add(url)
 
-    # Public information pages
-    add_url(base_url + "/about")
-    add_url(base_url + "/privacy-policy")
-    add_url(base_url + "/terms")
-    add_url(base_url + "/disclaimer")
+        url_element = ET.SubElement(
+            urlset,
+            f"{{{namespace}}}url"
+        )
 
-    # Dynamic class URLs
+        ET.SubElement(
+            url_element,
+            f"{{{namespace}}}loc"
+        ).text = url
+
+    # =================================
+    # PUBLIC INFORMATION PAGES
+    # =================================
+
+    add_url("/")
+
+    add_url("/about")
+    add_url("/privacy-policy")
+    add_url("/terms")
+    add_url("/disclaimer")
+
+    # =================================
+    # CLASSES
+    # =================================
+
     classes = Class.query.order_by(Class.id.asc()).all()
 
     for cls in classes:
 
         add_url(
-            base_url + url_for(
+            url_for(
                 "public_class",
                 class_id=cls.id
             )
         )
 
-        # Subjects
+        # =================================
+        # SUBJECTS
+        # =================================
+
         subjects = Subject.query.filter_by(
             class_id=cls.id
-        ).all()
+        ).order_by(Subject.id.asc()).all()
 
         for subject in subjects:
 
             add_url(
-                base_url + url_for(
+                url_for(
                     "public_subject",
                     subject_id=subject.id
                 )
             )
 
-            # Chapters
+            # =================================
+            # CHAPTERS
+            # =================================
+
             chapters = Chapter.query.filter_by(
                 subject_id=subject.id
-            ).all()
+            ).order_by(Chapter.id.asc()).all()
 
             for chapter in chapters:
 
                 add_url(
-                    base_url + url_for(
+                    url_for(
                         "public_chapter",
                         chapter_id=chapter.id
                     )
                 )
 
-                # Notes
+                # =================================
+                # NOTES
+                # =================================
+
                 notes = Note.query.filter_by(
                     chapter_id=chapter.id
-                ).all()
+                ).order_by(Note.id.asc()).all()
 
                 for note in notes:
 
                     add_url(
-                        base_url + url_for(
+                        url_for(
                             "public_note_preview",
                             note_id=note.id
                         )
                     )
 
-    # Generate XML
+    # =================================
+    # GENERATE XML
+    # =================================
+
     xml_data = ET.tostring(
         urlset,
         encoding="utf-8",
@@ -1188,6 +1222,7 @@ def sitemap():
         xml_data,
         mimetype="application/xml"
     )
+
 
 
 

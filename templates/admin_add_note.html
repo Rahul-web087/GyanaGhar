@@ -4,71 +4,85 @@
 {% block content %}
 
 <style>
+
 .form-box {
-    background: linear-gradient(145deg, #1a1a1a, #121212);
-    padding: 25px;
-    border-radius: 15px;
-    max-width: 550px;
+    background: #ffffff;
+    padding: 28px;
+    border-radius: 16px;
+    max-width: 650px;
     margin: 30px auto;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 8px 25px rgba(15, 23, 42, 0.07);
     animation: fadeUp 0.5s ease;
 }
 
-h3 {
+.container > h3 {
     text-align: center;
+    color: #173b70;
+    font-size: 27px;
+    font-weight: 700;
+    margin-top: 25px;
     margin-bottom: 20px;
 }
 
-label {
+.form-box label {
     display: block;
-    margin-top: 14px;
-    color: #ccc;
+    margin-top: 16px;
+    color: #334155;
+    font-weight: 600;
+    font-size: 14px;
 }
 
 .form-box input,
 .form-box select,
 .form-box textarea {
     width: 100%;
-    padding: 12px;
+    padding: 12px 14px;
     margin-top: 8px;
-    border: 1px solid #333;
-    border-radius: 8px;
-    background: #1a1a1a;
-    color: white;
+    border: 1px solid #dbe3ef;
+    border-radius: 9px;
+    background: #f8fafc;
+    color: #1e293b;
+    font-size: 14px;
     box-sizing: border-box;
+    transition: 0.2s ease;
 }
 
 .form-box input[type="file"] {
     cursor: pointer;
+    background: #ffffff;
 }
 
 .form-box textarea {
     resize: vertical;
-    min-height: 80px;
+    min-height: 85px;
 }
 
 .form-box input:focus,
 .form-box select:focus,
 .form-box textarea:focus {
     outline: none;
-    border: 1px solid #ff4d4d;
-    box-shadow: 0 0 5px #ff4d4d;
+    border-color: #2563eb;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
 }
 
 .form-box button {
     margin-top: 12px;
     padding: 12px;
     width: 100%;
-    border-radius: 10px;
-    background: linear-gradient(45deg, #ff4d4d, #ff0000);
-    color: white;
+    border-radius: 9px;
+    background: #2563eb;
+    color: #ffffff;
     border: none;
+    font-weight: 600;
     cursor: pointer;
-    transition: 0.3s;
+    transition: 0.2s ease;
 }
 
 .form-box button:hover {
-    transform: translateY(-2px);
+    background: #1d4ed8;
+    transform: translateY(-1px);
 }
 
 .form-box button:disabled {
@@ -78,38 +92,41 @@ label {
 }
 
 .qa-item {
-    margin-top: 12px;
-    background: #151515;
-    padding: 12px;
-    border-radius: 10px;
-    border: 1px solid #333;
+    margin-top: 14px;
+    background: #f8fafc;
+    padding: 15px;
+    border-radius: 11px;
+    border: 1px solid #e2e8f0;
 }
 
-.remove-btn {
-    background: #444 !important;
+.form-box .remove-btn {
+    background: #fee2e2 !important;
+    color: #b91c1c !important;
 }
 
-.remove-btn:hover {
-    background: #ff0000 !important;
+.form-box .remove-btn:hover {
+    background: #fecaca !important;
 }
 
 .upload-info {
     font-size: 12px;
-    color: #aaa;
-    margin-top: 5px;
+    color: #64748b;
+    margin-top: 7px;
+    line-height: 1.6;
 }
 
 .upload-section {
-    background: #191919;
-    border: 1px solid #333;
-    padding: 15px;
-    border-radius: 10px;
-    margin-top: 15px;
+    background: #f8fafc;
+    border: 1px solid #dbe3ef;
+    padding: 18px;
+    border-radius: 12px;
+    margin-top: 20px;
 }
 
 .upload-section h4 {
-    color: white;
-    margin: 0 0 8px;
+    color: #173b70;
+    margin: 0 0 12px;
+    font-size: 17px;
 }
 
 #videoPreview {
@@ -118,11 +135,11 @@ label {
     max-height: 280px;
     margin-top: 12px;
     border-radius: 10px;
-    background: #000;
+    background: #000000;
 }
 
 #uploadStatus {
-    color: #ffd166;
+    color: #b45309;
     font-size: 13px;
     margin-top: 10px;
 }
@@ -130,19 +147,31 @@ label {
 .footer {
     text-align: center;
     padding: 20px;
-    color: #aaa;
+    color: #64748b;
 }
 
 @keyframes fadeUp {
     from {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(25px);
     }
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
+
+@media (max-width: 600px) {
+    .form-box {
+        padding: 18px;
+        margin: 20px 10px;
+    }
+
+    .container > h3 {
+        font-size: 23px;
+    }
+}
+
 </style>
 
 <div class="container">
