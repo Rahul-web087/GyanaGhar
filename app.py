@@ -1449,7 +1449,9 @@ def leaderboard():
 
 # ================= ADMIN ADD CLASS =================
 
-@app.route('/admin/add_class', methods=['GET','POST'])
+# ================= ADMIN ADD CLASS =================
+
+@app.route('/admin/add_class', methods=['GET', 'POST'])
 @login_required
 def add_class():
 
@@ -1467,7 +1469,7 @@ def add_class():
 
         return redirect("/dashboard")
 
-    return render_template("add_class.html")
+    return render_template("admin_add_class.html")
 
 
 # ================= ADMIN ADD SUBJECT =================
