@@ -255,7 +255,7 @@ class Note(db.Model):
     qa_data = db.Column(db.Text)
     content = db.Column(db.Text)
     chapter_id = db.Column(db.Integer)
-    video_link = db.Column(db.String(200))
+    video_link = db.Column(db.String(500))
     pdf_file = db.Column(db.String(200))
     question = db.Column(db.Text)
     answer = db.Column(db.Text)
@@ -1280,8 +1280,9 @@ def subject_page(subject_id):
 @app.route('/chapter/<int:chapter_id>')
 @login_required
 def chapter_page(chapter_id):
-
-    notes = Note.query.filter_by(chapter_id=chapter_id).all()
+    notes = Note.query.filter_by(
+        chapter_id=chapter_id
+    ).order_by(Note.id.asc()).all()
 
     note_ids = [note.id for note in notes]
 
@@ -1469,65 +1470,124 @@ def add_subject():
 def edit_note(note_id):
 
     if current_user.role != "admin":
-        return "Access Denied"
+        return "Access Denied", 403
 
     note = Note.query.get_or_404(note_id)
 
     if request.method == "POST":
 
-        note.title = request.form["title"]
-        note.video_link = request.form.get("video_link")
-
-        #  MULTIPLE Q&A UPDATE (SAFE)
-        questions = request.form.getlist("question[]")
-        answers = request.form.getlist("answer[]")
-
-        qa_list = []
-
-        for q, a in zip(questions, answers):
-            q = q.strip()
-            a = a.strip()
-
-            if q and a:
-                qa_list.append({
-                    "question": q,
-                    "answer": a
-                })
-
-        # if not
-        if not qa_list:
-            qa_list = []
-
-        note.qa_data = json.dumps(qa_list)
-
-        #  PDF UPDATE (SAFE)
-        pdf = request.files.get("pdf_file")
-
-        if pdf and pdf.filename:
-
+        try:
             import os
 
-            pdf = request.files["pdf_file"]
+            # TITLE
+            title = request.form.get("title", "").strip()
 
-            if pdf and pdf.filename != "":
+            if not title:
+                return "Note title is required", 400
+
+            note.title = title
+
+            # Q&A UPDATE
+            questions = request.form.getlist("question[]")
+            answers = request.form.getlist("answer[]")
+
+            qa_list = []
+
+            for q, a in zip(questions, answers):
+                q = q.strip()
+                a = a.strip()
+
+                if q and a:
+                    qa_list.append({
+                        "question": q,
+                        "answer": a
+                    })
+
+            note.qa_data = json.dumps(qa_list)
+
+            # VIDEO UPDATE
+            video = request.files.get("video_file")
+            video_link = request.form.get("video_link", "").strip()
+
+            remove_video = request.form.get("remove_video") == "1"
+
+            if remove_video and ((video and video.filename) or video_link):
+                return "Choose either remove video or upload a replacement.", 400
+
+            if video and video.filename and video_link:
+                return "Upload a video file OR enter a YouTube link, not both.", 400
+
+            if remove_video:
+                note.video_link = None
+
+            elif video and video.filename:
+
+                allowed_extensions = {".mp4", ".webm", ".mov", ".m4v"}
+
+                extension = os.path.splitext(video.filename)[1].lower()
+
+                if extension not in allowed_extensions:
+                    return "Unsupported video format.", 400
+
+                if not video.mimetype or not video.mimetype.startswith("video/"):
+                    return "Invalid video file.", 400
+
                 upload = cloudinary.uploader.upload(
-                    pdf,
-                    resource_type="raw"
+                    video,
+                    resource_type="video",
+                    folder="gyanaghar/videos"
                 )
 
-                note.pdf_url = upload['secure_url']
+                note.video_link = upload["secure_url"]
 
-        #  SAFE COMMIT
-        try:
+            elif video_link:
+                note.video_link = video_link
+
+            # If no video action is selected, keep existing video.
+
+            # PDF UPDATE
+            pdf = request.files.get("pdf_file")
+            remove_pdf = request.form.get("remove_pdf") == "1"
+
+            if remove_pdf and pdf and pdf.filename:
+                return "Choose either remove PDF or upload a replacement.", 400
+
+            if remove_pdf:
+                note.pdf_url = None
+
+            elif pdf and pdf.filename:
+
+                extension = os.path.splitext(pdf.filename)[1].lower()
+
+                if extension != ".pdf":
+                    return "Only PDF files are allowed.", 400
+
+                upload = cloudinary.uploader.upload(
+                    pdf,
+                    resource_type="raw",
+                    folder="gyanaghar/pdfs"
+                )
+
+                note.pdf_url = upload["secure_url"]
+
+            # SAVE CHANGES
             db.session.commit()
-        except Exception as e:
+
+            flash("Note updated successfully!", "success")
+
+            return redirect("/admin/courses")
+
+        except Exception:
             db.session.rollback()
-            return f"Error: {str(e)}"
 
-        return redirect("/admin/courses")
+            app.logger.exception("Edit note failed")
 
-    return render_template("edit_note.html", note=note)
+            return "Unable to update note. Check application logs.", 500
 
+    return render_template(
+        "edit_note.html",
+        note=note
+    )
 
 
 
@@ -1570,6 +1630,8 @@ def add_chapter():
 
 import json
 
+
+
 @app.route("/admin/add_note", methods=["GET", "POST"])
 @login_required
 def add_note():
@@ -1583,50 +1645,104 @@ def add_note():
 
     if request.method == "POST":
 
-        title = request.form["title"]
-        chapter_id = request.form["chapter_id"]
-        video_link = request.form["video_link"]
+        try:
+            title = request.form.get("title", "").strip()
+            chapter_id = request.form.get("chapter_id")
+            video_link = request.form.get("video_link", "").strip()
 
-        # MULTIPLE Q&A
-        questions = request.form.getlist("question[]")
-        answers = request.form.getlist("answer[]")
+            if not title or not chapter_id:
+                return "Title and chapter are required", 400
 
-        qa_list = []
+            # Validate chapter
+            chapter = db.session.get(Chapter, int(chapter_id))
 
-        for q, a in zip(questions, answers):
-            if q.strip() and a.strip():
-                qa_list.append({
-                    "question": q,
-                    "answer": a
-                })
+            if not chapter:
+                return "Invalid chapter selected", 400
 
-        qa_json = json.dumps(qa_list)
+            # Q&A
+            questions = request.form.getlist("question[]")
+            answers = request.form.getlist("answer[]")
 
-        # PDF upload
-        pdf = request.files["pdf_file"]
-        pdf_url = None
+            qa_list = []
 
-        if pdf and pdf.filename != "":
-            upload = cloudinary.uploader.upload(
-                pdf,
-                resource_type="raw"
+            for q, a in zip(questions, answers):
+                q = q.strip()
+                a = a.strip()
+
+                if q and a:
+                    qa_list.append({
+                        "question": q,
+                        "answer": a
+                    })
+
+            qa_json = json.dumps(qa_list)
+
+            # PDF UPLOAD
+            pdf = request.files.get("pdf_file")
+            pdf_url = None
+
+            if pdf and pdf.filename:
+
+                upload = cloudinary.uploader.upload(
+                    pdf,
+                    resource_type="raw",
+                    folder="gyanaghar/pdfs"
+                )
+
+                pdf_url = upload["secure_url"]
+
+            # VIDEO UPLOAD
+            video = request.files.get("video_file")
+
+            if video and video.filename:
+
+                if video_link:
+                    return "Upload a video file OR enter a YouTube link, not both.", 400
+
+                allowed_extensions = {
+                    ".mp4", ".webm", ".mov", ".m4v"
+                }
+
+                import os
+
+                extension = os.path.splitext(video.filename)[1].lower()
+
+                if extension not in allowed_extensions:
+                    return "Unsupported video format. Use MP4, WebM, MOV or M4V.", 400
+
+                if not video.mimetype or not video.mimetype.startswith("video/"):
+                    return "Invalid video file.", 400
+
+                upload = cloudinary.uploader.upload(
+                    video,
+                    resource_type="video",
+                    folder="gyanaghar/videos"
+                )
+
+                video_link = upload["secure_url"]
+
+            # SAVE NOTE
+            new_note = Note(
+                title=title,
+                qa_data=qa_json,
+                chapter_id=int(chapter_id),
+                video_link=video_link or None,
+                pdf_url=pdf_url
             )
 
-            pdf_url = upload['secure_url']
+            db.session.add(new_note)
+            db.session.commit()
 
-        # Save in DB
-        new_note = Note(
-            title=title,
-            qa_data=qa_json,
-            chapter_id=chapter_id,
-            video_link=video_link,
-            pdf_url=pdf_url
-        )
+            flash("Note added successfully!", "success")
 
-        db.session.add(new_note)
-        db.session.commit()
+            return redirect("/dashboard")
 
-        return redirect("/dashboard")
+        except Exception:
+            db.session.rollback()
+
+            app.logger.exception("Add note failed")
+
+            return "Unable to add note. Check application logs.", 500
 
     return render_template(
         "admin_add_note.html",
@@ -1634,6 +1750,7 @@ def add_note():
         subjects=subjects,
         chapters=chapters
     )
+
 
 
 

@@ -1,222 +1,496 @@
+
 {% extends "base.html" %}
 
 {% block content %}
 
 <style>
-.form-box{
+.form-box {
     background: linear-gradient(145deg, #1a1a1a, #121212);
-    padding:25px;
-    border-radius:15px;
-    max-width:500px;
-    margin:auto;
-    box-shadow:0 10px 30px rgba(0,0,0,0.6);
+    padding: 25px;
+    border-radius: 15px;
+    max-width: 550px;
+    margin: 30px auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
     animation: fadeUp 0.5s ease;
 }
 
-h3{
-    text-align:center;
-    margin-bottom:15px;
+h3 {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
-label{
-    display:block;
-    margin-top:10px;
-    color:#ccc;
+label {
+    display: block;
+    margin-top: 14px;
+    color: #ccc;
 }
 
 .form-box input,
 .form-box select,
-.form-box textarea{
-    width:100%;
-    padding:12px;
-    margin-top:8px;
-    border:1px solid #333;
-    border-radius:8px;
-    background:#1a1a1a;
-    color:white;
+.form-box textarea {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    border: 1px solid #333;
+    border-radius: 8px;
+    background: #1a1a1a;
+    color: white;
+    box-sizing: border-box;
 }
 
-.form-box textarea{
-    resize:vertical;
-    min-height:80px;
+.form-box input[type="file"] {
+    cursor: pointer;
+}
+
+.form-box textarea {
+    resize: vertical;
+    min-height: 80px;
 }
 
 .form-box input:focus,
 .form-box select:focus,
-.form-box textarea:focus{
-    outline:none;
-    border:1px solid #ff4d4d;
-    box-shadow:0 0 5px #ff4d4d;
+.form-box textarea:focus {
+    outline: none;
+    border: 1px solid #ff4d4d;
+    box-shadow: 0 0 5px #ff4d4d;
 }
 
-.form-box button{
-    margin-top:12px;
-    padding:12px;
-    width:100%;
-    border-radius:10px;
+.form-box button {
+    margin-top: 12px;
+    padding: 12px;
+    width: 100%;
+    border-radius: 10px;
     background: linear-gradient(45deg, #ff4d4d, #ff0000);
-    color:white;
-    border:none;
-    cursor:pointer;
-    transition:0.3s;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
-.form-box button:hover{
-    transform:scale(1.05);
+.form-box button:hover {
+    transform: translateY(-2px);
 }
 
-.qa-item{
-    margin-top:10px;
-    background:#151515;
-    padding:10px;
-    border-radius:10px;
+.form-box button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
 }
 
-.remove-btn{
-    background:#444;
-    margin-top:5px;
+.qa-item {
+    margin-top: 12px;
+    background: #151515;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #333;
 }
 
-.remove-btn:hover{
-    background:#ff0000;
+.remove-btn {
+    background: #444 !important;
 }
 
-/* Animation */
+.remove-btn:hover {
+    background: #ff0000 !important;
+}
+
+.upload-info {
+    font-size: 12px;
+    color: #aaa;
+    margin-top: 5px;
+}
+
+.upload-section {
+    background: #191919;
+    border: 1px solid #333;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+.upload-section h4 {
+    color: white;
+    margin: 0 0 8px;
+}
+
+#videoPreview {
+    display: none;
+    width: 100%;
+    max-height: 280px;
+    margin-top: 12px;
+    border-radius: 10px;
+    background: #000;
+}
+
+#uploadStatus {
+    color: #ffd166;
+    font-size: 13px;
+    margin-top: 10px;
+}
+
+.footer {
+    text-align: center;
+    padding: 20px;
+    color: #aaa;
+}
+
 @keyframes fadeUp {
     from {
-        opacity:0;
-        transform:translateY(30px);
+        opacity: 0;
+        transform: translateY(30px);
     }
     to {
-        opacity:1;
-        transform:translateY(0);
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 </style>
 
 <div class="container">
 
-<h3> Add New Note</h3>
+    <h3>Add New Note</h3>
 
-<div class="form-box">
+    <div class="form-box">
 
-<form method="POST" enctype="multipart/form-data">
+        <form method="POST"
+              enctype="multipart/form-data"
+              id="noteForm">
 
-<!-- Class -->
-<label>Select Class</label>
-<select id="classSelect">
-<option value="">Select Class</option>
-{% for c in classes %}
-<option value="{{ c.id }}">{{ c.name }}</option>
-{% endfor %}
-</select>
+            <!-- CLASS -->
+            <label>Select Class</label>
 
-<!-- Subject -->
-<label>Select Subject</label>
-<select id="subjectSelect">
-<option value="">Select Subject</option>
-{% for s in subjects %}
-<option value="{{ s.id }}" data-class="{{ s.class_id }}">
-{{ s.name }}
-</option>
-{% endfor %}
-</select>
+            <select id="classSelect" required>
+                <option value="">Select Class</option>
 
-<!-- Chapter -->
-<label>Select Chapter</label>
-<select name="chapter_id" id="chapterSelect" required>
-<option value="">Select Chapter</option>
-{% for ch in chapters %}
-<option value="{{ ch.id }}" data-subject="{{ ch.subject_id }}">
-{{ ch.name }}
-</option>
-{% endfor %}
-</select>
+                {% for c in classes %}
+                <option value="{{ c.id }}">
+                    {{ c.name }}
+                </option>
+                {% endfor %}
+            </select>
 
-<label>Note Title</label>
-<input type="text" name="title" placeholder="Enter Note Title" required>
+            <!-- SUBJECT -->
+            <label>Select Subject</label>
 
-<!-- Q&A -->
-<div id="qa-container">
+            <select id="subjectSelect" required>
+                <option value="">Select Subject</option>
 
-<div class="qa-item">
-<textarea name="question[]" placeholder="Enter Question" required></textarea>
-<textarea name="answer[]" placeholder="Enter Answer" required></textarea>
-</div>
+                {% for s in subjects %}
+                <option value="{{ s.id }}"
+                        data-class="{{ s.class_id }}">
+                    {{ s.name }}
+                </option>
+                {% endfor %}
+            </select>
 
-</div>
+            <!-- CHAPTER -->
+            <label>Select Chapter</label>
 
-<button type="button" onclick="addQA()">➕ Add More Q&A</button>
+            <select name="chapter_id"
+                    id="chapterSelect"
+                    required>
 
-<label>YouTube Video Link</label>
-<input type="text" name="video_link" placeholder="Paste embed link (optional)">
+                <option value="">Select Chapter</option>
 
-<label>Upload PDF</label>
-<input type="file" name="pdf_file">
+                {% for ch in chapters %}
+                <option value="{{ ch.id }}"
+                        data-subject="{{ ch.subject_id }}">
+                    {{ ch.name }}
+                </option>
+                {% endfor %}
 
-<button type="submit">Add Note</button>
+            </select>
 
-</form>
+            <!-- NOTE TITLE -->
+            <label>Note Title</label>
 
-</div>
+            <input type="text"
+                   name="title"
+                   placeholder="Enter Note Title"
+                   required>
+
+            <!-- Q&A -->
+            <label>Questions & Answers (Optional)</label>
+
+            <div id="qa-container">
+
+                <div class="qa-item">
+
+                    <textarea name="question[]"
+                              placeholder="Enter Question (Optional)"></textarea>
+
+                    <textarea name="answer[]"
+                              placeholder="Enter Answer (Optional)"></textarea>
+
+                </div>
+
+            </div>
+
+            <button type="button" onclick="addQA()">
+                + Add More Q&A
+            </button>
+
+            <!-- VIDEO FILE UPLOAD -->
+            <div class="upload-section">
+
+                <h4>
+                    <i class="fas fa-video"></i>
+                    Upload Video
+                </h4>
+
+                <label>Select Video File</label>
+
+                <input type="file"
+                       name="video_file"
+                       id="videoFile"
+                       accept=".mp4,.webm,.mov,.m4v,video/mp4,video/webm,video/quicktime">
+
+                <p class="upload-info">
+                    Supported formats: MP4, WebM, MOV and M4V.
+                </p>
+
+                <!-- VIDEO PREVIEW -->
+                <video id="videoPreview"
+                       controls
+                       playsinline
+                       preload="metadata">
+                </video>
+
+                <div id="uploadStatus"></div>
+
+            </div>
+
+            <!-- YOUTUBE LINK -->
+            <label>YouTube Video Link (Optional)</label>
+
+            <input type="url"
+                   name="video_link"
+                   id="videoLink"
+                   placeholder="https://www.youtube.com/embed/...">
+
+            <p class="upload-info">
+                Upload a video file OR provide a YouTube embed URL.
+                Do not select both.
+            </p>
+
+            <!-- PDF UPLOAD -->
+            <label>Upload PDF (Optional)</label>
+
+            <input type="file"
+                   name="pdf_file"
+                   id="pdfFile"
+                   accept=".pdf,application/pdf">
+
+            <!-- SUBMIT -->
+            <button type="submit" id="submitBtn">
+
+                <i class="fas fa-plus-circle"></i>
+                Add Note
+
+            </button>
+
+        </form>
+
+    </div>
 
 </div>
 
 <footer class="footer">
-© 2026 GyanaGhar | Built by Rahul Nayak
+    © 2026 GyanaGhar | Built by Rahul Nayak
 </footer>
 
-<!-- JS -->
 <script>
-function addQA() {
-    var container = document.getElementById("qa-container");
 
-    var div = document.createElement("div");
+// =====================================
+// ADD MULTIPLE Q&A
+// =====================================
+
+function addQA() {
+
+    const container = document.getElementById("qa-container");
+
+    const div = document.createElement("div");
+
     div.className = "qa-item";
 
-    div.innerHTML =
-        '<textarea name="question[]" placeholder="Enter Question" required></textarea>' +
-        '<textarea name="answer[]" placeholder="Enter Answer" required></textarea>' +
-        '<button type="button" class="remove-btn" onclick="this.parentElement.remove()">❌ Remove</button>';
+    div.innerHTML = `
+        <textarea name="question[]"
+                  placeholder="Enter Question (Optional)"></textarea>
+
+        <textarea name="answer[]"
+                  placeholder="Enter Answer (Optional)"></textarea>
+
+        <button type="button"
+                class="remove-btn"
+                onclick="this.parentElement.remove()">
+            Remove Q&A
+        </button>
+    `;
 
     container.appendChild(div);
 }
-</script>
 
-<!-- FILTER -->
-<script>
+
+// =====================================
+// CLASS / SUBJECT / CHAPTER FILTER
+// =====================================
+
 const classSelect = document.getElementById("classSelect");
 const subjectSelect = document.getElementById("subjectSelect");
 const chapterSelect = document.getElementById("chapterSelect");
 
+function filterOptions(select, attribute, selectedValue) {
+
+    for (const option of select.options) {
+
+        if (option.value === "") {
+            option.hidden = false;
+            continue;
+        }
+
+        option.hidden = option.dataset[attribute] !== selectedValue;
+    }
+
+    select.value = "";
+}
+
+// Initially hide subjects and chapters
+filterOptions(subjectSelect, "class", "");
+filterOptions(chapterSelect, "subject", "");
+
+// When class changes
 classSelect.addEventListener("change", function () {
-    let classId = this.value;
 
-    for (let option of subjectSelect.options) {
-        if (option.dataset.class == classId || option.value == "") {
-            option.style.display = "block";
-        } else {
-            option.style.display = "none";
-        }
-    }
+    filterOptions(subjectSelect, "class", this.value);
 
-    subjectSelect.value = "";
-    chapterSelect.value = "";
+    filterOptions(chapterSelect, "subject", "");
 });
 
+// When subject changes
 subjectSelect.addEventListener("change", function () {
-    let subjectId = this.value;
 
-    for (let option of chapterSelect.options) {
-        if (option.dataset.subject == subjectId || option.value == "") {
-            option.style.display = "block";
-        } else {
-            option.style.display = "none";
+    filterOptions(chapterSelect, "subject", this.value);
+});
+
+
+// =====================================
+// VIDEO PREVIEW
+// =====================================
+
+const videoFile = document.getElementById("videoFile");
+const videoPreview = document.getElementById("videoPreview");
+const videoLink = document.getElementById("videoLink");
+
+let previewURL = null;
+
+const allowedExtensions = ["mp4", "webm", "mov", "m4v"];
+
+videoFile.addEventListener("change", function () {
+
+    const file = this.files[0];
+
+    if (previewURL) {
+        URL.revokeObjectURL(previewURL);
+        previewURL = null;
+    }
+
+    videoPreview.pause();
+    videoPreview.removeAttribute("src");
+    videoPreview.load();
+    videoPreview.style.display = "none";
+
+    if (!file) return;
+
+    const extension = file.name.split(".").pop().toLowerCase();
+
+    if (!allowedExtensions.includes(extension) ||
+        !file.type.startsWith("video/")) {
+
+        alert("Please select a valid MP4, WebM, MOV or M4V video.");
+
+        this.value = "";
+        return;
+    }
+
+    previewURL = URL.createObjectURL(file);
+
+    videoPreview.src = previewURL;
+    videoPreview.style.display = "block";
+
+});
+
+
+// =====================================
+// PREVENT SELECTING BOTH VIDEO TYPES
+// =====================================
+
+document.getElementById("noteForm").addEventListener("submit", function(e) {
+
+    const file = videoFile.files[0];
+
+    const link = videoLink.value.trim();
+
+    const submitBtn = document.getElementById("submitBtn");
+
+    // Prevent both video types
+    if (file && link) {
+
+        e.preventDefault();
+
+        alert("Please upload a video file OR enter a YouTube link, not both.");
+
+        return;
+    }
+
+    // Validate video extension
+    if (file) {
+
+        const extension = file.name.split(".").pop().toLowerCase();
+
+        if (!allowedExtensions.includes(extension) ||
+            !file.type.startsWith("video/")) {
+
+            e.preventDefault();
+
+            alert("Invalid video file.");
+
+            return;
         }
     }
 
-    chapterSelect.value = "";
+    // Validate PDF extension
+    const pdfFile = document.getElementById("pdfFile").files[0];
+
+    if (pdfFile) {
+
+        const extension = pdfFile.name.split(".").pop().toLowerCase();
+
+        if (extension !== "pdf") {
+
+            e.preventDefault();
+
+            alert("Please select a valid PDF file.");
+
+            return;
+        }
+    }
+
+    // Prevent duplicate submission
+    submitBtn.disabled = true;
+
+    submitBtn.innerText = "Uploading... Please wait";
+
 });
+
+
+// Release temporary preview URL
+window.addEventListener("beforeunload", function() {
+
+    if (previewURL) {
+        URL.revokeObjectURL(previewURL);
+    }
+
+});
+
 </script>
 
 {% endblock %}

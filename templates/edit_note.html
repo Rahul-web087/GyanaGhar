@@ -1,137 +1,555 @@
-<!DOCTYPE html>
 
-<html>
-<head>
-<title>Edit Note</title>
+{% extends "base.html" %}
+
+{% block content %}
 
 <style>
-body{
-font-family:Arial;
-background:#f5f5f5;
-margin:0;
+.edit-container {
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 15px;
 }
 
-.container{
-width:90%;
-max-width:600px;
-margin:auto;
-margin-top:40px;
+.edit-card {
+    background: linear-gradient(145deg, #1a1a1a, #121212);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    animation: fadeUp 0.5s ease;
 }
 
-.card{
-background:white;
-padding:25px;
-border-radius:10px;
-box-shadow:0 4px 10px rgba(0,0,0,0.2);
+.edit-card h3 {
+    text-align: center;
+    color: white;
+    margin-bottom: 25px;
 }
 
-input, textarea{
-width:100%;
-padding:10px;
-margin-top:10px;
-border:1px solid #ccc;
-border-radius:5px;
+.edit-card label {
+    display: block;
+    margin-top: 15px;
+    color: #ccc;
 }
 
-button{
-margin-top:15px;
-padding:10px;
-width:100%;
-background:#2a5298;
-color:white;
-border:none;
-border-radius:5px;
-cursor:pointer;
+.edit-card input,
+.edit-card textarea {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    border: 1px solid #333;
+    border-radius: 8px;
+    background: #1a1a1a;
+    color: white;
+    box-sizing: border-box;
 }
 
-button:hover{
-background:#1e3c72;
+.edit-card textarea {
+    min-height: 80px;
+    resize: vertical;
 }
 
-.qa-item{
-margin-top:15px;
-padding:10px;
-border:1px solid #ddd;
-border-radius:8px;
-background:#fafafa;
+.edit-card input:focus,
+.edit-card textarea:focus {
+    outline: none;
+    border-color: #ff4d4d;
+    box-shadow: 0 0 5px #ff4d4d;
+}
+
+.qa-item {
+    margin-top: 15px;
+    padding: 15px;
+    background: #151515;
+    border: 1px solid #333;
+    border-radius: 10px;
+}
+
+.section-box {
+    background: #191919;
+    border: 1px solid #333;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+.section-box h4 {
+    color: white;
+    margin: 0 0 10px;
+}
+
+.info-text {
+    color: #aaa;
+    font-size: 12px;
+    margin-top: 6px;
+}
+
+.current-media {
+    margin-top: 12px;
+    padding: 12px;
+    background: #222;
+    border-radius: 8px;
+    color: white;
+}
+
+.current-media video,
+.current-media iframe {
+    width: 100%;
+    max-height: 300px;
+    border-radius: 8px;
+    background: black;
+}
+
+.remove-option {
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+    color: #ff7777 !important;
+    font-size: 13px;
+}
+
+.remove-option input {
+    width: auto;
+    margin: 0;
+}
+
+#videoPreview {
+    display: none;
+    width: 100%;
+    max-height: 280px;
+    margin-top: 12px;
+    border-radius: 10px;
+    background: black;
+}
+
+.edit-btn {
+    width: 100%;
+    padding: 13px;
+    margin-top: 20px;
+    background: linear-gradient(45deg, #ff4d4d, #ff0000);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.edit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.secondary-btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 12px;
+    background: #333;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.remove-btn {
+    background: #8b2020;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    margin-top: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 </style>
 
-</head>
+<div class="edit-container">
 
-<body>
+    <div class="edit-card">
 
-<div class="container">
+        <h3>✏️ Edit Note</h3>
 
-<div class="card">
+        <form method="POST"
+              enctype="multipart/form-data"
+              id="editNoteForm">
 
-<h2> Edit Note</h2>
+            <!-- NOTE TITLE -->
 
-<form method="POST" enctype="multipart/form-data">
+            <label>Note Title</label>
 
-<label>Title</label> <input type="text" name="title" value="{{ note.title }}" required>
+            <input type="text"
+                   name="title"
+                   value="{{ note.title or '' }}"
+                   placeholder="Enter Note Title"
+                   required>
 
-<!-- MULTIPLE Q&A -->
+            <!-- QUESTIONS AND ANSWERS -->
 
-<div id="qa-container">
+            <label>Questions & Answers (Optional)</label>
 
-{% if note.qa_data %}
-{% set qa_list = note.qa_data | from_json %}
+            <div id="qa-container">
+
+                {% if note.qa_data %}
+
+                    {% set qa_list = note.qa_data | from_json %}
+
+                    {% for qa in qa_list %}
+
+                    <div class="qa-item">
+
+                        <label>Question</label>
+
+                        <textarea name="question[]"
+                                  placeholder="Enter Question">{{ qa.question }}</textarea>
+
+                        <label>Answer</label>
+
+                        <textarea name="answer[]"
+                                  placeholder="Enter Answer">{{ qa.answer }}</textarea>
+
+                        <button type="button"
+                                class="remove-btn"
+                                onclick="this.parentElement.remove()">
+                            Remove Q&A
+                        </button>
+
+                    </div>
+
+                    {% endfor %}
+
+                {% endif %}
+
+            </div>
+
+            <button type="button"
+                    class="secondary-btn"
+                    onclick="addQA()">
+                + Add More Q&A
+            </button>
 
 
-{% for qa in qa_list %}
-<div class="qa-item">
-    <label>Question</label>
-    <textarea name="question[]" required>{{ qa.question }}</textarea>
+            <!-- VIDEO SECTION -->
 
-    <label>Answer</label>
-    <textarea name="answer[]" required>{{ qa.answer }}</textarea>
+            <div class="section-box">
 
-    <button type="button" onclick="this.parentElement.remove()"> Remove</button>
+                <h4>🎥 Video Lecture</h4>
+
+                {% if note.video_link %}
+
+                    <div class="current-media">
+
+                        <p>Current Video:</p>
+
+                        {% if 'youtube.com/embed/' in note.video_link
+                              or 'youtu.be/' in note.video_link %}
+
+                            <iframe
+                                src="{{ note.video_link }}"
+                                height="220"
+                                title="Current Video"
+                                allowfullscreen>
+                            </iframe>
+
+                        {% else %}
+
+                            <video controls playsinline preload="metadata">
+                                <source src="{{ note.video_link }}">
+                                Your browser does not support video playback.
+                            </video>
+
+                        {% endif %}
+
+                    </div>
+
+                    <label class="remove-option">
+                        <input type="checkbox"
+                               name="remove_video"
+                               value="1"
+                               id="removeVideo">
+
+                        Remove existing video
+                    </label>
+
+                {% else %}
+
+                    <p class="info-text">No video currently uploaded.</p>
+
+                {% endif %}
+
+                <!-- REPLACE VIDEO -->
+
+                <label>Upload Replacement Video</label>
+
+                <input type="file"
+                       name="video_file"
+                       id="videoFile"
+                       accept=".mp4,.webm,.mov,.m4v,video/mp4,video/webm,video/quicktime">
+
+                <p class="info-text">
+                    Supported formats: MP4, WebM, MOV and M4V.
+                </p>
+
+                <video id="videoPreview"
+                       controls
+                       playsinline
+                       preload="metadata">
+                </video>
+
+                <!-- YOUTUBE LINK -->
+
+                <label>Replace with YouTube Embed Link (Optional)</label>
+
+                <input type="url"
+                       name="video_link"
+                       id="videoLink"
+                       placeholder="https://www.youtube.com/embed/...">
+
+                <p class="info-text">
+                    Leave blank to keep the existing video.
+                    Upload a file OR enter a YouTube link, not both.
+                </p>
+
+            </div>
+
+
+            <!-- PDF SECTION -->
+
+            <div class="section-box">
+
+                <h4>📄 PDF Document</h4>
+
+                {% if note.pdf_url %}
+
+                    <div class="current-media">
+
+                        <p>Current PDF:</p>
+
+                        <a href="/view_pdf?url={{ note.pdf_url | urlencode }}"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           style="color:#ff7777;">
+                            📄 Open Current PDF
+                        </a>
+
+                    </div>
+
+                    <label class="remove-option">
+
+                        <input type="checkbox"
+                               name="remove_pdf"
+                               value="1"
+                               id="removePDF">
+
+                        Remove existing PDF
+
+                    </label>
+
+                {% else %}
+
+                    <p class="info-text">No PDF currently uploaded.</p>
+
+                {% endif %}
+
+                <label>Upload Replacement PDF</label>
+
+                <input type="file"
+                       name="pdf_file"
+                       id="pdfFile"
+                       accept=".pdf,application/pdf">
+
+                <p class="info-text">
+                    Leave empty to keep the existing PDF.
+                </p>
+
+            </div>
+
+
+            <!-- UPDATE BUTTON -->
+
+            <button type="submit"
+                    class="edit-btn"
+                    id="updateBtn">
+
+                💾 Update Note
+
+            </button>
+
+        </form>
+
+    </div>
+
 </div>
-{% endfor %}
 
-
-{% endif %}
-
-</div>
-
-<button type="button" onclick="addQA()"> Add More Question</button>
-
-<label>Video Link</label> <input type="text" name="video_link" value="{{ note.video_link }}">
-
-{% if note.pdf_file %}
-
-<p>Current PDF:</p>
-<a href="/static/uploads/{{ note.pdf_file }}" target="_blank">
-📄 View PDF
-</a>
-{% endif %}
-
-<label>Replace PDF</label> <input type="file" name="pdf_file">
-
-<button type="submit">Update Note</button>
-
-</form>
-
-</div>
-
-</div>
 
 <script>
-function addQA() {
-    var container = document.getElementById("qa-container");
 
-    var div = document.createElement("div");
+// =====================================
+// ADD Q&A
+// =====================================
+
+function addQA() {
+
+    const container = document.getElementById("qa-container");
+
+    const div = document.createElement("div");
+
     div.className = "qa-item";
 
-    div.innerHTML =
-        '<textarea name="question[]" placeholder="Enter Question" required></textarea>' +
-        '<textarea name="answer[]" placeholder="Enter Answer" required></textarea>' +
-        '<button type="button" onclick="this.parentElement.remove()">❌ Remove</button>';
+    div.innerHTML = `
+        <label>Question</label>
+
+        <textarea name="question[]"
+                  placeholder="Enter Question"></textarea>
+
+        <label>Answer</label>
+
+        <textarea name="answer[]"
+                  placeholder="Enter Answer"></textarea>
+
+        <button type="button"
+                class="remove-btn"
+                onclick="this.parentElement.remove()">
+            Remove Q&A
+        </button>
+    `;
 
     container.appendChild(div);
 }
+
+
+// =====================================
+// VIDEO PREVIEW
+// =====================================
+
+const videoFile = document.getElementById("videoFile");
+const videoPreview = document.getElementById("videoPreview");
+const videoLink = document.getElementById("videoLink");
+
+const allowedExtensions = ["mp4", "webm", "mov", "m4v"];
+
+let previewURL = null;
+
+videoFile.addEventListener("change", function() {
+
+    const file = this.files[0];
+
+    if (previewURL) {
+        URL.revokeObjectURL(previewURL);
+        previewURL = null;
+    }
+
+    videoPreview.pause();
+    videoPreview.removeAttribute("src");
+    videoPreview.load();
+    videoPreview.style.display = "none";
+
+    if (!file) return;
+
+    const extension = file.name.split(".").pop().toLowerCase();
+
+    if (!allowedExtensions.includes(extension) ||
+        !file.type.startsWith("video/")) {
+
+        alert("Select a valid MP4, WebM, MOV or M4V video.");
+
+        this.value = "";
+        return;
+    }
+
+    previewURL = URL.createObjectURL(file);
+
+    videoPreview.src = previewURL;
+    videoPreview.style.display = "block";
+
+});
+
+
+// =====================================
+// FORM VALIDATION
+// =====================================
+
+document.getElementById("editNoteForm").addEventListener("submit", function(e) {
+
+    const file = videoFile.files[0];
+    const link = videoLink.value.trim();
+
+    const removeVideo = document.getElementById("removeVideo");
+    const removePDF = document.getElementById("removePDF");
+
+    const pdfFile = document.getElementById("pdfFile").files[0];
+
+    // Prevent both video options
+    if (file && link) {
+        e.preventDefault();
+        alert("Choose a video file OR a YouTube link, not both.");
+        return;
+    }
+
+    // Prevent remove + replacement
+    if (removeVideo && removeVideo.checked && (file || link)) {
+        e.preventDefault();
+        alert("Uncheck Remove existing video before replacing it.");
+        return;
+    }
+
+    if (removePDF && removePDF.checked && pdfFile) {
+        e.preventDefault();
+        alert("Uncheck Remove existing PDF before replacing it.");
+        return;
+    }
+
+    // Validate video
+    if (file) {
+
+        const extension = file.name.split(".").pop().toLowerCase();
+
+        if (!allowedExtensions.includes(extension) ||
+            !file.type.startsWith("video/")) {
+
+            e.preventDefault();
+            alert("Invalid video format.");
+            return;
+        }
+    }
+
+    // Validate PDF
+    if (pdfFile) {
+
+        const extension = pdfFile.name.split(".").pop().toLowerCase();
+
+        if (extension !== "pdf") {
+            e.preventDefault();
+            alert("Only PDF files are allowed.");
+            return;
+        }
+    }
+
+    document.getElementById("updateBtn").disabled = true;
+
+    document.getElementById("updateBtn").innerText =
+        "Updating... Please wait";
+
+});
+
+
+// =====================================
+// CLEANUP VIDEO PREVIEW
+// =====================================
+
+window.addEventListener("beforeunload", function() {
+
+    if (previewURL) {
+        URL.revokeObjectURL(previewURL);
+    }
+
+});
+
 </script>
-</body>
-</html>
+
+{% endblock %}
